@@ -29,7 +29,7 @@
         "icon": "lupusec.png",
         "materialize": true,
         "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.lupusec/master/admin/lupusec.png",
+        "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
         "keywords": ["lupusec", "burlgar alarm", "alarm system", "lupus", "iobroker"],
         "readme": "https://github.com/ioBroker/ioBroker.lupusec/blob/master/README.md",
         "loglevel": "info",
