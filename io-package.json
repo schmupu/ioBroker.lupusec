@@ -35,7 +35,7 @@
     "enabled": true,
     "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
     "keywords": ["lupusec", "burlgar alarm", "alarm system", "lupus", "iobroker"],
-    "readme": "https://github.com/ioBroker/ioBroker.lupusec/blob/master/README.md",
+    "readme": "https://github.com/schmupu/ioBroker.lupusec/blob/master/README.md",
     "loglevel": "info",
     "type": "general",
     "restartAdapters": []
