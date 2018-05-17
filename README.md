@@ -2,6 +2,13 @@
 # ioBroker.lupusec
 =================
 
+[![Build Status](https://travis-ci.org/schmupu/ioBroker.lupusec.svg?branch=master)](https://travis-ci.org/schmupu/ioBroker.lupusec)
+[![NPM version](http://img.shields.io/npm/v/iobroker.lupusec.svg)](https://www.npmjs.com/package/iobroker.lupusec)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.lupusec.svg)](https://www.npmjs.com/package/iobroker.lupusec)
+
+[![NPM](https://nodei.co/npm/iobroker.lupusec.png?downloads=true)](https://nodei.co/npm/iobroker.lupusec/)
+
+
 This adapter is a lupusec for the creation of an ioBroker adapter. You do not need it at least that you plan developing your own adapter.
 
 It includes both code running within iobroker and as vis widget. If you only plan to create a vis widget then you should use the [iobroker.vis-lupusec](https://github.com/ioBroker/ioBroker.vis-lupusec) instead.
