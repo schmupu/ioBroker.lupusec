@@ -6,24 +6,24 @@ This adapter is a lupusec for the creation of an ioBroker adapter. You do not ne
 
 It includes both code running within iobroker and as vis widget. If you only plan to create a vis widget then you should use the [iobroker.vis-lupusec](https://github.com/ioBroker/ioBroker.vis-lupusec) instead.
 
-## Steps 
+## Steps
 1. download and unpack this packet from github ```https://github.com/ioBroker/ioBroker.lupusec/archive/master.zip```
   or clone git repository ```git clone --depth=1 https://github.com/ioBroker/ioBroker.lupusec.git```
 
 2. download required npm packets. Write in ioBroker.lupusec directory:
 
   ```npm install```
-  
+
 3. set name of this lupusec. Call
-  
+
   ```gulp rename --name mynewname --email email@mail.com --author "Author Name"```
-  
+
   *mynewname* must be **lower** case and with no spaces.
 
   If gulp is not available, install gulp globally:
-  
+
   ```npm install -g gulp-cli```
- 
+
 4. rename directory from *ioBroker.lupusec* (can be *ioBroker.lupusec-master*) to *iobroker.mynewname*
 
 5. to use this lupusec you should copy it into *.../iobroker/node_modules* directory and then create an instance for it with iobroker.admin
@@ -33,11 +33,11 @@ It includes both code running within iobroker and as vis widget. If you only pla
   * you might want to start with main.js (code running within iobroker) and admin/index.html (the adapter settings page).
 
   * [Adapter-Development-Documentation](https://github.com/ioBroker/ioBroker/wiki/Adapter-Development-Documentation),
-  
+
   * [Installation, setup and first steps with an ioBroker Development Environment](https://github.com/ioBroker/ioBroker/wiki/Installation,-setup-and-first-steps-with-an-ioBroker-Development-Environment)
-  
+
   * [Write and debug vis widgets](https://github.com/ioBroker/ioBroker/wiki/How-to-debug-vis-and-to-write-own-widget-set)
-  
+
   * files under the www folders are made available under http://&lt;iobrokerIP&gt;:8082/&lt;adapter-name&gt;/
     * for this to work the iobroker.vis adapter has to be installed
     * delete this folder if you do not plan to export any files this way
@@ -49,7 +49,7 @@ It includes both code running within iobroker and as vis widget. If you only pla
     * After admin/index.html is changed you must execute ```iobroker upload mynewname``` to see changes in admin console. The same is valid for any files in *admin* and *www* directory  
 
 7. change version: edit package.json and then call ```grunt p``` in your adapter directory.
-  
+
 8. share it with the community
 
 ## Requirements
@@ -59,17 +59,8 @@ It includes both code running within iobroker and as vis widget. If you only pla
 
 ## Changelog
 
-### 0.6.0 (2017.01.02)
-* (bluefox) Support of admin3
-
-### 0.5.0
-* (vegetto) include vis widget
-
-### 0.4.0
-* (bluefox) fix errors with grunt
-
-### 0.2.0
-* (bluefox) initial release
+### 0.0.1
+* (Stübi) initial release
 
 ## License
 The MIT License (MIT)
