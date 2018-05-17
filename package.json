@@ -1,6 +1,6 @@
 {
   "name": "iobroker.lupusec",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "ioBroker lupusec Adapter",
   "author": {
     "name": "Thorsten Stueben",

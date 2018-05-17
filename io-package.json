@@ -1,47 +1,51 @@
 {
-    "common": {
-        "name": "lupusec",
-        "version": "0.0.1",
-        "news": {
-            "0.0.1": {
-                "en": "initial adapter",
-                "de": "Initiale Version"
-            }
-        },
-		"title": "Lupusec alarm system adapter",
-        "titleLang": {
-            "en": "Javascript/Node.js based lupusec adapter",
-            "de": "Javascript / Node.js basierte Vorlagenadapter"
-        },
-        "desc": {
-            "en": "ioBroker lupusec Adapter",
-            "de": "ioBroker Lupusec Adapter"
-        },
-        "authors": [
-            "Thorsten Stueben <thorsten@stueben.de>"
-        ],
-        "docs": {
-            "en": "docs/en/admin.md",
-            "de": "docs/de/admin.md"
-        },
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "icon": "lupusec.png",
-        "materialize": true,
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
-        "keywords": ["lupusec", "burlgar alarm", "alarm system", "lupus", "iobroker"],
-        "readme": "https://github.com/ioBroker/ioBroker.lupusec/blob/master/README.md",
-        "loglevel": "info",
-        "type": "general",
-        "restartAdapters": [ ]
+  "common": {
+    "name": "lupusec",
+    "version": "0.0.2",
+    "news": {
+      "0.0.2": {
+        "en": "initial adapter",
+        "de": "Initiale Version"
+      },
+      "0.0.1": {
+        "en": "initial adapter",
+        "de": "Initiale Version"
+      }
     },
-    "native": {
-        "test1": true,
-        "test2": 42,
-        "mySelect": "auto"
+    "title": "Lupusec alarm system adapter",
+    "titleLang": {
+      "en": "Javascript/Node.js based lupusec adapter",
+      "de": "Javascript / Node.js basierte Vorlagenadapter"
     },
-    "objects": [
+    "desc": {
+      "en": "ioBroker lupusec Adapter",
+      "de": "ioBroker Lupusec Adapter"
+    },
+    "authors": [
+      "Thorsten Stueben <thorsten@stueben.de>"
+    ],
+    "docs": {
+      "en": "docs/en/admin.md",
+      "de": "docs/de/admin.md"
+    },
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "icon": "lupusec.png",
+    "materialize": true,
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
+    "keywords": ["lupusec", "burlgar alarm", "alarm system", "lupus", "iobroker"],
+    "readme": "https://github.com/ioBroker/ioBroker.lupusec/blob/master/README.md",
+    "loglevel": "info",
+    "type": "general",
+    "restartAdapters": []
+  },
+  "native": {
+    "test1": true,
+    "test2": 42,
+    "mySelect": "auto"
+  },
+  "objects": [
 
-    ]
+  ]
 }
