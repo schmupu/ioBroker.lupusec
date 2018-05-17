@@ -8,8 +8,8 @@
 
 [![NPM](https://nodei.co/npm/iobroker.lupusec.png?downloads=true)](https://nodei.co/npm/iobroker.lupusec/)
 
-Lupusec is a great alarm system from company Lupus. This adapter connects the Lupusec alarm system with ioBroker. You can read informations
-from the Lupusec sensors like door, windows, water and smoke sensors. You can turn on switches and arm/disarm the alarm system.
+Lupusec is a great alarm system from the company Lupus. This adapter connects the Lupusec alarm system with ioBroker. You can read informations
+from the Lupusec sensors like door, windows, water and smoke sensors and you can turn on switches and arm/disarm the alarm system.
 
 You can find more information here: [Lupus](https://www.lupus-electronics.de/en)
 
@@ -27,7 +27,7 @@ You can find more information here: [Lupus](https://www.lupus-electronics.de/en)
 
 ## Changelog
 
-### 0.0.1 (17.05.2018)
+### 0.0.2 (17.05.2018)
 * (Stübi) no Logic !!!!
 
 ### 0.0.1 (17.05.2018)
