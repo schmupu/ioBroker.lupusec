@@ -48,6 +48,7 @@
         $('#transportOptions_secure').prop('checked', false);
       }
     }
+    *
 
     function init() {
       $('#transportOptions_service').change(showHideSettings);
@@ -107,14 +108,47 @@
     function load(settings, _onChange) {
       loadHelper(settings);
       onChange = _onChange;
-      init();
+    //  init();
       onChange(false);
-      showHideSettings();
+    //  showHideSettings();
       getIsAdapterAlive(function(_isAlive) {
         isAlive = (_isAlive || common.enabled);
       });
     }
 
+    /*
+    function test() {
+      if (!isAlive) {
+        showMessage(_('Enable first the adapter to test email.'));
+        return;
+      }
+      var transportOptionsService = $('#transportOptions_service').val();
+      $('#test').addClass('disabled');
+      sendTo('email.' + instance, 'send', {
+        subject: $('#defaults_subject').val(),
+        to: $('#defaults_to').val(),
+        from: $('#defaults_from').val(),
+        text: _('This is test email!'),
+        options: {
+          host: transportOptionsService ? undefined : $('#transportOptions_host').val(),
+          port: transportOptionsService ? undefined : $('#transportOptions_port').val(),
+          secure: transportOptionsService ? undefined : $('#transportOptions_secure').prop('checked'),
+          auth: {
+            user: $('#transportOptions_auth_user').val(),
+            pass: $('#transportOptions_auth_pass').val()
+          },
+          service: transportOptionsService
+        }
+      }, function(result) {
+        $('#test').removeClass('disabled');
+        if (result.error) {
+          showMessage(_('Error: ') + result.error);
+        } else {
+          showMessage(_('Check the log or your email'));
+        }
+      });
+    }
+    */
 
     function saveHelper(obj, id, value) {
       var ids = id.split('_');
@@ -169,41 +203,34 @@
               <img src="lupusec.png" class="logo">
             </div>
           </div>
-
           <div class="row">
             <div class="col s12 m4">
-              <select id="transportOptions_service" class="value">
-                        <option value="1und1">1und1</option>
-                        <option value="AOL">AOL</option>
-                        <option value="DebugMail.io">DebugMail.io</option>
-                    </select>
-              <label class="translate" for="transportOptions_service">Service:</label>
+              <select id="transport" class="value">
+                            <option value="xt2">Lupusec XT2</option>
+                        </select>
+              <label class="translate" for="transport">Transport:</label>
             </div>
           </div>
-          <div class="row" id="_email_host">
+
+          <div class="row">
             <div class="col s12 m4">
               <input id="transportOptions_host" type="text" size="50" class="value" />
               <label class="translate" for="transportOptions_host">Host:</label>
             </div>
-          </div>
-          <div class="row" id="_email_port">
+
             <div class="col s12 m4">
               <input id="transportOptions_port" type="text" size="5" class="value" />
               <label class="translate" for="transportOptions_port">Port:</label>
             </div>
           </div>
-          <div class="row" id="_email_secure">
+
+          <div class="row">
             <div class="col s12 m4">
               <input type="checkbox" id="transportOptions_secure" class="value" />
               <label for="transportOptions_secure"><span class="translate">SSL connection:</span>(<span class="translate">Is secure connection</span>)</label>
             </div>
           </div>
-          <div class="row" id="_email_secure">
-            <div class="col s12 m4">
-              <input type="checkbox" id="transportOptions_secure" class="value" />
-              <label for="transportOptions_secure" class="translate">SSL connection:</label>
-            </div>
-          </div>
+
           <div class="row">
             <div class="col s12 m6 l4">
               <input id="transportOptions_auth_user" type="text" size="30" class="value" />
@@ -214,8 +241,6 @@
               <label class="translate" for="transportOptions_auth_pass">Password:</label>
             </div>
           </div>
-
-
         </div>
       </div>
     </div>
