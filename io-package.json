@@ -12,14 +12,14 @@
         "de": "Initiale Version"
       }
     },
-    "title": "Lupusec alarm system adapter",
+    "title": "Lupusec alarm system",
     "titleLang": {
       "en": "Javascript/Node.js based lupusec adapter",
       "de": "Javascript / Node.js basierte Vorlagenadapter"
     },
     "desc": {
-      "en": "ioBroker lupusec Adapter",
-      "de": "ioBroker Lupusec Adapter"
+      "en": "Lupusec adaper for alarm system ",
+      "de": "Lupusec Adapter für Alarmanlagen"
     },
     "authors": [
       "Thorsten Stueben <thorsten@stueben.de>"

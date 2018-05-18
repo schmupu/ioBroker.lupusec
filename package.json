@@ -1,7 +1,7 @@
 {
   "name": "iobroker.lupusec",
   "version": "0.0.2",
-  "description": "ioBroker lupusec Adapter",
+  "description": "Lupusec",
   "author": {
     "name": "Thorsten Stueben",
     "email": "thorsten@stueben.de"
@@ -18,7 +18,9 @@
     "ioBroker",
     "lupusec",
     "Smart Home",
-    "home automation"
+    "Lupus",
+    "alarm",
+    "burglar"
   ],
   "repository": {
     "type": "git",
