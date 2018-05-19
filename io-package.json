@@ -14,12 +14,12 @@
     },
     "title": "Lupusec alarm system adapter",
     "titleLang": {
-      "en": "Javascript/Node.js based lupusec adapter",
-      "de": "Javascript / Node.js basierte Vorlagenadapter"
+      "en": "Lupusec alarm system",
+      "de": "Lupusec Alarmanlage"
     },
     "desc": {
-      "en": "ioBroker lupusec Adapter",
-      "de": "ioBroker Lupusec Adapter"
+      "en": "ioBroker lupusec alarm system Adapter",
+      "de": "ioBroker Lupusec Alarmanlagen Adapter"
     },
     "authors": [
       "Thorsten Stueben <thorsten@stueben.de>"
@@ -41,9 +41,12 @@
     "restartAdapters": []
   },
   "native": {
-    "test1": true,
-    "test2": 42,
-    "mySelect": "auto"
+    "alarm_host": "192.168.1.2",
+    "alarm_port": "80",
+    "alarm_https": false,
+    "alarm_type": "lupusec_xt2",
+    "alarm_user": "test",
+    "alarm_password": "test"
   },
   "objects": [
 
