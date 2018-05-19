@@ -22,53 +22,12 @@
     .m span {
       font-size: 0.9em;
     }
-<<<<<<< HEAD
-
-    function showHideSettings() {
-      if (!$('#transportOptions_service').val()) {
-        $('#_email_host').show();
-        $('#_email_port').show();
-        $('#_email_secure').show();
-      } else {
-        $('#_email_host').hide();
-        $('#_email_port').hide();
-        $('#_email_secure').hide();
-        $('#transportOptions_host').val('');
-        $('#transportOptions_port').val('');
-        $('#transportOptions_secure').prop('checked', false);
-      }
-    }
-    *
-
-    function init() {
-      $('#transportOptions_service').change(showHideSettings);
-      $('#test').on('click', test);
-    }
-
-    function setValue(id, value) {
-      var $value = $('#' + id + '.value');
-      if ($value.attr('type') === 'checkbox') {
-        $value.prop('checked', value).change(function() {
-          onChange();
-        });
-      } else {
-        $value.val(value).on('change', function() {
-          onChange();
-        }).on('keyup', function() {
-          onChange();
-        });
-      }
-    }
-
-    function loadHelper(settings, param, subparam) {
-=======
   </style>
   <!-- you have to define 2 functions in the global scope: -->
   <script type="text/javascript">
     // the function loadSettings has to exist ...
     function load(settings, onChange) {
       // example: select elements with id=key and class=value and insert value
->>>>>>> master
       if (!settings) return;
       $('.value').each(function() {
         var $key = $(this);
@@ -86,85 +45,15 @@
             onChange();
           });
         }
-<<<<<<< HEAD
-      }
-    }
-    // the function loadSettings has to exist ...
-    function load(settings, _onChange) {
-      loadHelper(settings);
-      onChange = _onChange;
-    //  init();
-      onChange(false);
-    //  showHideSettings();
-      getIsAdapterAlive(function(_isAlive) {
-        isAlive = (_isAlive || common.enabled);
-=======
->>>>>>> master
       });
       onChange(false);
       M.updateTextFields(); // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
     }
 
-<<<<<<< HEAD
-    /*
-    function test() {
-      if (!isAlive) {
-        showMessage(_('Enable first the adapter to test email.'));
-        return;
-      }
-      var transportOptionsService = $('#transportOptions_service').val();
-      $('#test').addClass('disabled');
-      sendTo('email.' + instance, 'send', {
-        subject: $('#defaults_subject').val(),
-        to: $('#defaults_to').val(),
-        from: $('#defaults_from').val(),
-        text: _('This is test email!'),
-        options: {
-          host: transportOptionsService ? undefined : $('#transportOptions_host').val(),
-          port: transportOptionsService ? undefined : $('#transportOptions_port').val(),
-          secure: transportOptionsService ? undefined : $('#transportOptions_secure').prop('checked'),
-          auth: {
-            user: $('#transportOptions_auth_user').val(),
-            pass: $('#transportOptions_auth_pass').val()
-          },
-          service: transportOptionsService
-        }
-      }, function(result) {
-        $('#test').removeClass('disabled');
-        if (result.error) {
-          showMessage(_('Error: ') + result.error);
-        } else {
-          showMessage(_('Check the log or your email'));
-        }
-      });
-    }
-    */
-
-    function saveHelper(obj, id, value) {
-      var ids = id.split('_');
-      if (ids.length === 1) {
-        obj[id] = value;
-      } else if (ids.length === 2) {
-        if (!obj[ids[0]]) obj[ids[0]] = {};
-        obj[ids[0]][ids[1]] = value;
-      } else if (ids.length === 3) {
-        if (ids[2] === 'pass') {
-          value = encrypt('Zgfr56gFe87jJOM', value);
-        }
-        if (!obj[ids[0]]) obj[ids[0]] = {};
-        if (!obj[ids[0]][ids[1]]) obj[ids[0]][ids[1]] = {};
-        obj[ids[0]][ids[1]][ids[2]] = value;
-      }
-      return obj;
-    }
-
-    function getSettings() {
-=======
     // ... and the function save has to exist.
     // you have to make sure the callback is called with the settings object as first param!
     function save(callback) {
       // example: select elements with class=value and build settings object
->>>>>>> master
       var obj = {};
       $('.value').each(function() {
         var $this = $(this);
@@ -189,52 +78,6 @@
         <div class="input-field col s6">
           <img src="lupusec.png" class="logo">
         </div>
-<<<<<<< HEAD
-        <div id="tab-main" class="col s12 page">
-          <div class="row">
-            <div class="col s12 m4 l2">
-              <img src="lupusec.png" class="logo">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col s12 m4">
-              <select id="transport" class="value">
-                            <option value="xt2">Lupusec XT2</option>
-                        </select>
-              <label class="translate" for="transport">Transport:</label>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col s12 m4">
-              <input id="transportOptions_host" type="text" size="50" class="value" />
-              <label class="translate" for="transportOptions_host">Host:</label>
-            </div>
-
-            <div class="col s12 m4">
-              <input id="transportOptions_port" type="text" size="5" class="value" />
-              <label class="translate" for="transportOptions_port">Port:</label>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col s12 m4">
-              <input type="checkbox" id="transportOptions_secure" class="value" />
-              <label for="transportOptions_secure"><span class="translate">SSL connection:</span>(<span class="translate">Is secure connection</span>)</label>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col s12 m6 l4">
-              <input id="transportOptions_auth_user" type="text" size="30" class="value" />
-              <label class="translate" for="transportOptions_auth_user">User:</label>
-            </div>
-            <div class="col s12 m6 l4">
-              <input id="transportOptions_auth_pass" type="password" size="30" class="value" />
-              <label class="translate" for="transportOptions_auth_pass">Password:</label>
-            </div>
-          </div>
-=======
       </div>
 
       <div class="row">
@@ -279,7 +122,6 @@
       <div class="row">
         <div class="col s12">
           <p class="translate">Adapter restarts with new config immediately</p>
->>>>>>> master
         </div>
       </div>
     </div>

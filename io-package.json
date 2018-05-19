@@ -18,13 +18,8 @@
       "de": "Lupusec Alarmanlage"
     },
     "desc": {
-<<<<<<< HEAD
       "en": "Lupusec adaper for alarm system ",
       "de": "Lupusec Adapter für Alarmanlagen"
-=======
-      "en": "ioBroker lupusec alarm system Adapter",
-      "de": "ioBroker Lupusec Alarmanlagen Adapter"
->>>>>>> master
     },
     "authors": [
       "Thorsten Stueben <thorsten@stueben.de>"
