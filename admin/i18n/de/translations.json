@@ -1,9 +1,9 @@
 {
-  "Auto": "Auto",
-  "Manual": "Manual",
-  "My select": "Mein Auswahl",
+  "alarm_type": "Alarmanlage",
+  "alarm_host": "IP-Adresse / Hostname Alarmanlage",
+  "alarm_port": "Port",
   "on save adapter restarts with new config immediately": "Beim Speichern von Einstellungen der Adapter wird sofort neu gestartet.",
-  "template adapter settings": "Beispiel",
-  "test1": "Test 1",
-  "test2": "Test 2"
+  "alarm_user": "Benutzer",
+  "alarm_password": "Passwort",
+  "alarm_https": "https"
 }

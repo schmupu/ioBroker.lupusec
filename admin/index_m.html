@@ -1,38 +1,28 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
-  <!-- Materialze style -->
-  <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
+  <!-- these 4 files always have to be included -->
   <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+  <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
 
   <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
 
+
+  <!-- these files always have to be included -->
   <script type="text/javascript" src="../../js/translate.js"></script>
   <script type="text/javascript" src="../../lib/js/materialize.js"></script>
   <script type="text/javascript" src="../../js/adapter-settings.js"></script>
   <script type="text/javascript" src="words.js"></script>
-
-  <script type="text/javascript">
-    var onChange = null;
-    var isAlive = false;
-
-    function encrypt(key, value) {
-      var result = '';
-      for (var i = 0; i < value.length; i++) {
-        result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
-      }
-      return result;
+  <style>
+    .m .col .select-wrapper+label {
+      top: -26px;
     }
 
-    function decrypt(key, value) {
-      var result = '';
-      for (var i = 0; i < value.length; i++) {
-        result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
-      }
-      return result;
+    .m span {
+      font-size: 0.9em;
     }
+<<<<<<< HEAD
 
     function showHideSettings() {
       if (!$('#transportOptions_service').val()) {
@@ -71,37 +61,32 @@
     }
 
     function loadHelper(settings, param, subparam) {
+=======
+  </style>
+  <!-- you have to define 2 functions in the global scope: -->
+  <script type="text/javascript">
+    // the function loadSettings has to exist ...
+    function load(settings, onChange) {
+      // example: select elements with id=key and class=value and insert value
+>>>>>>> master
       if (!settings) return;
-      if (subparam && param) {
-        for (var key in settings[param][subparam]) {
-          if (!settings[param][subparam].hasOwnProperty(key)) continue;
-          if (typeof settings[param][subparam][key] !== 'object') {
-            if (key === 'pass') {
-              settings[param][subparam][key] = decrypt('Zgfr56gFe87jJOM', settings[param][subparam][key]);
-            }
-            setValue(param + '_' + subparam + '_' + key, settings[param][subparam][key]);
-          } else {
-            alert('4th level is not supported');
-          }
+      $('.value').each(function() {
+        var $key = $(this);
+        var id = $key.attr('id');
+        if ($key.attr('type') === 'checkbox') {
+          // do not call onChange direct, because onChange could expect some arguments
+          $key.prop('checked', settings[id]).change(function() {
+            onChange();
+          });
+        } else {
+          // do not call onChange direct, because onChange could expect some arguments
+          $key.val(settings[id]).change(function() {
+            onChange();
+          }).keyup(function() {
+            onChange();
+          });
         }
-      } else if (param) {
-        for (var key in settings[param]) {
-          if (!settings[param].hasOwnProperty(key)) continue;
-          if (typeof settings[param][key] !== 'object') {
-            setValue(param + '_' + key, settings[param][key]);
-          } else {
-            loadHelper(settings, param, key);
-          }
-        }
-      } else {
-        for (var key in settings) {
-          if (!settings.hasOwnProperty(key)) continue;
-          if (typeof settings[key] !== 'object') {
-            setValue(key, settings[key]);
-          } else {
-            loadHelper(settings, key);
-          }
-        }
+<<<<<<< HEAD
       }
     }
     // the function loadSettings has to exist ...
@@ -113,9 +98,14 @@
     //  showHideSettings();
       getIsAdapterAlive(function(_isAlive) {
         isAlive = (_isAlive || common.enabled);
+=======
+>>>>>>> master
       });
+      onChange(false);
+      M.updateTextFields(); // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
     }
 
+<<<<<<< HEAD
     /*
     function test() {
       if (!isAlive) {
@@ -169,34 +159,37 @@
     }
 
     function getSettings() {
+=======
+    // ... and the function save has to exist.
+    // you have to make sure the callback is called with the settings object as first param!
+    function save(callback) {
+      // example: select elements with class=value and build settings object
+>>>>>>> master
       var obj = {};
       $('.value').each(function() {
         var $this = $(this);
-        var id = $this.attr('id');
         if ($this.attr('type') === 'checkbox') {
-          obj = saveHelper(obj, id, $this.prop('checked'))
+          obj[$this.attr('id')] = $this.prop('checked');
         } else {
-          obj = saveHelper(obj, id, $this.val())
+          obj[$this.attr('id')] = $this.val();
         }
       });
-      return obj;
-    }
-
-    function save(callback) {
-      callback(getSettings());
+      callback(obj);
     }
   </script>
 </head>
 
 <body>
-  <div id="adapter-container">
-    <div class="m adapter-container">
+  <!-- you have to put your config page in a div with id adapter-container -->
+  <div class="m adapter-container">
+    <div class="row">
+      <!-- Forms are the standard way to receive user inputted data.
+         Learn more http://materializecss.com/forms.html-->
       <div class="row">
-        <div class="col s12">
-          <ul class="tabs">
-            <li class="tab col s2"><a href="#tab-main" class="translate active">Connection settings</a></li>
-          </ul>
+        <div class="input-field col s6">
+          <img src="lupusec.png" class="logo">
         </div>
+<<<<<<< HEAD
         <div id="tab-main" class="col s12 page">
           <div class="row">
             <div class="col s12 m4 l2">
@@ -241,6 +234,52 @@
               <label class="translate" for="transportOptions_auth_pass">Password:</label>
             </div>
           </div>
+=======
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12 m4 l4">
+          <select id="alarm_type" class="value">
+                          <option value="lupusec_xt2">Lupusec XT2</option>
+                      </select>
+          <!-- label class="translate" for="alarm_type">alarm system:</label -->
+        </div>
+
+        <div class="input-field col s12 m8 l4">
+          <input id="alarm_host" type="text" size="50" class="value" />
+          <label class="translate" for="alarm_host">Host:</label>
+        </div>
+
+        <!--
+        <div class="input-field col s12 m4 l1">
+          <input class="value number" id="alarm_port" min="1" max="65565" type="number" />
+          <label class="translate" for="alarm_port">Port:</label>
+        </div>
+        -->
+      </div>
+
+
+      <div class="row">
+        <div class="input-field col s12">
+          <input class="value" id="alarm_https" type="checkbox" />
+          <label for="alarm_https" class="translate">https</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12 m6 l4">
+          <input id="alarm_user" type="text" size="30" class="value" />
+          <label class="translate" for="alarm_user">User:</label>
+        </div>
+        <div class="input-field col s12 m6 l4">
+          <input id="alarm_password" type="password" size="30" class="value" />
+          <label class="translate" for="alarm_password">Password:</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <p class="translate">Adapter restarts with new config immediately</p>
+>>>>>>> master
         </div>
       </div>
     </div>
