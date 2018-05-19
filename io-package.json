@@ -48,7 +48,6 @@
     "alarm_user": "test",
     "alarm_password": "test"
   },
-  "objects": [
-
-  ]
+  "objects": [ ],
+  "instanceObjects": []
 }
