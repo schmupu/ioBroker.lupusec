@@ -3,6 +3,7 @@
 
 // you have to require the utils module and call adapter function
 var utils =    require(__dirname + '/lib/utils'); // Get common adapter utils
+var lupus =    require(__dirname + '/lib/lupus');
 var adapter = new utils.Adapter('lupusec');
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
@@ -101,6 +102,9 @@ function main() {
     // same thing, but the state is deleted after 30s (getState will return null afterwards)
     adapter.setState('testVariable', {val: true, ack: true, expire: 30});
 
+    // lupus.test(adapter);
 
+    var t = new lupus(adapter);
+    t.show();
 
 }
