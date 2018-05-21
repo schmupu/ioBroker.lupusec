@@ -1,6 +1,6 @@
 {
   "name": "iobroker.lupusec",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Lupusec",
   "author": {
     "name": "Thorsten Stueben",
@@ -12,7 +12,7 @@
       "email": "thorsten@stueben.de"
     }
   ],
-  "homepage": "https://github.com/ioBroker/ioBroker.lupusec",
+  "homepage": "https://github.com/schmupu/ioBroker.lupusec",
   "license": "MIT",
   "keywords": [
     "ioBroker",
@@ -24,7 +24,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ioBroker/ioBroker.lupusec"
+    "url": "https://github.com/schmupu/ioBroker.lupusec"
   },
   "dependencies": {},
   "devDependencies": {
@@ -37,7 +37,7 @@
     "test": "node node_modules/mocha/bin/mocha --exit"
   },
   "bugs": {
-    "url": "https://github.com/ioBroker/ioBroker.lupusec/issues"
+    "url": "https://github.com/schmupu/ioBroker.lupusec/issues"
   },
   "readmeFilename": "README.md"
 }

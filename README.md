@@ -27,6 +27,9 @@ You can find more information here: [Lupus](https://www.lupus-electronics.de/en)
 
 ## Changelog
 
+### 0.0.3 (17.05.2018)
+* (Stübi) no Logic !!!!
+
 ### 0.0.2 (17.05.2018)
 * (Stübi) no Logic !!!!
 
