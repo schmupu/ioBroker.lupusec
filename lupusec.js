@@ -111,13 +111,7 @@ function main() {
   // lupus.test(adapter);
 
 
-  var t = new Lupus(
-    adapter,
-    adapter.config.alarm_host,
-    adapter.config.alarm_https,
-    adapter.config.alarm_user,
-    adapter.config.alarm_password,
-  );
+  var t = new Lupus(adapter);
 
   t.test();
 

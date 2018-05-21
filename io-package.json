@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "news": {
+      "0.0.5": {
+        "en": "initial adapter",
+        "de": "Initiale Version"
+      },
       "0.0.4": {
         "en": "initial adapter",
         "de": "Initiale Version"
