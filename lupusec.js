@@ -54,18 +54,6 @@ adapter.on('ready', function() {
 
 function main() {
 
-
-  adapter.setObject('testVariable', {
-    type: 'state',
-    common: {
-      name: 'testVariable',
-      type: 'boolean',
-      role: 'indicator'
-    },
-    native: {}
-  });
-
-
   var t = new Lupus(adapter);
 
   t.test();
