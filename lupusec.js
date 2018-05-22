@@ -37,7 +37,9 @@ adapter.on('stateChange', function(id, state) {
 
       if (m !== null) {
         var key = m[1];
-        lupusec.DeviceSwitchPSSPost(key);
+        lupusec.DeviceSwitchPSSPost(key, {
+          switch: state.val
+        });
       }
 
       if (id == adapter.namespace + ".Status.mode_pc_a1") {
