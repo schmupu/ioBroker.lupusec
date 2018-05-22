@@ -2,7 +2,7 @@
 
 // you have to require the utils module and call adapter function
 var utils = require(__dirname + '/lib/utils'); // Get common adapter utils
-var Lupus = require(__dirname + '/lib/lupus');
+//var Lupus = require(__dirname + '/lib/lupus');
 var adapter = new utils.Adapter('lupusec');
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
