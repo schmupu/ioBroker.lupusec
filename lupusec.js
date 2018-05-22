@@ -2,8 +2,9 @@
 
 // you have to require the utils module and call adapter function
 var utils = require(__dirname + '/lib/utils'); // Get common adapter utils
-//var Lupus = require(__dirname + '/lib/lupus');
+var Lupus = require(__dirname + '/lib/lupus');
 var adapter = new utils.Adapter('lupusec');
+var lupusec = null;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', function(callback) {
@@ -24,11 +25,31 @@ adapter.on('objectChange', function(id, obj) {
 // is called if a subscribed state changes
 adapter.on('stateChange', function(id, state) {
   // Warning, state can be null if it was deleted
-//  adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
+  //  adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
 
   // you can use the ack flag to detect if it is status (true) or command (false)
   if (state && !state.ack) {
-  //  adapter.log.info('ack is not set!');
+
+    if (lupusec) {
+
+      const regstatusex = /lupusec\..+\.(.+)\.info.status_ex/gm;
+      var m = regstatusex.exec(id);
+
+      if (m !== null) {
+        var key = m[1];
+        lupusec.DeviceSwitchPSSPost(key);
+      }
+
+      if (id == adapter.namespace + ".Status.mode_pc_a1") {
+        lupusec.PanelCondPost(1, state.val);
+      }
+
+      if (id == adapter.namespace + ".Status.mode_pc_a2") {
+        lupusec.PanelCondPost(2, state.val);
+      }
+
+    }
+
   }
 
 });
@@ -54,10 +75,11 @@ adapter.on('ready', function() {
 
 function main() {
 
-  //var t = new Lupus(adapter);
-
-  //t.test();
-
-  adapter.subscribeStates('*');
+  lupusec = new Lupus(adapter);
+  lupusec.test();
+  adapter.subscribeStates(adapter.namespace + ".Status.mode_pc_a1");
+  adapter.subscribeStates(adapter.namespace + ".*.info.status_ex");
+  adapter.subscribeStates(adapter.namespace + ".Status.mode_pc_a2");
+  //adapter.subscribeStates('*');
 
 }
