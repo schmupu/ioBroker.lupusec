@@ -54,9 +54,9 @@ adapter.on('ready', function() {
 
 function main() {
 
-  var t = new Lupus(adapter);
+  //var t = new Lupus(adapter);
 
-  t.test();
+  //t.test();
 
   adapter.subscribeStates('*');
 
