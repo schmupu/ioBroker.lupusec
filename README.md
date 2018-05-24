@@ -8,10 +8,13 @@
 
 [![NPM](https://nodei.co/npm/iobroker.lupusec.png?downloads=true)](https://nodei.co/npm/iobroker.lupusec/)
 
-Lupusec is a great alarm system from the company Lupus. This adapter connects the Lupusec alarm system with ioBroker. You can read informations
-from the Lupusec sensors like door, windows, water and smoke sensors and you can turn on switches and arm/disarm the alarm system.
+Requires node.js 6.0 or higher.
 
-You can find more information here: [Lupus](https://www.lupus-electronics.de/en)
+This adapter connects the Lupusec alarm system XT1, XT2, XT3 with ioBroker. You can read the status of the Lupusec sensors
+like door, windows, water, smoke sensors and the status of the alarm system.
+You can turn on switches and arm/disarm the alarm system.
+
+You can find detailed information here: [Lupus](https://www.lupus-electronics.de/en)
 
 
 ## Installation
@@ -20,15 +23,15 @@ You can find more information here: [Lupus](https://www.lupus-electronics.de/en)
 
 2. Configuration of the adapter
 
-  Choose the IP-Address or hostname from the Lupusec alarm system.
-
-3. ....
+  Choose the IP-Address or hostname from the Lupusec alarm system. Choose https (recommended) if possible.
+  For only reading the status, select a user without write access. If you want to change the status
+  (for example, turn on/off the light or arm/disarm the alarm) pick a user with write access.
 
 
 ## Changelog
 
-### 0.0.4 (17.05.2018)
-* (Stübi) no Logic !!!!
+### 0.0.6 (24.05.2018)
+* (Stübi) Alpha Version of Adapter !!!!
 
 
 ## License

@@ -1,27 +1,11 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "news": {
-      "0.0.5": {
-        "en": "initial adapter",
-        "de": "Initiale Version"
-      },
-      "0.0.4": {
-        "en": "initial adapter",
-        "de": "Initiale Version"
-      },
-      "0.0.3": {
-        "en": "initial adapter",
-        "de": "Initiale Version"
-      },
-      "0.0.2": {
-        "en": "initial adapter",
-        "de": "Initiale Version"
-      },
-      "0.0.1": {
-        "en": "initial adapter",
-        "de": "Initiale Version"
+      "0.0.6": {
+        "en": "Alpha Version of Adapter",
+        "de": "Alpha Version of Adapter"
       }
     },
     "title": "Lupusec alarm system",
@@ -53,12 +37,13 @@
     "restartAdapters": []
   },
   "native": {
-    "alarm_host": "192.168.1.2",
+    "alarm_host": "",
     "alarm_port": "80",
     "alarm_https": false,
     "alarm_type": "lupusec_xt2",
     "alarm_user": "test",
-    "alarm_password": "test"
+    "alarm_password": "test",
+    "alarm_polltime": 15
   },
   "objects": [ ],
   "instanceObjects": []

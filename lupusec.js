@@ -77,11 +77,38 @@ adapter.on('ready', function() {
 
 function main() {
 
+  var pollsec = adapter.config.alarm_polltime;
+
   lupusec = new Lupus(adapter);
-  lupusec.test();
-  adapter.subscribeStates(adapter.namespace + ".Status.mode_pc_a1");
-  adapter.subscribeStates(adapter.namespace + ".*.info.status_ex");
-  adapter.subscribeStates(adapter.namespace + ".Status.mode_pc_a2");
-  //adapter.subscribeStates('*');
+
+  if (adapter.config.alarm_host != null && adapter.config.alarm_host != "") {
+
+    lupusec.DeviceListGet();
+    lupusec.DevicePSSListGet();
+    lupusec.PanelCondGet();
+    lupusec.DeviceEditAllGet();
+
+
+    setInterval(function() {
+
+      lupusec.DeviceListGet();
+      lupusec.DevicePSSListGet();
+      lupusec.PanelCondGet();
+
+    }, pollsec * 1000);
+
+    setInterval(function() {
+
+      lupusec.DeviceEditAllGet();
+
+    }, 4 * pollsec * 1000);
+
+
+    adapter.subscribeStates(adapter.namespace + ".*.info.status_ex");
+    adapter.subscribeStates(adapter.namespace + ".Status.mode_pc_a1");
+    adapter.subscribeStates(adapter.namespace + ".Status.mode_pc_a2");
+
+  }
+
 
 }

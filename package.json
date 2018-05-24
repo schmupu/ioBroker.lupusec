@@ -1,6 +1,6 @@
 {
   "name": "iobroker.lupusec",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Lupusec",
   "author": {
     "name": "Thorsten Stueben",
@@ -19,8 +19,8 @@
     "lupusec",
     "Smart Home",
     "Lupus",
-    "alarm",
-    "burglar"
+    "alarm system",
+    "burglar alarm" 
   ],
   "repository": {
     "type": "git",
