@@ -29,7 +29,7 @@ You can find detailed information here: [Lupus](https://www.lupus-electronics.de
 
 ## Changelog
 
-### 0.0.9 (26.05.2018)
+### 0.1.0 (26.05.2018)
 * (Stübi) Alpha Version of Adapter !!!! Only Lupusec XT2 supported.
 
 
