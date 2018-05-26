@@ -16,7 +16,6 @@ You can turn on switches and arm/disarm the alarm system.
 
 You can find detailed information here: [Lupus](https://www.lupus-electronics.de/en)
 
-
 ## Installation
 
 1. Install the adapter
@@ -30,8 +29,8 @@ You can find detailed information here: [Lupus](https://www.lupus-electronics.de
 
 ## Changelog
 
-### 0.0.6 (24.05.2018)
-* (Stübi) Alpha Version of Adapter !!!!
+### 0.0.7 (26.05.2018)
+* (Stübi) Alpha Version of Adapter !!!! Only Lupusec XT2 supported.
 
 
 ## License

@@ -37,8 +37,16 @@ adapter.on('stateChange', function(id, state) {
 
       if (m !== null) {
         var key = m[1];
+        var status;
+
+        if (state.val === false) {
+          status = 0;
+        } else {
+          status = 1;
+        }
+
         lupusec.DeviceSwitchPSSPost(key, {
-          switch: state.val
+          switch: status
         });
       }
 
@@ -77,8 +85,6 @@ adapter.on('ready', function() {
 
 function main() {
 
-  var pollsec = adapter.config.alarm_polltime;
-
   lupusec = new Lupus(adapter);
 
   if (adapter.config.alarm_host != null && adapter.config.alarm_host != "") {
@@ -87,22 +93,6 @@ function main() {
     lupusec.DevicePSSListGet();
     lupusec.PanelCondGet();
     lupusec.DeviceEditAllGet();
-
-
-    setInterval(function() {
-
-      lupusec.DeviceListGet();
-      lupusec.DevicePSSListGet();
-      lupusec.PanelCondGet();
-
-    }, pollsec * 1000);
-
-    setInterval(function() {
-
-      lupusec.DeviceEditAllGet();
-
-    }, 4 * pollsec * 1000);
-
 
     adapter.subscribeStates(adapter.namespace + ".*.info.status_ex");
     adapter.subscribeStates(adapter.namespace + ".Status.mode_pc_a1");
