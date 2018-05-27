@@ -32,22 +32,36 @@ adapter.on('stateChange', function(id, state) {
 
     if (lupusec) {
 
-      const regstatusex = /lupusec\..+\.(.+)\.info.status_ex/gm;
-      var m = regstatusex.exec(id);
+      const regstatusex = /lupusec\..+\.(.+)\.info.(status_ex|hue|sat)/gm;
+
+      let m = regstatusex.exec(id);
 
       if (m !== null) {
-        var key = m[1];
-        var status;
 
-        if (state.val === false) {
-          status = 0;
-        } else {
-          status = 1;
+        let key = m[1]; // Device
+        let statusname = m[2]; // statusname
+        let status = state.val;
+        let values = {};
+
+        if (statusname == "status_ex") {
+          if (status === false) {
+            status = 0;
+          } else {
+            status = 1;
+          }
+          values.switch = status;
         }
 
-        lupusec.DeviceSwitchPSSPost(key, {
-          switch: status
-        });
+        if (statusname == "hue") {
+          values.hue = status;
+        }
+
+        if (statusname == "sat") {
+          values.sat = status;
+        }
+
+        lupusec.DeviceSwitchPSSPost(key, values);
+
       }
 
       if (id == adapter.namespace + ".Status.mode_pc_a1") {
@@ -95,6 +109,8 @@ function main() {
     lupusec.DeviceEditAllGet();
 
     adapter.subscribeStates(adapter.namespace + ".*.info.status_ex");
+    adapter.subscribeStates(adapter.namespace + ".*.info.hue");
+    adapter.subscribeStates(adapter.namespace + ".*.info.sat");
     adapter.subscribeStates(adapter.namespace + ".Status.mode_pc_a1");
     adapter.subscribeStates(adapter.namespace + ".Status.mode_pc_a2");
 
