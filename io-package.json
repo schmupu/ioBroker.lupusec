@@ -43,7 +43,8 @@
     "alarm_type": "lupusec_xt2",
     "alarm_user": "test",
     "alarm_password": "test",
-    "alarm_polltime": 15
+    "alarm_polltime": 15,
+    "alarm_allstates": false
   },
   "objects": [ ],
   "instanceObjects": []
