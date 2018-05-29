@@ -32,7 +32,8 @@ adapter.on('stateChange', function(id, state) {
 
     if (lupusec) {
 
-      const regstatusex = /lupusec\..+\.(.+)\.info.(status_ex|hue|sat|level)/gm;
+      // const regstatusex = /lupusec\..+\.devices\.(.+)\.(status_ex|hue|sat|level)/gm;
+      const regstatusex = /.+\.devices\.(.+)\.(.+)/gm;
 
       let m = regstatusex.exec(id);
 
@@ -55,6 +56,13 @@ adapter.on('stateChange', function(id, state) {
           lupusec.DeviceSwitchPSSPost(key, values);
         }
 
+        if (statusname == "pd") {
+          values.pd = status;
+          lupusec.DeviceSwitchPSSPost(key, values);
+          adapter.setState(id, { ack: true });
+        }
+
+
         if (statusname == "hue") {
           values.hue = status;
           lupusec.DeviceHueColorControl(key, values);
@@ -72,11 +80,11 @@ adapter.on('stateChange', function(id, state) {
 
       }
 
-      if (id == adapter.namespace + ".Status.mode_pc_a1") {
+      if (id == adapter.namespace + ".status.mode_pc_a1") {
         lupusec.PanelCondPost(1, state.val);
       }
 
-      if (id == adapter.namespace + ".Status.mode_pc_a2") {
+      if (id == adapter.namespace + ".status.mode_pc_a2") {
         lupusec.PanelCondPost(2, state.val);
       }
 
@@ -116,12 +124,13 @@ function main() {
     lupusec.PanelCondGet();
     // lupusec.DeviceEditAllGet();
 
-    adapter.subscribeStates(adapter.namespace + ".*.info.status_ex");
-    adapter.subscribeStates(adapter.namespace + ".*.info.hue");
-    adapter.subscribeStates(adapter.namespace + ".*.info.sat");
-    adapter.subscribeStates(adapter.namespace + ".*.info.level");
-    adapter.subscribeStates(adapter.namespace + ".Status.mode_pc_a1");
-    adapter.subscribeStates(adapter.namespace + ".Status.mode_pc_a2");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.status_ex");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.hue");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.sat");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.level");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
+    adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a1");
+    adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a2");
 
   }
 
