@@ -114,7 +114,7 @@ function main() {
     lupusec.DeviceListGet();
     lupusec.DevicePSSListGet();
     lupusec.PanelCondGet();
-    lupusec.DeviceEditAllGet();
+    // lupusec.DeviceEditAllGet();
 
     adapter.subscribeStates(adapter.namespace + ".*.info.status_ex");
     adapter.subscribeStates(adapter.namespace + ".*.info.hue");

@@ -5,5 +5,6 @@
   "on save adapter restarts with new config immediately": "on save adapter restarts with new config immediately.",
   "alarm_user": "User",
   "alarm_password": "Password",
-  "alarm_https": "https"
+  "alarm_https": "https",
+  "alarm_allstates": "Show all fields (not recomended)"
 }
