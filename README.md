@@ -10,9 +10,11 @@
 
 Requires node.js 6.0 or higher.
 
-This adapter connects the Lupusec alarm system XT1, XT2, XT3 with ioBroker. You can read the status of the Lupusec sensors
+This adapter connects the Lupusec alarm system XT1 Plus, XT2, XT2 Plus and XT3 with ioBroker.
+The XT1 (without Plus) will not be supported. You can read the status of the Lupusec sensors
 like door, windows, water, smoke sensors and the status of the alarm system.
 You can turn on switches and arm/disarm the alarm system.
+
 
 You can find detailed information here: [Lupus](https://www.lupus-electronics.de/en)
 
@@ -29,7 +31,7 @@ You can find detailed information here: [Lupus](https://www.lupus-electronics.de
 
 ## Changelog
 
-### 0.1.5 (28.05.2018)
+### 0.1.6 (30.05.2018)
 * (Stübi) Alpha Version of Adapter !!!! Only Lupusec XT2 supported.
 
 
