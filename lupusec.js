@@ -7,7 +7,9 @@ var adapter = new utils.Adapter('lupusec');
 var lupusec = null;
 var apar = [];
 
-
+// *******************************************************************************
+// Small Test. 
+// *******************************************************************************
 function post(id, parameter, callback, sec = 5) {
 
   let tmppar = {};
@@ -204,7 +206,7 @@ function main() {
     adapter.subscribeStates(adapter.namespace + ".devices.*.hue");
     adapter.subscribeStates(adapter.namespace + ".devices.*.sat");
     adapter.subscribeStates(adapter.namespace + ".devices.*.level");
-    // adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
+    //adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
     adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a1");
     adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a2");
 

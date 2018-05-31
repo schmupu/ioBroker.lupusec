@@ -31,6 +31,9 @@ You can find detailed information here: [Lupus](https://www.lupus-electronics.de
 
 ## Changelog
 
+### 0.1.8 (31.05.2018)
+* (Stübi) Beta Version of Adapter !!!!
+
 ### 0.1.7 (30.05.2018)
 * (Stübi) Beta Version of Adapter !!!! XT1+, XT2, XT2+ and XT3 supported.
 
