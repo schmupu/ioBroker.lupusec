@@ -1,37 +1,57 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "news": {
+      "0.1.9": {
+        "en": "Translation of view pages",
+        "de": "Translation of view pages",
+        "ru": "Перевод",
+        "pt": "Tradução",
+        "nl": "Vertaling",
+        "fr": "Traduction",
+        "it": "Traduzione",
+        "es": "Traducción",
+        "pl": "Tłumaczenie"
+      },
       "0.1.8": {
         "en": "Stable Version of Lupusec Adapter",
-        "de": "Stable Version of Lupusec Adapter"
-      },
-      "0.1.7": {
-        "en": "Beta Version of Lupusec Adapter",
-        "de": "Beta Version of Lupusec Adapter"
-      },
-      "0.1.6": {
-        "en": "Alpha Version of Adapter",
-        "de": "Alpha Version of Adapter"
+        "de": "Stable Version of Lupusec Adapter",
+        "ru": "стабильная версия адаптера Lupusec",
+        "pt": "Versão estável do adaptador Lupusec",
+        "nl": "stabiele versie van de Lupusec-adapter",
+        "fr": "Version stable de l'adaptateur Lupusec",
+        "it": "Versione stabile di Lupusec Adapter",
+        "es": "Versión estable del adaptador Lupusec",
+        "pl": "stabilna wersja adaptera Lupusec"
       }
     },
     "title": "Lupusec alarm system",
     "titleLang": {
       "en": "Lupusec alarm system",
-      "de": "Lupusec Alarmanlage"
-    }, 
+      "de": "Lupusec Alarmanlage",
+      "ru": "Аварийная система Lupusec",
+      "pt": "Sistema de alarme Lupusec",
+      "nl": "Lupusec alarmsysteem",
+      "fr": "Système d'alarme Lupusec",
+      "it": "Sistema di allarme Lupusec",
+      "es": "Sistema de alarma Lupusec",
+      "pl": "System alarmowy Lupusec"
+    },
     "desc": {
       "en": "Lupusec adaper for alarm system ",
-      "de": "Lupusec Adapter für Alarmanlagen"
+      "de": "Lupusec Adapter für Alarmanlagen",
+      "ru": "Адаптер Lupusec для Alarmanlagen",
+      "pt": "Adaptador Lupusec para Alarmanlagen",
+      "nl": "Lupusec-adapter voor alarmanlagen",
+      "fr": "Lupusec Adaptateur pour Alarmanlagen",
+      "it": "Lupusec Adapter für Alarmanlagen",
+      "es": "Adaptador Lupusec para Alarmanlagen",
+      "pl": "Lupusec Adapter für Alarmanlagen"
     },
     "authors": [
       "Thorsten Stueben <thorsten@stueben.de>"
     ],
-    "docs": {
-      "en": "docs/en/admin.md",
-      "de": "docs/de/admin.md"
-    },
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "icon": "lupusec.png",
@@ -41,7 +61,7 @@
     "keywords": ["lupusec", "burlgar alarm", "alarm system", "lupus", "iobroker"],
     "readme": "https://github.com/schmupu/ioBroker.lupusec/blob/master/README.md",
     "loglevel": "info",
-    "type": "general",
+    "type": "alarm",
     "restartAdapters": []
   },
   "native": {
@@ -54,6 +74,6 @@
     "alarm_polltime": 15,
     "alarm_allstates": false
   },
-  "objects": [ ],
+  "objects": [],
   "instanceObjects": []
 }
