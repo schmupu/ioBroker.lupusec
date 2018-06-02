@@ -5,62 +5,7 @@ var utils = require(__dirname + '/lib/utils'); // Get common adapter utils
 var Lupus = require(__dirname + '/lib/lupus');
 var adapter = new utils.Adapter('lupusec');
 var lupusec = null;
-var apar = [];
 
-
-function post(id, parameter, callback, sec = 5) {
-
-  let tmppar = {};
-  let index = -1;
-
-  index = apar.map(x => x.id).indexOf(id);
-
-  if (index >= 0) {
-
-    tmppar = apar[index];
-
-    // kopieren alles rüber
-    for (let prop in parameter) {
-      tmppar.parameter[prop] = parameter[prop];
-    }
-
-  } else {
-
-    tmppar = {
-      id: id,
-      callback: callback,
-      handle: null,
-      parameter: {}
-    };
-
-    for (let prop in parameter) {
-      tmppar.parameter[prop] = parameter[prop];
-    }
-
-    apar.push(tmppar);
-
-  }
-
-  if (tmppar.handle) {
-    clearTimeout(tmppar.handle);
-  }
-
-  tmppar.handle = setTimeout(function() {
-
-    let index = apar.map(x => x.id).indexOf(id);
-
-    if (index >= 0) {
-
-      let tmppar = apar[index];
-      apar.splice(index, 1);
-      tmppar.callback(tmppar.id, tmppar.parameter);
-
-    }
-
-
-  }, sec * 1000);
-
-}
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', function(callback) {
@@ -123,20 +68,6 @@ adapter.on('stateChange', function(id, state) {
 
           lupusec.DeviceSwitchPSSPost(key, values);
 
-          /*
-          post(key, values, function(id, parameter) {
-            lupusec.DeviceSwitchPSSPost(id, parameter);
-          });
-          */
-
-        }
-
-        if (statusname == "pd") {
-          /*
-          adapter.setState(id, {
-            ack: true
-          });
-          */
         }
 
         if (statusname == "hue") {
@@ -204,7 +135,7 @@ function main() {
     adapter.subscribeStates(adapter.namespace + ".devices.*.hue");
     adapter.subscribeStates(adapter.namespace + ".devices.*.sat");
     adapter.subscribeStates(adapter.namespace + ".devices.*.level");
-    // adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
+    //adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
     adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a1");
     adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a2");
 
