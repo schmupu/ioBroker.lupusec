@@ -1,6 +1,6 @@
 {
   "alarm_type": "alarm system",
-  "alarm_host": "IP-Addresse / Hostname alarm system",
+  "alarm_host": "IP-Address / Hostname alarm system",
   "alarm_port": "Port",
   "on save adapter restarts with new config immediately": "on save adapter restarts with new config immediately.",
   "alarm_user": "User",
