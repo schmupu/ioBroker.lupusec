@@ -52,29 +52,29 @@
     "authors": [
       "Thorsten Stueben <thorsten@stueben.de>"
     ],
-    },
-    "platform": "Javascript/Node.js",
-    "mode": "daemon",
-    "icon": "lupusec.png",
-    "materialize": true,
-    "enabled": true,
-    "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
-    "keywords": ["lupusec", "burlgar alarm", "alarm system", "lupus", "iobroker"],
-    "readme": "https://github.com/schmupu/ioBroker.lupusec/blob/master/README.md",
-    "loglevel": "info",
-    "type": "alarm",
-    "restartAdapters": []
   },
-  "native": {
-    "alarm_host": "",
-    "alarm_port": "80",
-    "alarm_https": false,
-    "alarm_type": "lupusec_xt2",
-    "alarm_user": "test",
-    "alarm_password": "test",
-    "alarm_polltime": 15,
-    "alarm_allstates": false
-  },
-  "objects": [],
-  "instanceObjects": []
+  "platform": "Javascript/Node.js",
+  "mode": "daemon",
+  "icon": "lupusec.png",
+  "materialize": true,
+  "enabled": true,
+  "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
+  "keywords": ["lupusec", "burlgar alarm", "alarm system", "lupus", "iobroker"],
+  "readme": "https://github.com/schmupu/ioBroker.lupusec/blob/master/README.md",
+  "loglevel": "info",
+  "type": "alarm",
+  "restartAdapters": []
+},
+"native": {
+  "alarm_host": "",
+  "alarm_port": "80",
+  "alarm_https": false,
+  "alarm_type": "lupusec_xt2",
+  "alarm_user": "test",
+  "alarm_password": "test",
+  "alarm_polltime": 15,
+  "alarm_allstates": false
+},
+"objects": [],
+"instanceObjects": []
 }
