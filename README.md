@@ -31,6 +31,9 @@ You can find detailed information here: [Lupus](https://www.lupus-electronics.de
 
 ## Changelog
 
+### 0.2.0 (03.06.2018)
+* (Stübi) Port can be added
+
 ### 0.1.9 (01.06.2018)
 * (Stübi) Translation of a view files
 

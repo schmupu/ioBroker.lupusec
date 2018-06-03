@@ -1,8 +1,19 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.1.9",
+    "version": "0.2.0",
     "news": {
+      "0.2.0": {
+        "en": "Port can be added",
+        "de": "Port kann hinzugefügt werden",
+        "ru": "Порт можно добавить",
+        "pt": "Porto pode ser adicionado",
+        "nl": "Poort kan worden toegevoegd",
+        "fr": "Le port peut être ajouté",
+        "it": "La porta può essere aggiunta",
+        "es": "Puerto puede ser agregado",
+        "pl": "Port można dodać"
+      },
       "0.1.9": {
         "en": "Translation of view pages",
         "de": "Translation of view pages",
@@ -66,7 +77,7 @@
   },
   "native": {
     "alarm_host": "",
-    "alarm_port": "80",
+    "alarm_port": "",
     "alarm_https": false,
     "alarm_type": "lupusec_xt2",
     "alarm_user": "test",
