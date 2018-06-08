@@ -1,8 +1,19 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "news": {
+      "0.2.1": {
+        "en": "directory widged deleted",
+        "de": "Verzeichnis-Widget gelöscht",
+        "ru": "виджет каталога удален",
+        "pt": "widget de diretório excluído",
+        "nl": "directory widget verwijderd",
+        "fr": "répertoire widget supprimé",
+        "it": "widget di directory cancellato",
+        "es": "widget de directorio eliminado",
+        "pl": "Usunięto widget katalogu"
+      },
       "0.2.0": {
         "en": "Port can be added",
         "de": "Port kann hinzugefügt werden",
