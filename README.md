@@ -31,6 +31,9 @@ You can find detailed information here: [Lupus](https://www.lupus-electronics.de
 
 ## Changelog
 
+### 0.2.2 (13.07.2018)
+* (Stübi) Devices thermostat (type 79) and switch (type 48) supported
+
 ### 0.2.1 (08.06.2018)
 * (Stübi) Directory widged deleted
 

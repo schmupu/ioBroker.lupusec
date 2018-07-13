@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "news": {
+      "0.2.2": {
+        "en": "Devices thermostat & switch supported",
+        "de": "Thermostat u. Steckdose werden unterstützt"
+      },
       "0.2.1": {
         "en": "directory widged deleted",
         "de": "Verzeichnis-Widget gelöscht",

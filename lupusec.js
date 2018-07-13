@@ -40,97 +40,98 @@ adapter.on('stateChange', function(id, state) {
 
       if (m !== null) {
 
-        adapter.getState(idtype, function(err, statetype) {
+        // adapter.getState(idtype, function(err, statetype) {
 
-          let type = statetype.val;
-          let key = m[1]; // Device
-          let statusname = m[2]; // statusname
-          let status = state.val;
-          let values = {};
+        let key = m[1]; // Device ID
+        // let type = statetype.val;
+        let type = lupusec.getTypeById(key) || 0;
+        let statusname = m[2]; // statusname
+        let status = state.val;
+        let values = {};
 
-          switch (type) {
+        switch (type) {
 
-            case 48:
+          case 48:
 
-              if (statusname == "status_ex") {
+            if (statusname == "status_ex") {
 
-                if (status === false) {
-                  status = 0;
-                } else {
-                  status = 1;
+              if (status === false) {
+                status = 0;
+              } else {
+                status = 1;
+              }
+
+              values.switch = status;
+
+              // PD Wert mitnehmen, falls vorhanden
+              let idpd = idparent + ".pd";
+              adapter.getState(idpd, function(err, state) {
+                if (!err && state && state.val > 0) {
+                  values.pd = state.val;
+                  adapter.setState(idpd, {
+                    val: 0,
+                    ack: true
+                  });
                 }
+              });
 
-                values.switch = status;
+              lupusec.DeviceSwitchPSSPost(key, values);
 
-                // PD Wert mitnehmen, falls vorhanden
-                let idpd = idparent + ".pd";
-                adapter.getState(idpd, function(err, state) {
-                  if (!err && state && state.val > 0) {
-                    values.pd = state.val;
-                    adapter.setState(idpd, {
-                      val: 0,
-                      ack: true
-                    });
-                  }
-                });
+            }
 
-                lupusec.DeviceSwitchPSSPost(key, values);
+            if (statusname == "hue") {
+              values.hue = status;
+              lupusec.DeviceHueColorControl(key, values);
+            }
 
+            if (statusname == "sat") {
+              values.saturation = status;
+              lupusec.DeviceHueColorControl(key, values);
+            }
+
+            if (statusname == "level") {
+              values.level = status;
+              lupusec.DeviceSwitchDimmerPost(key, values);
+            }
+
+            break;
+
+
+          case 79:
+
+            if (statusname == "mode") {
+              values.act = "t_schd_setting";
+              if (status == 0) {
+                values.thermo_schd_setting = 0;
+              } else {
+                values.thermo_schd_setting = 1;
               }
+              lupusec.DeviceEditThermoPost(key, values);
+            }
 
-              if (statusname == "hue") {
-                values.hue = status;
-                lupusec.DeviceHueColorControl(key, values);
+            if (statusname == "off") {
+              values.act = "t_mode";
+              if (status == true) {
+                values.thermo_mode = 0;
+              } else {
+                values.thermo_mode = 4;
               }
+              lupusec.DeviceEditThermoPost(key, values);
+            }
 
-              if (statusname == "sat") {
-                values.saturation = status;
-                lupusec.DeviceHueColorControl(key, values);
-              }
+            if (statusname == "set_temperature") {
+              values.act = "t_setpoint";
+              values.thermo_setpoint = Math.trunc(100 * Math.round(2 * status) / 2);
+              lupusec.DeviceEditThermoPost(key, values);
+            }
 
-              if (statusname == "level") {
-                values.level = status;
-                lupusec.DeviceSwitchDimmerPost(key, values);
-              }
+            break;
 
-              break;
+          default:
 
+        }
 
-            case 79:
-
-              if (statusname == "mode") {
-                values.act = "t_schd_setting";
-                if (status == 0) {
-                  values.thermo_schd_setting = 0;
-                } else {
-                  values.thermo_schd_setting = 1;
-                }
-                lupusec.DeviceEditThermoPost(key, values);
-              }
-
-              if (statusname == "off") {
-                values.act = "t_mode";
-                if (status == false) {
-                  values.thermo_mode = 0;
-                } else {
-                  values.thermo_mode = 4;
-                }
-                lupusec.DeviceEditThermoPost(key, values);
-              }
-
-              if (statusname == "set_temperature") {
-                values.act = "t_setpoint";
-                values.thermo_setpoint = Math.trunc( 100 * Math.round( 2 * status ) / 2 );
-                lupusec.DeviceEditThermoPost(key, values);
-              }
-
-              break;
-
-            default:
-
-          }
-
-        });
+        // });
 
       }
 
