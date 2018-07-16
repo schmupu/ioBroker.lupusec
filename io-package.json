@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "news": {
+      "0.2.3": {
+        "en": "Status RSSI supported",
+        "de": "RSSI Status anzeigen"
+      },
       "0.2.2": {
         "en": "Devices thermostat & switch supported",
         "de": "Thermostat u. Steckdose werden unterstützt"
