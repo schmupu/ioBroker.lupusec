@@ -51,6 +51,7 @@ adapter.on('stateChange', function(id, state) {
 
         switch (type) {
 
+          // Schalter
           case 48:
 
             if (statusname == "status_ex") {
@@ -96,7 +97,31 @@ adapter.on('stateChange', function(id, state) {
 
             break;
 
+          // Rollläden
+          case 76:
 
+            if (statusname == "switch") {
+
+              if (status == 0) {
+                values.switch = 0;
+              } else {
+                values.switch = 1;
+              }
+              adapter.setState(id, {
+                val: 0,
+                ack: true
+              });
+              lupusec.DeviceSwitchPSSPost(key, values);
+            }
+
+            if (statusname == "level") {
+              values.level = status;
+              lupusec.DeviceSwitchDimmerPost(key, values);
+            }
+
+            break;
+
+            // Thermometer
           case 79:
 
             if (statusname == "mode") {
@@ -175,6 +200,8 @@ function main() {
     adapter.subscribeStates(adapter.namespace + ".devices.*.off");
     adapter.subscribeStates(adapter.namespace + ".devices.*.mode");
     adapter.subscribeStates(adapter.namespace + ".devices.*.set_temperature");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.switch");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.level");
     //adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
     adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a1");
     adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a2");
