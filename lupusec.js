@@ -103,9 +103,9 @@ adapter.on('stateChange', function(id, state) {
             if (statusname == "switch") {
 
               if (status == 0) {
-                values.switch = 0;
+                values.switch = 0; // runterfahren, zu
               } else {
-                values.switch = 1;
+                values.switch = 1; // hochfahren, auf
               }
               adapter.setState(id, {
                 val: 0,
@@ -201,7 +201,6 @@ function main() {
     adapter.subscribeStates(adapter.namespace + ".devices.*.mode");
     adapter.subscribeStates(adapter.namespace + ".devices.*.set_temperature");
     adapter.subscribeStates(adapter.namespace + ".devices.*.switch");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.level");
     //adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
     adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a1");
     adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a2");
