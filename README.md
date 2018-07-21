@@ -31,6 +31,9 @@ You can find detailed information here: [Lupus](https://www.lupus-electronics.de
 
 ## Changelog
 
+### 0.2.4 (16.07.2018)
+* (Stübi) Wrong device description removed
+
 ### 0.2.3 (16.07.2018)
 * (Stübi) RSSI Status an Device shutter (type 76) supported
 
