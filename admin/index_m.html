@@ -46,6 +46,7 @@
           });
         }
       });
+      init();
       onChange(false);
       M.updateTextFields(); // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
     }
@@ -65,6 +66,39 @@
       });
       callback(obj);
     }
+
+
+    function changeValue() {
+
+      var port;
+
+       if ($('#alarm_https').prop('checked') === true) {
+
+         if($('#alarm_port').val() == 80) {
+
+           port = 443;
+           $('#alarm_port').val(port);
+
+         }
+
+       } else {
+
+         if($('#alarm_port').val() == 443) {
+
+           port = 80;
+           $('#alarm_port').val(port);
+
+         }
+
+       }
+
+    }
+
+    function init() {
+        $('#alarm_https').on('change', changeValue);
+        changeValue() ;
+    }
+
   </script>
 </head>
 
