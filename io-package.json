@@ -83,6 +83,7 @@
       "es": "Adaptador Lupusec para Alarmanlagen",
       "pl": "Lupusec Adapter für Alarmanlagen"
     },
+    "license": "MIT",
     "authors": [
       "Thorsten Stueben <thorsten@stueben.de>"
     ],
