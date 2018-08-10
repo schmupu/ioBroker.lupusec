@@ -104,8 +104,8 @@
     "alarm_port": "",
     "alarm_https": false,
     "alarm_type": "lupusec_xt2",
-    "alarm_user": "test",
-    "alarm_password": "test",
+    "alarm_user": "",
+    "alarm_password": "",
     "alarm_polltime": 15,
     "alarm_allstates": false
   },

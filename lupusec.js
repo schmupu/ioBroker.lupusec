@@ -97,7 +97,7 @@ adapter.on('stateChange', function(id, state) {
 
             break;
 
-          // Rollläden
+            // Rollläden
           case 76:
 
             if (statusname == "switch") {
@@ -186,40 +186,45 @@ function main() {
 
   lupusec = new Lupus(adapter);
 
-  if (adapter.config.alarm_host != null && adapter.config.alarm_host != "" && adapter.config.alarm_port) {
+  if (!adapter.config.alarm_host || !adapter.config.alarm_port) {
 
-    if(adapter.config.alarm_https) {
-
-      adapter.log.info('Connecting to Lupusec with https://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
-
-    } else {
-
-      adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);  
-
-    }
-
-    lupusec.DeviceListGet();
-    lupusec.DevicePSSListGet();
-    lupusec.PanelCondGet();
-    //  lupusec.DeviceEditAllGet();
-
-    adapter.subscribeStates(adapter.namespace + ".devices.*.status_ex");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.hue");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.sat");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.level");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.off");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.mode");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.set_temperature");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.switch");
-    //adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
-    adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a1");
-    adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a2");
-
-  } else {
-
-    adapter.log.error('Hostname or Port is in configuration missing!');
+    adapter.log.error('Hostname or Port in configuration missing!');
+    return;
 
   }
 
+  if (!adapter.config.alarm_user  || !adapter.config.alarm_password) {
+
+    adapter.log.error('Unsername or password is missing!');
+    return;
+
+  }
+
+  if (adapter.config.alarm_https) {
+
+    adapter.log.info('Connecting to Lupusec with https://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
+
+  } else {
+
+    adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
+
+  }
+
+  lupusec.DeviceListGet();
+  lupusec.DevicePSSListGet();
+  lupusec.PanelCondGet();
+  //  lupusec.DeviceEditAllGet();
+
+  adapter.subscribeStates(adapter.namespace + ".devices.*.status_ex");
+  adapter.subscribeStates(adapter.namespace + ".devices.*.hue");
+  adapter.subscribeStates(adapter.namespace + ".devices.*.sat");
+  adapter.subscribeStates(adapter.namespace + ".devices.*.level");
+  adapter.subscribeStates(adapter.namespace + ".devices.*.off");
+  adapter.subscribeStates(adapter.namespace + ".devices.*.mode");
+  adapter.subscribeStates(adapter.namespace + ".devices.*.set_temperature");
+  adapter.subscribeStates(adapter.namespace + ".devices.*.switch");
+  //adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
+  adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a1");
+  adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a2");
 
 }
