@@ -186,7 +186,17 @@ function main() {
 
   lupusec = new Lupus(adapter);
 
-  if (adapter.config.alarm_host != null && adapter.config.alarm_host != "") {
+  if (adapter.config.alarm_host != null && adapter.config.alarm_host != "" && adapter.config.alarm_port) {
+
+    if(adapter.config.alarm_https) {
+
+      adapter.log.info('Connecting to Lupusec with https://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
+
+    } else {
+
+      adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);  
+
+    }
 
     lupusec.DeviceListGet();
     lupusec.DevicePSSListGet();
@@ -204,6 +214,10 @@ function main() {
     //adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
     adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a1");
     adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a2");
+
+  } else {
+
+    adapter.log.error('Hostname or Port is in configuration missing!');
 
   }
 
