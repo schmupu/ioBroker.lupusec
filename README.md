@@ -31,6 +31,9 @@ You can find detailed information here: [Lupus](https://www.lupus-electronics.de
 
 ## Changelog
 
+### 0.2.5 (16.07.2018)
+* (Stübi) Changes of roles and icons added to devices
+
 ### 0.2.4 (16.07.2018)
 * (Stübi) Wrong device description removed
 
@@ -45,16 +48,6 @@ You can find detailed information here: [Lupus](https://www.lupus-electronics.de
 
 ### 0.2.0 (03.06.2018)
 * (Stübi) Port can be added
-
-### 0.1.9 (01.06.2018)
-* (Stübi) Translation of a view files
-
-### 0.1.8 (01.06.2018)
-* (Stübi) First stable version
-
-### 0.1.7 (30.05.2018)
-* (Stübi) Beta Version of Adapter !!!! XT1+, XT2, XT2+ and XT3 supported.
-
 
 
 ## License

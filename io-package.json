@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "news": {
+      "0.2.5": {
+        "en": "role changed, icons added",
+        "de": "Rollen angepaßt u. Bilder hinzugefügt"
+      },
       "0.2.4": {
         "en": "Wrong description removed",
         "de": "Wrong description removed"
