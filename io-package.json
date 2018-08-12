@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "news": {
+      "0.2.6": {
+        "en": "Improvements",
+        "de": "Anpassungen"
+      },
       "0.2.5": {
         "en": "role changed, icons added",
         "de": "Rollen angepaßt u. Bilder hinzugefügt"
@@ -110,6 +114,7 @@
     "alarm_type": "lupusec_xt2",
     "alarm_user": "",
     "alarm_password": "",
+    "alarm_password_confirm": "",
     "alarm_polltime": 15,
     "alarm_allstates": false
   },
