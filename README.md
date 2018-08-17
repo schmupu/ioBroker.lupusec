@@ -31,8 +31,8 @@ You can find detailed information here: [Lupus](https://www.lupus-electronics.de
 
 ## Changelog
 
-### 0.2.6 (11.08.2018)
-* (Stübi) Improvements
+### 0.2.6 (17.08.2018)
+* (Stübi) Improvements and new add/del/update Object function
 
 ### 0.2.5 (10.08.2018)
 * (Stübi) Changes of roles and icons added to devices
