@@ -182,49 +182,77 @@ adapter.on('ready', function() {
   main();
 });
 
+
+// Check Paerameter
+function checkparameter(callback) {
+
+  if (!adapter.config.alarm_host || !adapter.config.alarm_port) {
+    adapter.log.error('Hostname or Port in configuration missing!');
+    return;
+  }
+
+  if (!adapter.config.alarm_user || !adapter.config.alarm_password) {
+    adapter.log.error('Unsername or password is missing!');
+    return;
+  }
+
+  return pingalarm(callback);
+  // return callback && callback();
+
+}
+
+// if alarmssystem reachable
+function pingalarm(callback) {
+
+  let ping = require('ping');
+  let host = adapter.config.alarm_host;
+
+  ping.sys.probe(host, (isAlive) => {
+
+    var msg = isAlive ? 'Alarmsystem ' + host + ' is alive' : 'Alarmsystem ' + host + ' is not reachable';
+
+    if (isAlive) {
+      adapter.log.info(msg);
+      return callback && callback();
+    } else {
+      adapter.log.error(msg);
+    }
+
+  });
+
+}
+
+// main function
 function main() {
 
   lupusec = new Lupus(adapter);
 
-  if (!adapter.config.alarm_host || !adapter.config.alarm_port) {
+  checkparameter(() => {
 
-    adapter.log.error('Hostname or Port in configuration missing!');
-    return;
+    // wenn alles okay ist, gehts los
+    if (adapter.config.alarm_https) {
+      adapter.log.info('Connecting to Lupusec with https://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
+    } else {
+      adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
+    }
 
-  }
+    lupusec.DeviceListGet();
+    lupusec.DevicePSSListGet();
+    lupusec.PanelCondGet();
+    //  lupusec.DeviceEditAllGet();
 
-  if (!adapter.config.alarm_user  || !adapter.config.alarm_password) {
+    adapter.subscribeStates(adapter.namespace + ".devices.*.status_ex");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.hue");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.sat");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.level");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.off");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.mode");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.set_temperature");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.switch");
+    //adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
+    adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a1");
+    adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a2");
 
-    adapter.log.error('Unsername or password is missing!');
-    return;
-
-  }
-
-  if (adapter.config.alarm_https) {
-
-    adapter.log.info('Connecting to Lupusec with https://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
-
-  } else {
-
-    adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
-
-  }
-
-  lupusec.DeviceListGet();
-  lupusec.DevicePSSListGet();
-  lupusec.PanelCondGet();
-  //  lupusec.DeviceEditAllGet();
-
-  adapter.subscribeStates(adapter.namespace + ".devices.*.status_ex");
-  adapter.subscribeStates(adapter.namespace + ".devices.*.hue");
-  adapter.subscribeStates(adapter.namespace + ".devices.*.sat");
-  adapter.subscribeStates(adapter.namespace + ".devices.*.level");
-  adapter.subscribeStates(adapter.namespace + ".devices.*.off");
-  adapter.subscribeStates(adapter.namespace + ".devices.*.mode");
-  adapter.subscribeStates(adapter.namespace + ".devices.*.set_temperature");
-  adapter.subscribeStates(adapter.namespace + ".devices.*.switch");
-  //adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
-  adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a1");
-  adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a2");
+  });
 
 }
