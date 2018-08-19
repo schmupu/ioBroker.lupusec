@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "news": {
+      "0.2.7": {
+        "en": "Fixing update function",
+        "de": "Fehlerbehebung in update Funktion"
+      },
       "0.2.6": {
         "en": "Improvements",
         "de": "Anpassungen"
