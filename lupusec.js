@@ -52,6 +52,7 @@ adapter.on('stateChange', function(id, state) {
         switch (type) {
 
           // Schalter
+          case 24:
           case 48:
 
             if (statusname == "status_ex") {
