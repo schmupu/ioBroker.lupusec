@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.2.8",
+    "version": "0.2.9",
     "news": {
+      "0.2.9": {
+        "en": "Hue added",
+        "de": "Hue hinzugefügt"
+      },
       "0.2.8": {
         "en": "New devices added",
         "de": "Neue Geräte hinzugefügt"

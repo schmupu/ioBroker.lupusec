@@ -36,6 +36,7 @@ adapter.on('stateChange', function(id, state) {
       const regstatusex = /.+\.devices\.(.+)\.(.+)/gm;
       let m = regstatusex.exec(id);
       let idparent = id.split(".").slice(0, -1).join(".");
+      let iddevice = id.split(".").slice(2, -1).join(".");
       let idtype = idparent + ".type";
 
       if (m !== null) {
@@ -97,6 +98,49 @@ adapter.on('stateChange', function(id, state) {
             }
 
             break;
+
+            // HUE Lampe
+          case 74:
+
+            if (statusname == "status_ex") {
+              if (status === false) {
+                status = 0;
+              } else {
+                status = 1;
+              }
+              values.switch = status;
+              lupusec.DeviceSwitchPSSPost(key, values);
+
+            }
+
+            if (statusname == "hue") {
+              values.hue = status;
+              values.saturation = lupusec.getStateChangeById(iddevice + ".sat") || 0;
+              values.mod = 2; // lupusec.getStateChangeById(iddevice + ".mod") || 0;
+              lupusec.DeviceHueColorControl(key, values);
+            }
+
+            if (statusname == "sat") {
+              values.saturation = status;
+              values.hue = lupusec.getStateChangeById(iddevice + ".hue") || 0;
+              values.mod = 2; // lupusec.getStateChangeById(iddevice + ".mod") || 0;
+              lupusec.DeviceHueColorControl(key, values);
+            }
+
+            if (statusname == "mod") {
+              values.mod = status;
+              values.saturation = lupusec.getStateChangeById(iddevice + ".sat") || 0;
+              values.hue = lupusec.getStateChangeById(iddevice + ".hue") || 0;
+              lupusec.DeviceHueColorControl(key, values);
+            }
+
+            if (statusname == "level") {
+              values.level = status;
+              lupusec.DeviceSwitchDimmerPost(key, values);
+            }
+
+            break;
+
 
             // Rollläden
           case 76:
@@ -248,6 +292,7 @@ function main() {
     adapter.subscribeStates(adapter.namespace + ".devices.*.level");
     adapter.subscribeStates(adapter.namespace + ".devices.*.off");
     adapter.subscribeStates(adapter.namespace + ".devices.*.mode");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.mod");
     adapter.subscribeStates(adapter.namespace + ".devices.*.set_temperature");
     adapter.subscribeStates(adapter.namespace + ".devices.*.switch");
     //adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
