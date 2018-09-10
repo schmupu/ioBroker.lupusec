@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.2.9",
+    "version": "0.3.0",
     "news": {
+      "0.3.0": {
+        "en": "Hue added",
+        "de": "Hue hinzugefügt"
+      },
       "0.2.9": {
         "en": "Hue added",
         "de": "Hue hinzugefügt"

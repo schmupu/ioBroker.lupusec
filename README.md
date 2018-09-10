@@ -31,7 +31,7 @@ You can find detailed information here: [Lupus](https://www.lupus-electronics.de
 
 ## Changelog
 
-### 0.2.9 (09.09.2018)
+### 0.3.0 (10.09.2018)
 * (Stübi) New devices added / Hue added
 
 ### 0.2.7 (19.08.2018)
