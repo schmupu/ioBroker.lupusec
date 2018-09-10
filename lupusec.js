@@ -116,14 +116,14 @@ adapter.on('stateChange', function(id, state) {
             if (statusname == "hue") {
               values.hue = status;
               values.saturation = lupusec.getStateChangeById(iddevice + ".sat") || 0;
-              values.mod = 2; // lupusec.getStateChangeById(iddevice + ".mod") || 0;
+              values.mod = lupusec.getStateChangeById(iddevice + ".mod") || 2;
               lupusec.DeviceHueColorControl(key, values);
             }
 
             if (statusname == "sat") {
               values.saturation = status;
               values.hue = lupusec.getStateChangeById(iddevice + ".hue") || 0;
-              values.mod = 2; // lupusec.getStateChangeById(iddevice + ".mod") || 0;
+              values.mod = lupusec.getStateChangeById(iddevice + ".mod") || 2;
               lupusec.DeviceHueColorControl(key, values);
             }
 
