@@ -58,12 +58,7 @@ adapter.on('stateChange', function(id, state) {
 
             if (statusname == "status_ex") {
 
-              if (status === false) {
-                status = 0;
-              } else {
-                status = 1;
-              }
-
+              status === false ? status = 0 : status = 1;
               values.switch = status;
 
               // PD Wert mitnehmen, falls vorhanden
@@ -81,62 +76,55 @@ adapter.on('stateChange', function(id, state) {
               lupusec.DeviceSwitchPSSPost(key, values);
 
             }
-
-            if (statusname == "hue") {
-              values.hue = status;
-              lupusec.DeviceHueColorControl(key, values);
-            }
-
-            if (statusname == "sat") {
-              values.saturation = status;
-              lupusec.DeviceHueColorControl(key, values);
-            }
-
-            if (statusname == "level") {
-              values.level = status;
-              lupusec.DeviceSwitchDimmerPost(key, values);
-            }
-
             break;
 
             // HUE Lampe
           case 74:
 
             if (statusname == "status_ex") {
-              if (status === false) {
-                status = 0;
-              } else {
-                status = 1;
-              }
+
+              status === false ? status = 0 : status = 1;
               values.switch = status;
               lupusec.DeviceSwitchPSSPost(key, values);
 
             }
 
             if (statusname == "hue") {
-              values.hue = status;
-              values.saturation = lupusec.getStateChangeById(iddevice + ".sat") || 0;
-              values.mod = lupusec.getStateChangeById(iddevice + ".mod") || 2;
-              lupusec.DeviceHueColorControl(key, values);
+              // erst nach 500 ms ausführen, falls sich wert noch ändert!
+              callByDelay(function() {
+                values.hue = status;
+                values.saturation = lupusec.getStateChangeById(iddevice + ".sat") || 0;
+                values.mod = lupusec.getStateChangeById(iddevice + ".mod") || 2;
+                lupusec.DeviceHueColorControl(key, values);
+              }, "74_hue");
             }
 
             if (statusname == "sat") {
-              values.saturation = status;
-              values.hue = lupusec.getStateChangeById(iddevice + ".hue") || 0;
-              values.mod = lupusec.getStateChangeById(iddevice + ".mod") || 2;
-              lupusec.DeviceHueColorControl(key, values);
+              // erst nach 500 ms ausführen, falls sich wert noch ändert!
+              callByDelay(function() {
+                values.saturation = status;
+                values.hue = lupusec.getStateChangeById(iddevice + ".hue") || 0;
+                values.mod = lupusec.getStateChangeById(iddevice + ".mod") || 2;
+                lupusec.DeviceHueColorControl(key, values);
+              }, "74_hue");
             }
 
             if (statusname == "mod") {
-              values.mod = status;
-              values.saturation = lupusec.getStateChangeById(iddevice + ".sat") || 0;
-              values.hue = lupusec.getStateChangeById(iddevice + ".hue") || 0;
-              lupusec.DeviceHueColorControl(key, values);
+              // erst nach 500 ms ausführen, falls sich wert noch ändert!
+              callByDelay(function() {
+                values.mod = status;
+                values.saturation = lupusec.getStateChangeById(iddevice + ".sat") || 0;
+                values.hue = lupusec.getStateChangeById(iddevice + ".hue") || 0;
+                lupusec.DeviceHueColorControl(key, values);
+              }, "74_hue");
             }
 
             if (statusname == "level") {
-              values.level = status;
-              lupusec.DeviceSwitchDimmerPost(key, values);
+              // erst nach 500 ms ausführen, falls sich wert noch ändert!
+              callByDelay(function() {
+                values.level = status;
+                lupusec.DeviceSwitchDimmerPost(key, values);
+              }, "74_level");
             }
 
             break;
@@ -147,11 +135,8 @@ adapter.on('stateChange', function(id, state) {
 
             if (statusname == "switch") {
 
-              if (status == 0) {
-                values.switch = 0; // runterfahren, zu
-              } else {
-                values.switch = 1; // hochfahren, auf
-              }
+              // (0: runterfahren/zu, 1: hochfahren/auf)
+              status == 0 ? values.switch = 0 : values.switch = 1;
               adapter.setState(id, {
                 val: 0,
                 ack: true
@@ -159,6 +144,7 @@ adapter.on('stateChange', function(id, state) {
               lupusec.DeviceSwitchPSSPost(key, values);
             }
 
+            // down or up x %
             if (statusname == "level") {
               values.level = status;
               lupusec.DeviceSwitchDimmerPost(key, values);
@@ -205,10 +191,12 @@ adapter.on('stateChange', function(id, state) {
 
       }
 
+      // Area 1 alarm modus
       if (id == adapter.namespace + ".status.mode_pc_a1") {
         lupusec.PanelCondPost(1, state.val);
       }
 
+      // Area 2 alarm modus
       if (id == adapter.namespace + ".status.mode_pc_a2") {
         lupusec.PanelCondPost(2, state.val);
       }
@@ -220,12 +208,28 @@ adapter.on('stateChange', function(id, state) {
 });
 
 
-
 // is called when databases are connected and adapter received configuration.
 // start here!
 adapter.on('ready', function() {
   main();
 });
+
+
+// Execute a callback function after x msec with a delayname. if you call callByDelay
+// again, with a callback funtion, the older one will be canceld if not executed
+// till now
+function callByDelay(callback, delayname) {
+
+  if (callByDelay.obj === undefined) {
+    callByDelay.obj = {};
+  }
+
+  clearTimeout(callByDelay.obj[delayname]);
+  callByDelay.obj[delayname] = setTimeout(function() {
+    callback();
+  }, 500);
+
+}
 
 
 // Check Paerameter
