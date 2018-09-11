@@ -21,12 +21,31 @@ You can find detailed information here: [Lupus](https://www.lupus-electronics.de
 ## Installation
 
 1. Install the adapter
+The easiest way is to configure the lupusec.iobroker adapter via the discovery adapter in ioBroker. The discovery adapter search for the right IP-address of the Lupusec alarm system. The other way is it, to configure it manually
 
-2. Configuration of the adapter
+2. Manually configuration of the adapter
+Choose the IP-Address or hostname from the Lupusec alarm system. Choose https (recommended) if possible.
+For only reading the status, select a user without write access. If you want to change the status
+(for example, turn on/off the light or arm/disarm the alarm) pick a user with write access.
 
-  Choose the IP-Address or hostname from the Lupusec alarm system. Choose https (recommended) if possible.
-  For only reading the status, select a user without write access. If you want to change the status
-  (for example, turn on/off the light or arm/disarm the alarm) pick a user with write access.
+
+By default all Lupssec devices will be on the ioBroker object tab  displayed.
+Fully supported and individually adapted are following devices:
+
+  - Door contact / window contact (Type 4)
+  - Water sensor (Type 5)
+  - Motion detector (Type 9)
+  - Smoke Detector / Heat Detector (Type 14)
+  - Status Indicator / Mini Indoor Siren (Type 22)
+  - Power Switch (Type 24)
+  - Keypad (Type 37)
+  - Power Switch Meter (Type 49)
+  - Room sensor V1 (Type 54)
+  - Hue (Type 74)
+  - Roller shutter relay V1 (Type 76)
+  - Radiator thermostat (Type 79)
+
+  If you own a device that is not listed in the list above, please contact me at iobroker@stueben.de.
 
 
 ## Changelog
