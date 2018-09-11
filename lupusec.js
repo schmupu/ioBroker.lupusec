@@ -299,7 +299,7 @@ function main() {
     adapter.subscribeStates(adapter.namespace + ".devices.*.mod");
     adapter.subscribeStates(adapter.namespace + ".devices.*.set_temperature");
     adapter.subscribeStates(adapter.namespace + ".devices.*.switch");
-    //adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
+    adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
     adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a1");
     adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a2");
 
