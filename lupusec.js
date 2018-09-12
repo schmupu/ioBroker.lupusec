@@ -64,7 +64,7 @@ adapter.on('stateChange', function(id, state) {
               // PD Wert mitnehmen, falls vorhanden
               let idpd = idparent + ".pd";
               adapter.getState(idpd, function(err, state) {
-                if (!err && state && state.val > 0) {
+                if (!err && state && !state.ack) {
                   values.pd = state.val;
                   adapter.setState(idpd, {
                     val: 0,
@@ -76,6 +76,7 @@ adapter.on('stateChange', function(id, state) {
               lupusec.DeviceSwitchPSSPost(key, values);
 
             }
+
             break;
 
             // HUE Lampe

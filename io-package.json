@@ -1,19 +1,11 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "news": {
-      "0.3.0": {
-        "en": "Hue added",
-        "de": "Hue hinzugefügt"
-      },
-      "0.2.9": {
-        "en": "Hue added",
-        "de": "Hue hinzugefügt"
-      },
-      "0.2.8": {
-        "en": "New devices added",
-        "de": "Neue Geräte hinzugefügt"
+      "0.3.1": {
+        "en": "Hue, room sensor, power switch added",
+        "de": "Hue, Raumthermostat, Lichtschalter hinzugefügt"
       },
       "0.2.7": {
         "en": "Fixing update function",

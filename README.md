@@ -45,13 +45,14 @@ Fully supported and individually adapted are following devices:
   - Roller shutter relay V1 (Type 76)
   - Radiator thermostat (Type 79)
 
-  If you own a device that is not listed in the list above, please contact me at iobroker@stueben.de.
+If you own a device that is not listed in the list above, please contact me
+at Thorsten Stueben <thorsten@stueben.de>.
 
 
 ## Changelog
 
-### 0.3.0 (10.09.2018)
-* (Stübi) New devices added / Hue added
+### 0.3.1 (12.09.2018)
+* (Stübi) Hue, room sensor, power switch added
 
 ### 0.2.7 (19.08.2018)
 * (Stübi) Fixing error update function
