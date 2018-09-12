@@ -235,6 +235,8 @@ function callByDelay(callback, delayname) {
 // Check Paerameter
 function checkparameter(callback) {
 
+  adapter.log.info('Checking the ioBroker Lupusec configuration');
+
   if (!adapter.config.alarm_host || !adapter.config.alarm_port) {
     adapter.log.error('Hostname or Port in configuration missing!');
     return;
@@ -245,8 +247,8 @@ function checkparameter(callback) {
     return;
   }
 
-  return pingalarm(callback);
-  // return callback && callback();
+  // return pingalarm(callback);
+  return callback && callback();
 
 }
 
@@ -258,7 +260,7 @@ function pingalarm(callback) {
 
   ping.sys.probe(host, (isAlive) => {
 
-    var msg = isAlive ? 'Alarmsystem ' + host + ' is alive' : 'Alarmsystem ' + host + ' is not reachable';
+    var msg = isAlive ? 'Lupusec Alarmsystem ' + host + ' is alive' : 'Lupusec Alarmsystem ' + host + ' is not reachable';
 
     if (isAlive) {
       adapter.log.info(msg);
@@ -276,33 +278,44 @@ function main() {
 
   lupusec = new Lupus(adapter);
 
+  // Check Parameter
   checkparameter(() => {
 
-    // wenn alles okay ist, gehts los
-    if (adapter.config.alarm_https) {
-      adapter.log.info('Connecting to Lupusec with https://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
-    } else {
-      adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
-    }
+    // test if we can reach the lupusec alarm system with a ping
+    pingalarm(() => {
 
-    lupusec.DeviceListGet();
-    lupusec.DevicePSSListGet();
-    lupusec.PanelCondGet();
-    //  lupusec.DeviceEditAllGet();
+      // Load all state in lupusec object
+      lupusec.setAllStateChange(() => {
 
-    adapter.subscribeStates(adapter.namespace + ".devices.*.status_ex");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.hue");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.sat");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.level");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.off");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.mode");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.mod");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.set_temperature");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.switch");
-    adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
-    adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a1");
-    adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a2");
+        // wenn alles okay ist, gehts los
+        if (adapter.config.alarm_https) {
+          adapter.log.info('Connecting to Lupusec with https://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
+        } else {
+          adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
+        }
 
-  });
+        lupusec.DeviceListGet();
+        lupusec.DevicePSSListGet();
+        lupusec.PanelCondGet();
+        //  lupusec.DeviceEditAllGet();
+
+        adapter.subscribeStates(adapter.namespace + ".devices.*.status_ex");
+        adapter.subscribeStates(adapter.namespace + ".devices.*.hue");
+        adapter.subscribeStates(adapter.namespace + ".devices.*.sat");
+        adapter.subscribeStates(adapter.namespace + ".devices.*.level");
+        adapter.subscribeStates(adapter.namespace + ".devices.*.off");
+        adapter.subscribeStates(adapter.namespace + ".devices.*.mode");
+        adapter.subscribeStates(adapter.namespace + ".devices.*.mod");
+        adapter.subscribeStates(adapter.namespace + ".devices.*.set_temperature");
+        adapter.subscribeStates(adapter.namespace + ".devices.*.switch");
+        adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
+        adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a1");
+        adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a2");
+
+      })
+
+    })
+
+  })
 
 }
