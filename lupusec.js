@@ -95,7 +95,7 @@ adapter.on('stateChange', function(id, state) {
               callByDelay(function() {
                 values.hue = status;
                 values.saturation = lupusec.getStateChangeById(iddevice + ".sat") || 0;
-                values.mod = lupusec.getStateChangeById(iddevice + ".mod") || 2;
+                values.mod = 2;
                 lupusec.DeviceHueColorControl(key, values);
               }, "74_hue");
             }
@@ -105,17 +105,7 @@ adapter.on('stateChange', function(id, state) {
               callByDelay(function() {
                 values.saturation = status;
                 values.hue = lupusec.getStateChangeById(iddevice + ".hue") || 0;
-                values.mod = lupusec.getStateChangeById(iddevice + ".mod") || 2;
-                lupusec.DeviceHueColorControl(key, values);
-              }, "74_hue");
-            }
-
-            if (statusname == "mod") {
-              // erst nach 500 ms ausführen, falls sich wert noch ändert!
-              callByDelay(function() {
-                values.mod = status;
-                values.saturation = lupusec.getStateChangeById(iddevice + ".sat") || 0;
-                values.hue = lupusec.getStateChangeById(iddevice + ".hue") || 0;
+                values.mod = 2;
                 lupusec.DeviceHueColorControl(key, values);
               }, "74_hue");
             }
@@ -295,6 +285,9 @@ function main() {
           adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
         }
 
+        // delete or update old objects 
+        lupusec.deleteOldStates();
+
         lupusec.DeviceListGet();
         lupusec.DevicePSSListGet();
         lupusec.PanelCondGet();
@@ -306,7 +299,7 @@ function main() {
         adapter.subscribeStates(adapter.namespace + ".devices.*.level");
         adapter.subscribeStates(adapter.namespace + ".devices.*.off");
         adapter.subscribeStates(adapter.namespace + ".devices.*.mode");
-        adapter.subscribeStates(adapter.namespace + ".devices.*.mod");
+        // adapter.subscribeStates(adapter.namespace + ".devices.*.mod");
         adapter.subscribeStates(adapter.namespace + ".devices.*.set_temperature");
         adapter.subscribeStates(adapter.namespace + ".devices.*.switch");
         adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
