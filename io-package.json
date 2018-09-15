@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "news": {
+      "0.3.2": {
+        "en": "Add debug messages",
+        "de": "Debug Nachrichten hinzugefügt"
+      },
       "0.3.1": {
         "en": "Hue, room sensor, power switch added",
         "de": "Hue, Raumthermostat, Lichtschalter hinzugefügt"
