@@ -29,21 +29,30 @@
 
     function encrypt(key, value) {
       var result = '';
+      if (value.startsWith('(crypt)')) {
+        value = value.substr(7);
+      }
       for (var i = 0; i < value.length; ++i) {
         result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
       }
+      result = '(crypt)' + result;
       return result;
     }
+
 
     function decrypt(key, value) {
-
-      var result = '';
-      for (var i = 0; i < value.length; ++i) {
-        result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+      let result = '';
+      if (value.startsWith('(crypt)')) {
+        value = value.substr(7);
+        for (let i = 0; i < value.length; ++i) {
+          result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+        }
+      } else {
+        result = value;
       }
       return result;
-
     }
+
 
     // the function loadSettings has to exist ...
     function loadHelper(settings, onChange) {
@@ -64,7 +73,7 @@
         } else {
           // do not call onChange direct, because onChange could expect some arguments
           var val = $key.data('crypt') && settings[id] ? decrypt(secret, settings[id]) : settings[id];
-          $key.val(settings[id]).change(function() {
+          $key.val(val).change(function() {
             onChange();
           }).keyup(function() {
             onChange();

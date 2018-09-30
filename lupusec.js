@@ -229,8 +229,13 @@ adapter.on('ready', function() {
 // decrypt password
 function decrypt(key, value) {
   let result = '';
-  for (let i = 0; i < value.length; ++i) {
-    result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+  if (value.startsWith('(crypt)')) {
+    value =  value.substr(7);
+    for (let i = 0; i < value.length; ++i) {
+      result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+    }
+  } else {
+    result = value;
   }
   return result;
 }

@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "news": {
-      "0.3.3": {
+      "0.3.4": {
         "en": "Password will be encrypted",
         "de": "Passwort wird verschlüsselt gespeichert"
       },
