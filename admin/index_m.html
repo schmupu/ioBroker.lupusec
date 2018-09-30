@@ -25,10 +25,34 @@
   </style>
   <!-- you have to define 2 functions in the global scope: -->
   <script type="text/javascript">
+    var secret;
+
+    function encrypt(key, value) {
+      var result = '';
+      for (var i = 0; i < value.length; ++i) {
+        result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+      }
+      return result;
+    }
+
+    function decrypt(key, value) {
+
+      var result = '';
+      for (var i = 0; i < value.length; ++i) {
+        result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+      }
+      return result;
+
+    }
+
     // the function loadSettings has to exist ...
-    function load(settings, onChange) {
+    function loadHelper(settings, onChange) {
       // example: select elements with id=key and class=value and insert value
       if (!settings) return;
+      if (settings.alarm_password === undefined) settings.alarm_password = '';
+      if (settings.alarm_password_confirm === undefined) settings.alarm_password_confirm = '';
+
+
       $('.value').each(function() {
         var $key = $(this);
         var id = $key.attr('id');
@@ -39,6 +63,7 @@
           });
         } else {
           // do not call onChange direct, because onChange could expect some arguments
+          var val = $key.data('crypt') && settings[id] ? decrypt(secret, settings[id]) : settings[id];
           $key.val(settings[id]).change(function() {
             onChange();
           }).keyup(function() {
@@ -54,6 +79,16 @@
       M.updateTextFields(); // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
     }
 
+    function load(settings, onChange) {
+
+      socket.emit('getObject', 'system.config', function(err, obj) {
+        secret = (obj.native ? obj.native.secret : '') || 'Zgfr56gFe87jJOM';
+        loadHelper(settings, onChange);
+      });
+
+      onChange(false);
+    }
+
     // ... and the function save has to exist.
     // you have to make sure the callback is called with the settings object as first param!
     function save(callback) {
@@ -64,15 +99,16 @@
         if ($this.attr('type') === 'checkbox') {
           obj[$this.attr('id')] = $this.prop('checked');
         } else {
-          obj[$this.attr('id')] = $this.val();
+          // obj[$this.attr('id')] = $this.val();
+          obj[$this.attr('id')] = $this.data('crypt') && $this.val() ? encrypt(secret, $this.val()) : $this.val();
         }
       });
 
 
       if ($('#alarm_password').val() !== $('#alarm_password_confirm').val()) {
-           showMessage(_('Password confirmation is not equal with password'));
-           return;
-       }
+        showMessage(_('Password confirmation is not equal with password'));
+        return;
+      }
 
 
       callback(obj);
@@ -135,23 +171,23 @@
       <div class="row">
         <div class="input-field col s12 m4 l4">
           <select id="alarm_type" class="value">
-              <option value="lupusec_xt1_plus">Lupusec XT1 Plus</option>
-              <option value="lupusec_xt2">Lupusec XT2</option>
-              <option value="lupusec_xt2_plus">Lupusec XT2 Plus</option>
-              <option value="lupusec_xt3">Lupusec XT3</option>
+            <option value="lupusec_xt1_plus">Lupusec XT1 Plus</option>
+            <option value="lupusec_xt2">Lupusec XT2</option>
+            <option value="lupusec_xt2_plus">Lupusec XT2 Plus</option>
+            <option value="lupusec_xt3">Lupusec XT3</option>
           </select>
-          <!-- label class="translate" for="alarm_type">alarm system:</label -->
+          <label class="translate" for="alarm_type">alarm system</label>
         </div>
       </div>
 
       <div class="row">
         <div class="input-field col s12 m8 l4">
           <input id="alarm_host" type="text" size="50" class="value" />
-          <label class="translate" for="alarm_host">Host:</label>
+          <label class="translate" for="alarm_host">Host</label>
         </div>
         <div class="input-field col s12 m4 l1">
           <input class="value number" id="alarm_port" min="1" max="65565" type="number" />
-          <label class="translate" for="alarm_port">Port:</label>
+          <label class="translate" for="alarm_port">Port</label>
         </div>
       </div>
 
@@ -171,26 +207,26 @@
       <div class="row">
         <div class="input-field col s12 m6 l4">
           <input id="alarm_user" type="text" size="30" class="value" />
-          <label class="translate" for="alarm_user">User:</label>
+          <label class="translate" for="alarm_user">User</label>
         </div>
       </div>
 
       <div class="row">
         <div class="input-field col s12 m6 l4">
-          <input id="alarm_password" type="password" size="30" class="value" />
-          <label class="translate" for="alarm_password">Password:</label>
+          <input id="alarm_password" type="password" data-crypt="1" size="30" class="value" />
+          <label class="translate" for="alarm_password">Password</label>
         </div>
 
         <div class="input-field col s12 m6 l4">
-          <input id="alarm_password_confirm" type="password" size="30" class="value" />
-          <label class="translate" for="alarm_password_confirm">Confirm Password:</label>
+          <input id="alarm_password_confirm" type="password" data-crypt="1" size="30" class="value" />
+          <label class="translate" for="alarm_password_confirm">Confirm Password</label>
         </div>
 
       </div>
 
       <div class="row">
         <div class="col s12">
-          <p class="translate">Adapter restarts with new config immediately</p>
+          <p class="translate">on save adapter restarts with new config immediately</p>
         </div>
       </div>
     </div>

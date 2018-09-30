@@ -51,6 +51,9 @@ at Thorsten Stueben <thorsten@stueben.de>.
 
 ## Changelog
 
+### 0.3.3 (30.09.2018)
+* (Stübi) password will be encrypted. Translation of configuration
+
 ### 0.3.2 (15.09.2018)
 * (Stübi) add debug messages
 

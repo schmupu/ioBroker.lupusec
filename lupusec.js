@@ -202,9 +202,38 @@ adapter.on('stateChange', function(id, state) {
 // is called when databases are connected and adapter received configuration.
 // start here!
 adapter.on('ready', function() {
-  main();
+  adapter.getForeignObject('system.config', (err, obj) => {
+
+    if (adapter.config.alarm_password) {
+      if (obj && obj.native && obj.native.secret) {
+        //noinspection JSUnresolvedVariable
+        adapter.config.alarm_password = decrypt(obj.native.secret, adapter.config.alarm_password);
+      } else {
+        //noinspection JSUnresolvedVariable
+        adapter.config.alarm_password = decrypt('Zgfr56gFe87jJOM', adapter.config.alarm_password);
+      }
+    }
+    if (adapter.config.alarm_password_confirm) {
+      if (obj && obj.native && obj.native.secret) {
+        //noinspection JSUnresolvedVariable
+        adapter.config.alarm_password_confirm = decrypt(obj.native.secret, adapter.config.alarm_password_confirm);
+      } else {
+        //noinspection JSUnresolvedVariable
+        adapter.config.alarm_password_confirm = decrypt('Zgfr56gFe87jJOM', adapter.config.alarm_password_confirm);
+      }
+    }
+    main();
+  });
 });
 
+// decrypt password
+function decrypt(key, value) {
+  let result = '';
+  for (let i = 0; i < value.length; ++i) {
+    result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+  }
+  return result;
+}
 
 // Execute a callback function after x msec with a delayname. if you call callByDelay
 // again, with a callback funtion, the older one will be canceld if not executed
@@ -285,7 +314,7 @@ function main() {
           adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
         }
 
-        // delete or update old objects 
+        // delete or update old objects
         lupusec.deleteOldStates();
 
         lupusec.DeviceListGet();
