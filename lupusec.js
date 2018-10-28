@@ -301,7 +301,9 @@ function pingalarm(callback) {
 // main function
 function main() {
 
-  adapter.config.alarm_polltime = 2;
+  if (adapter.config.alarm_polltime > 5) {
+    adapter.config.alarm_polltime = 2;
+  }
 
   lupusec = new Lupus(adapter);
   lupusec.startProcess();
