@@ -58,6 +58,7 @@
     function loadHelper(settings, onChange) {
       // example: select elements with id=key and class=value and insert value
       if (!settings) return;
+      if (settings.alarm_type === undefined) settings.alarm_type = '';
       if (settings.alarm_password === undefined) settings.alarm_password = '';
       if (settings.alarm_password_confirm === undefined) settings.alarm_password_confirm = '';
 
@@ -177,7 +178,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <!--div class="row">
         <div class="input-field col s12 m4 l4">
           <select id="alarm_type" class="value">
             <option value="lupusec_xt1_plus">Lupusec XT1 Plus</option>
@@ -187,7 +188,7 @@
           </select>
           <label class="translate" for="alarm_type">alarm system</label>
         </div>
-      </div>
+      </div-->
 
       <div class="row">
         <div class="input-field col s12 m8 l4">

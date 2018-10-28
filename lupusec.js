@@ -230,7 +230,7 @@ adapter.on('ready', function() {
 function decrypt(key, value) {
   let result = '';
   if (value.startsWith('(crypt)')) {
-    value =  value.substr(7);
+    value = value.substr(7);
     for (let i = 0; i < value.length; ++i) {
       result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
     }
@@ -301,7 +301,11 @@ function pingalarm(callback) {
 // main function
 function main() {
 
+  adapter.config.alarm_polltime = 2;
+
   lupusec = new Lupus(adapter);
+  lupusec.startProcess();
+
 
   // Check Parameter
   checkparameter(() => {
@@ -322,10 +326,24 @@ function main() {
         // delete or update old objects
         lupusec.deleteOldStates();
 
+        /*
         lupusec.DeviceListGet();
         lupusec.DevicePSSListGet();
         lupusec.PanelCondGet();
-        //  lupusec.DeviceEditAllGet();
+        // lupusec.DeviceEditAllGet();
+        */
+
+        let self = this;
+        lupusec.addToProcess(function() {
+          return lupusec.DeviceListGet();
+        }, 2);
+        lupusec.addToProcess(function() {
+          return lupusec.DevicePSSListGet();
+        }, 2);
+        lupusec.addToProcess(function() {
+          return lupusec.PanelCondGet();
+        }, 2);
+
 
         adapter.subscribeStates(adapter.namespace + ".devices.*.status_ex");
         adapter.subscribeStates(adapter.namespace + ".devices.*.hue");
