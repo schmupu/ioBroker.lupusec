@@ -135,7 +135,7 @@
     "alarm_user": "",
     "alarm_password": "",
     "alarm_password_confirm": "",
-    "alarm_polltime": 2,
+    "alarm_polltime":  1,
     "alarm_allstates": false
   },
   "objects": [],

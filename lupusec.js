@@ -298,16 +298,26 @@ function pingalarm(callback) {
 
 }
 
+
+function changeAdapterConfig() {
+  var id = "system.adapter." + adapter.namespace;
+  adapter.getForeignObject(id, function(err, obj) {
+    if (obj && obj.native.alarm_polltime != 1) {
+      obj.native.alarm_polltime = 1;
+      adapter.setForeignObject(id, obj, function(err) {
+        if (err) adapter.log.error(err);
+      });
+    }
+  });
+}
+
 // main function
 function main() {
 
-  if (adapter.config.alarm_polltime > 5) {
-    adapter.config.alarm_polltime = 2;
-  }
+  changeAdapterConfig();
 
   lupusec = new Lupus(adapter);
   lupusec.startProcess();
-
 
   // Check Parameter
   checkparameter(() => {
@@ -335,7 +345,6 @@ function main() {
         // lupusec.DeviceEditAllGet();
         */
 
-        let self = this;
         lupusec.addToProcess(function() {
           return lupusec.DeviceListGet();
         }, 2);
