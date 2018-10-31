@@ -51,8 +51,11 @@ at Thorsten Stueben <thorsten@stueben.de>.
 
 ## Changelog
 
+### 0.3.6 (31.10.2018)
+* (Stübi) Bugfixing 
+
 ### 0.3.5 (21.10.2018)
-* (Stübi) Bugfixing and changing of the polling mechanism 
+* (Stübi) Bugfixing and changing of the polling mechanism
 
 ### 0.3.4 (30.09.2018)
 * (Stübi) password will be encrypted. Translation of configuration
