@@ -300,10 +300,11 @@ function pingalarm(callback) {
 
 
 function changeAdapterConfig() {
+  var polltime = 0.5;
   var id = "system.adapter." + adapter.namespace;
   adapter.getForeignObject(id, function(err, obj) {
-    if (obj && obj.native.alarm_polltime != 1) {
-      obj.native.alarm_polltime = 1;
+    if (obj && obj.native.alarm_polltime != polltime) {
+      obj.native.alarm_polltime = polltime;
       adapter.setForeignObject(id, obj, function(err) {
         if (err) adapter.log.error(err);
       });
