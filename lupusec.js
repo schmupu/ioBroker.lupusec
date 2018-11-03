@@ -271,7 +271,7 @@ function checkparameter(callback) {
     adapter.log.error('Unsername or password is missing!');
     return;
   }
-
+ 
   // return pingalarm(callback);
   return callback && callback();
 
@@ -316,7 +316,6 @@ function changeAdapterConfig() {
 function main() {
 
   changeAdapterConfig();
-
   lupusec = new Lupus(adapter);
   lupusec.startProcess();
 
@@ -355,7 +354,6 @@ function main() {
         lupusec.addToProcess(function() {
           return lupusec.PanelCondGet();
         }, 2);
-
 
         adapter.subscribeStates(adapter.namespace + ".devices.*.status_ex");
         adapter.subscribeStates(adapter.namespace + ".devices.*.hue");
