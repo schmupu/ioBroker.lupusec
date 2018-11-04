@@ -15,7 +15,6 @@ The XT1 (without Plus) will not be supported. You can read the status of the Lup
 like door, windows, water, smoke sensors and the status of the alarm system.
 You can turn on switches and arm/disarm the alarm system.
 
-
 You can find detailed information here: [Lupus](https://www.lupus-electronics.de/en)
 
 ## Installation
@@ -52,7 +51,7 @@ at Thorsten Stueben <thorsten@stueben.de>.
 ## Changelog
 
 ### 0.3.6 (31.10.2018)
-* (Stübi) Bugfixing 
+* (Stübi) Bugfixing and new status alarm_ex
 
 ### 0.3.5 (21.10.2018)
 * (Stübi) Bugfixing and changing of the polling mechanism

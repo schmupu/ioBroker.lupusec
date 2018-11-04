@@ -8,7 +8,7 @@ var lupusec = null;
 
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
-adapter.on('unload', function(callback) {
+adapter.on('unload', function (callback) {
   try {
     // adapter.log.info('cleaned everything up...');
     callback();
@@ -18,13 +18,13 @@ adapter.on('unload', function(callback) {
 });
 
 // is called if a subscribed object changes
-adapter.on('objectChange', function(id, obj) {
+adapter.on('objectChange', function (id, obj) {
   // Warning, obj can be null if it was deleted
   // adapter.log.info('objectChange ' + id + ' ' + JSON.stringify(obj));
 });
 
 // is called if a subscribed state changes
-adapter.on('stateChange', function(id, state) {
+adapter.on('stateChange', function (id, state) {
   // Warning, state can be null if it was deleted
   //  adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
 
@@ -63,7 +63,7 @@ adapter.on('stateChange', function(id, state) {
 
               // PD Wert mitnehmen, falls vorhanden
               let idpd = idparent + ".pd";
-              adapter.getState(idpd, function(err, state) {
+              adapter.getState(idpd, function (err, state) {
                 if (!err && state && !state.ack) {
                   values.pd = state.val;
                   adapter.setState(idpd, {
@@ -79,7 +79,7 @@ adapter.on('stateChange', function(id, state) {
 
             break;
 
-            // HUE Lampe
+          // HUE Lampe
           case 74:
 
             if (statusname == "status_ex") {
@@ -92,7 +92,7 @@ adapter.on('stateChange', function(id, state) {
 
             if (statusname == "hue") {
               // erst nach 500 ms ausführen, falls sich wert noch ändert!
-              callByDelay(function() {
+              callByDelay(function () {
                 values.hue = status;
                 values.saturation = lupusec.getStateChangeById(iddevice + ".sat") || 0;
                 values.mod = 2;
@@ -102,7 +102,7 @@ adapter.on('stateChange', function(id, state) {
 
             if (statusname == "sat") {
               // erst nach 500 ms ausführen, falls sich wert noch ändert!
-              callByDelay(function() {
+              callByDelay(function () {
                 values.saturation = status;
                 values.hue = lupusec.getStateChangeById(iddevice + ".hue") || 0;
                 values.mod = 2;
@@ -112,7 +112,7 @@ adapter.on('stateChange', function(id, state) {
 
             if (statusname == "level") {
               // erst nach 500 ms ausführen, falls sich wert noch ändert!
-              callByDelay(function() {
+              callByDelay(function () {
                 values.level = status;
                 lupusec.DeviceSwitchDimmerPost(key, values);
               }, "74_level");
@@ -121,7 +121,7 @@ adapter.on('stateChange', function(id, state) {
             break;
 
 
-            // Rollläden
+          // Rollläden
           case 76:
 
             if (statusname == "switch") {
@@ -143,7 +143,7 @@ adapter.on('stateChange', function(id, state) {
 
             break;
 
-            // Thermometer
+          // Thermometer
           case 79:
 
             if (statusname == "mode") {
@@ -201,7 +201,7 @@ adapter.on('stateChange', function(id, state) {
 
 // is called when databases are connected and adapter received configuration.
 // start here!
-adapter.on('ready', function() {
+adapter.on('ready', function () {
   adapter.getForeignObject('system.config', (err, obj) => {
 
     if (adapter.config.alarm_password) {
@@ -250,7 +250,7 @@ function callByDelay(callback, delayname) {
   }
 
   clearTimeout(callByDelay.obj[delayname]);
-  callByDelay.obj[delayname] = setTimeout(function() {
+  callByDelay.obj[delayname] = setTimeout(function () {
     callback();
   }, 500);
 
@@ -271,7 +271,7 @@ function checkparameter(callback) {
     adapter.log.error('Unsername or password is missing!');
     return;
   }
- 
+
   // return pingalarm(callback);
   return callback && callback();
 
@@ -300,12 +300,12 @@ function pingalarm(callback) {
 
 
 function changeAdapterConfig() {
-  var polltime = 0.5;
+  var polltime = 1.0;
   var id = "system.adapter." + adapter.namespace;
-  adapter.getForeignObject(id, function(err, obj) {
+  adapter.getForeignObject(id, function (err, obj) {
     if (obj && obj.native.alarm_polltime != polltime) {
       obj.native.alarm_polltime = polltime;
-      adapter.setForeignObject(id, obj, function(err) {
+      adapter.setForeignObject(id, obj, function (err) {
         if (err) adapter.log.error(err);
       });
     }
@@ -345,13 +345,13 @@ function main() {
         // lupusec.DeviceEditAllGet();
         */
 
-        lupusec.addToProcess(function() {
+        lupusec.addToProcess(function () {
           return lupusec.DeviceListGet();
         }, 2);
-        lupusec.addToProcess(function() {
+        lupusec.addToProcess(function () {
           return lupusec.DevicePSSListGet();
         }, 2);
-        lupusec.addToProcess(function() {
+        lupusec.addToProcess(function () {
           return lupusec.PanelCondGet();
         }, 2);
 

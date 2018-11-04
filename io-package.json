@@ -4,8 +4,8 @@
     "version": "0.3.6",
     "news": {
       "0.3.6": {
-        "en": "Bugfixing",
-        "de": "Bugfixing"
+        "en": "Bugfixing and new status alarm_ex",
+        "de": "Bugfixing and neuer Status alarm_ex"
       },
       "0.3.5": {
         "en": "Bugfixing",
