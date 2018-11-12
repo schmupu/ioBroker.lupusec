@@ -50,6 +50,9 @@ at Thorsten Stueben <thorsten@stueben.de>.
 
 ## Changelog
 
+### 0.3.7 (12.11.2018)
+* (Stübi) Bugfixing
+
 ### 0.3.6 (31.10.2018)
 * (Stübi) Bugfixing and new status alarm_ex
 
