@@ -299,8 +299,7 @@ function pingalarm(callback) {
 }
 
 
-function changeAdapterConfig() {
-  var polltime = 1.0;
+function changeAdapterConfig(polltime) {
   var id = "system.adapter." + adapter.namespace;
   adapter.getForeignObject(id, function (err, obj) {
     if (obj && obj.native.alarm_polltime != polltime) {
@@ -315,7 +314,7 @@ function changeAdapterConfig() {
 // main function
 function main() {
 
-  changeAdapterConfig();
+  changeAdapterConfig(1.0);
   lupusec = new Lupus(adapter);
   lupusec.startProcess();
 
