@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.3.7",
+    "version": "0.3.8",
     "news": {
+      "0.3.8": {
+        "en": "Dimmer added",
+        "de": "Dimmer hinzugefügt"
+      },
       "0.3.7": {
         "en": "Bugfixing",
         "de": "Bugfixing"

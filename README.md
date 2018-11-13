@@ -40,6 +40,7 @@ Fully supported and individually adapted are following devices:
   - Keypad (Type 37)
   - Power Switch Meter (Type 49)
   - Room sensor V1 (Type 54)
+  - Dimmer (Type 66)
   - Hue (Type 74)
   - Roller shutter relay V1 (Type 76)
   - Radiator thermostat (Type 79)
@@ -49,6 +50,9 @@ at Thorsten Stueben <thorsten@stueben.de>.
 
 
 ## Changelog
+
+### 0.3.8 (13.11.2018)
+* (Stübi) Add dimmer / relais (type 66)  
 
 ### 0.3.7 (12.11.2018)
 * (Stübi) Bugfixing

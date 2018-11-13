@@ -79,6 +79,28 @@ adapter.on('stateChange', function (id, state) {
 
             break;
 
+          // Dimmer / Unterputzrelais
+          case 66:
+
+            if (statusname == "status_ex") {
+
+              status === false ? status = 0 : status = 1;
+              values.switch = status;
+              lupusec.DeviceSwitchPSSPost(key, values);
+
+            }
+
+            if (statusname == "level") {
+              // erst nach 500 ms ausführen, falls sich wert noch ändert!
+              callByDelay(function () {
+                values.level = status;
+                lupusec.DeviceSwitchDimmerPost(key, values);
+              }, "66_level");
+            }
+
+            break;
+
+
           // HUE Lampe
           case 74:
 
