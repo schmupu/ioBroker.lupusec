@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.3.8",
+    "version": "0.3.9",
     "news": {
+      "0.3.9": {
+        "en": "Apple Home status added",
+        "de": "Apple Homekit Status"
+      },
       "0.3.8": {
         "en": "Dimmer added",
         "de": "Dimmer hinzugefügt"

@@ -51,6 +51,9 @@ at Thorsten Stueben <thorsten@stueben.de>.
 
 ## Changelog
 
+### 0.3.9 (26.11.2018)
+* (Stübi) Add Apple home alarm status  
+
 ### 0.3.8 (13.11.2018)
 * (Stübi) Add dimmer / relais (type 66)  
 
