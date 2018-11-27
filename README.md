@@ -33,7 +33,7 @@ Fully supported and individually adapted are following devices:
 
   - Door contact / window contact (Type 4)
   - Water sensor (Type 5)
-  - Motion detector (Type 9)
+  - Motion detector / 360 degree motion detector (Type 9)
   - Smoke Detector / Heat Detector (Type 14)
   - Status Indicator / Mini Indoor Siren (Type 22)
   - Power Switch (Type 24)
@@ -44,6 +44,8 @@ Fully supported and individually adapted are following devices:
   - Hue (Type 74)
   - Roller shutter relay V1 (Type 76)
   - Radiator thermostat (Type 79)
+
+The two states apple_home_a1 and lupusec.0.status.apple_home_a2 for the Apple Homekit adapter yahka supported. You can turn in addition to the lupusec states the alarm system for area 1 and 2 on and off.  
 
 If you own a device that is not listed in the list above, please contact me
 at Thorsten Stueben <thorsten@stueben.de>.
