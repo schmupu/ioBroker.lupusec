@@ -204,43 +204,31 @@ adapter.on('stateChange', function (id, state) {
 
       }
 
-     
+
       // Area 1 alarm modus
       if (id == adapter.namespace + ".status.mode_pc_a1") {
         lupusec.PanelCondPost(1, state.val);
-        /*
-        let alarm_ex = lupusec.getStateChangeById("status.alarm_ex") || 0;
-        let apple_home_a1 = lupusec.getAppleStautusFromLupusec(state.val, alarm_ex);
-        adapter.setState("status.apple_home_a1", {
-          val: apple_home_a1,
-          ack: true
-        });
-        */
       }
 
       // Area 2 alarm modus
       if (id == adapter.namespace + ".status.mode_pc_a2") {
         lupusec.PanelCondPost(2, state.val);
-        /*
-        let alarm_ex = lupusec.getStateChangeById("status.alarm_ex") || 0;
-        let apple_home_a2 = lupusec.getAppleStautusFromLupusec(state.val);
-        adapter.setState("status.apple_home_a2", {
-          val: apple_home_a2,
-          ack: true
-        });
-        */
       }
 
       // Area 1 alarm modus
       if (id == adapter.namespace + ".status.apple_home_a1") {
         let mode_pc_a1 = lupusec.getLupusecFromAppleStautus(state.val);
-        lupusec.PanelCondPost(1, mode_pc_a1);
+        if (mode_pc_a1) {
+          lupusec.PanelCondPost(1, mode_pc_a1);
+        }
       }
 
       // Area 2 alarm modus
       if (id == adapter.namespace + ".status.apple_home_a2") {
         let mode_pc_a2 = lupusec.getLupusecFromAppleStautus(state.val);
-        lupusec.PanelCondPost(2, mode_pc_a2);
+        if (mode_pc_a2) {
+          lupusec.PanelCondPost(2, mode_pc_a2);
+        }
       }
 
     }
