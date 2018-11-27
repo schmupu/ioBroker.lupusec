@@ -204,42 +204,31 @@ adapter.on('stateChange', function (id, state) {
 
       }
 
-       // Alarm triggerd
-       if (id == adapter.namespace + ".status.alarm_ex") {
-        let mode_pc_a1 = lupusec.getStateChangeById("status.mode_pc_a1") || 0;
-        let mode_pc_a2 = lupusec.getStateChangeById("status.mode_pc_a2") || 0;
-        let apple_home_a1 = lupusec.getAppleStautusFromLupusec(mode_pc_a1, state.val);
-        let apple_home_a2 = lupusec.getAppleStautusFromLupusec(mode_pc_a2, state.val);
-        adapter.setState("status.apple_home_a1", {
-          val: apple_home_a1,
-          ack: true
-        });
-        adapter.setState("status.apple_home_a2", {
-          val: apple_home_a2,
-          ack: true
-        });
-      }
-
+     
       // Area 1 alarm modus
       if (id == adapter.namespace + ".status.mode_pc_a1") {
         lupusec.PanelCondPost(1, state.val);
+        /*
         let alarm_ex = lupusec.getStateChangeById("status.alarm_ex") || 0;
         let apple_home_a1 = lupusec.getAppleStautusFromLupusec(state.val, alarm_ex);
         adapter.setState("status.apple_home_a1", {
           val: apple_home_a1,
           ack: true
         });
+        */
       }
 
       // Area 2 alarm modus
       if (id == adapter.namespace + ".status.mode_pc_a2") {
         lupusec.PanelCondPost(2, state.val);
+        /*
         let alarm_ex = lupusec.getStateChangeById("status.alarm_ex") || 0;
         let apple_home_a2 = lupusec.getAppleStautusFromLupusec(state.val);
         adapter.setState("status.apple_home_a2", {
           val: apple_home_a2,
           ack: true
         });
+        */
       }
 
       // Area 1 alarm modus
@@ -428,7 +417,6 @@ function main() {
         adapter.subscribeStates(adapter.namespace + ".devices.*.pd");
         adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a1");
         adapter.subscribeStates(adapter.namespace + ".status.mode_pc_a2");
-        adapter.subscribeStates(adapter.namespace + ".status.alarm_ex");
         adapter.subscribeStates(adapter.namespace + ".status.apple_home_a1");
         adapter.subscribeStates(adapter.namespace + ".status.apple_home_a2");
 
