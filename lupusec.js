@@ -218,7 +218,7 @@ adapter.on('stateChange', function (id, state) {
       // Area 1 alarm modus
       if (id == adapter.namespace + ".status.apple_home_a1") {
         let mode_pc_a1 = lupusec.getLupusecFromAppleStautus(state.val);
-        if (mode_pc_a1) {
+        if (mode_pc_a1 >= 0 && mode_pc_a1 <= 4) {
           lupusec.PanelCondPost(1, mode_pc_a1);
         }
       }
@@ -226,7 +226,7 @@ adapter.on('stateChange', function (id, state) {
       // Area 2 alarm modus
       if (id == adapter.namespace + ".status.apple_home_a2") {
         let mode_pc_a2 = lupusec.getLupusecFromAppleStautus(state.val);
-        if (mode_pc_a2) {
+        if (mode_pc_a2 >= 0 && mode_pc_a2 <= 4) {
           lupusec.PanelCondPost(2, mode_pc_a2);
         }
       }
