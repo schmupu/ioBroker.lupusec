@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.3.9",
+    "version": "0.4.0",
     "news": {
+      "0.4.0": {
+        "en": "Add Light sensor (type 78)",
+        "de": "Lichtsensor (Type 78) hinzugefügt"
+      },
       "0.3.9": {
         "en": "Apple Home status added",
         "de": "Apple Homekit Status"
@@ -137,7 +141,13 @@
     "materialize": true,
     "enabled": true,
     "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
-    "keywords": ["lupusec", "burlgar alarm", "alarm system", "lupus", "iobroker"],
+    "keywords": [
+      "lupusec",
+      "burlgar alarm",
+      "alarm system",
+      "lupus",
+      "iobroker"
+    ],
     "readme": "https://github.com/schmupu/ioBroker.lupusec/blob/master/README.md",
     "loglevel": "info",
     "type": "alarm",
@@ -151,7 +161,7 @@
     "alarm_user": "",
     "alarm_password": "",
     "alarm_password_confirm": "",
-    "alarm_polltime":  1,
+    "alarm_polltime": 1,
     "alarm_allstates": false
   },
   "objects": [],

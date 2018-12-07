@@ -43,6 +43,7 @@ Fully supported and individually adapted are following devices:
   - Dimmer (Type 66)
   - Hue (Type 74)
   - Roller shutter relay V1 (Type 76)
+  - Light sensor (Type 78)
   - Radiator thermostat (Type 79)
 
 The two states apple_home_a1 and lupusec.0.status.apple_home_a2 for the Apple Homekit adapter yahka supported. You can turn in addition to the lupusec states the alarm system for area 1 and 2 on and off.  
@@ -52,6 +53,9 @@ at Thorsten Stueben <thorsten@stueben.de>.
 
 
 ## Changelog
+
+### 0.4.0 (07.12.2018)
+* (Stübi) Add Light sensor (type 78)  
 
 ### 0.3.9 (26.11.2018)
 * (Stübi) Add Apple home alarm status  
