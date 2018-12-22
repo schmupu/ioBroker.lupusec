@@ -1,15 +1,17 @@
 {
   "name": "iobroker.lupusec",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Lupusec",
   "author": {
     "name": "Thorsten Stueben",
     "email": "thorsten@stueben.de"
   },
-  "contributors": [{
-    "name": "Thorsten Stueben",
-    "email": "thorsten@stueben.de"
-  }],
+  "contributors": [
+    {
+      "name": "Thorsten Stueben",
+      "email": "thorsten@stueben.de"
+    }
+  ],
   "homepage": "https://github.com/schmupu/ioBroker.lupusec",
   "license": "MIT",
   "keywords": [
@@ -26,7 +28,8 @@
   },
   "dependencies": {
     "ping": "^0.2.1",
-    "request": "^2.79.0"
+    "request": "^2.79.0",
+    "@iobroker/adapter-core": "^1.0.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",

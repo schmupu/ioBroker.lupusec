@@ -1,7 +1,7 @@
 'use strict';
 
 // you have to require the utils module and call adapter function
-var utils = require(__dirname + '/lib/utils'); // Get common adapter utils
+const utils   = require('@iobroker/adapter-core'); 
 var Lupus = require(__dirname + '/lib/lupus');
 var adapter = new utils.Adapter('lupusec');
 var lupusec = null;

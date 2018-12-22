@@ -54,6 +54,9 @@ at Thorsten Stueben <thorsten@stueben.de>.
 
 ## Changelog
 
+### 0.4.1 (22.12.2018)
+* (Stübi) Changed core adapter   
+
 ### 0.4.0 (07.12.2018)
 * (Stübi) Add Light sensor (type 78)  
 

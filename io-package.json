@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "news": {
+      "0.4.1": {
+        "en": "Changed core adapter",
+        "de": "Core Adapter angepasst"
+      },
       "0.4.0": {
         "en": "Add Light sensor (type 78)",
         "de": "Lichtsensor (Type 78) hinzugefügt"
