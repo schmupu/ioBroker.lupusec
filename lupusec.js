@@ -1,3 +1,8 @@
+/* jshint -W097 */
+/* jshint -W030 */
+/* jshint strict:true */
+/* jslint node: true */
+/* jslint esversion: 6 */
 'use strict';
 
 // you have to require the utils module and call adapter function
@@ -408,10 +413,10 @@ function main() {
         adapter.subscribeStates(adapter.namespace + ".status.apple_home_a1");
         adapter.subscribeStates(adapter.namespace + ".status.apple_home_a2");
 
-      })
+      });
 
-    })
+    });
 
-  })
+  });
 
 }
