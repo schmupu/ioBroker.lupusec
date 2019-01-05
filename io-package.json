@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "0.4.1",
+    "version": "1.0.0",
     "news": {
+      "1.0.0": {
+        "en": "Support of compact mode",
+        "de": "Compact Mode Unterstütztung"
+      },
       "0.4.1": {
         "en": "Changed core adapter",
         "de": "Core Adapter angepasst"
@@ -144,6 +148,7 @@
     "icon": "lupusec.png",
     "materialize": true,
     "enabled": true,
+    "compact": true,
     "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
     "keywords": [
       "lupusec",

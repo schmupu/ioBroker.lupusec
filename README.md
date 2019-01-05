@@ -54,6 +54,9 @@ at Thorsten Stueben <thorsten@stueben.de>.
 
 ## Changelog
 
+### 1.0.0 (22.12.2018)
+* (Stübi) Support of compact mode   
+
 ### 0.4.1 (22.12.2018)
 * (Stübi) Changed core adapter   
 
