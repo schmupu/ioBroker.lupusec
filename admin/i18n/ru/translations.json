@@ -1,0 +1,13 @@
+{
+    "Auto": "Автоматически",
+    "Confirm Password": "Подтвердите Пароль",
+    "Host": "Hostname",
+    "Manual": "Вручную",
+    "Password": "пароль",
+    "Port": "порт",
+    "User": "пользователь",
+    "alarm system": "аварийная система",
+    "https": "https",
+    "on save adapter restarts with new config immediately": "При сохранении настроек адаптера он сразу же перезапускается",
+    "template adapter settings": "Пример"
+}

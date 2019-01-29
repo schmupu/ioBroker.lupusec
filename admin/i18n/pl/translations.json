@@ -1,0 +1,13 @@
+{
+    "Auto": "Automatyczny",
+    "Confirm Password": "Potwierdź hasło",
+    "Host": "Hostname",
+    "Manual": "podręcznik",
+    "Password": "Hasło",
+    "Port": "Port",
+    "User": "Użytkownik",
+    "alarm system": "system alarmowy",
+    "https": "https",
+    "on save adapter restarts with new config immediately": "na karcie save natychmiast uruchamia się z nową konfiguracją",
+    "template adapter settings": "ustawienia adaptera szablonu"
+}

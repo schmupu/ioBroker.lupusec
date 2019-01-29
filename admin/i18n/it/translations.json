@@ -1,0 +1,13 @@
+{
+    "Auto": "Auto",
+    "Confirm Password": "conferma password",
+    "Host": "Hostname",
+    "Manual": "Manuale",
+    "Password": "Parola d'ordine",
+    "Port": "Porta",
+    "User": "Utente",
+    "alarm system": "sistema d'allarme",
+    "https": "https",
+    "on save adapter restarts with new config immediately": "su save adapter si riavvia immediatamente con la nuova configurazione",
+    "template adapter settings": "impostazioni dell'adattatore del modello"
+}

@@ -28,7 +28,7 @@ For only reading the status, select a user without write access. If you want to 
 (for example, turn on/off the light or arm/disarm the alarm) pick a user with write access.
 
 
-By default all Lupssec devices will be on the ioBroker object tab  displayed.
+By default all Lupusec devices will be on the ioBroker object tab  displayed.
 Fully supported and individually adapted are following devices:
 
   - Door contact / window contact (Type 4)
