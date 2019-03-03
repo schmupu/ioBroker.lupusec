@@ -35,7 +35,8 @@
     "axios": "^0.18.0",
     "chai": "^4.1.2",
     "gulp": "^4.0.0",
-    "mocha": "^4.1.0"
+    "mocha": "^4.1.0",
+    "@iobroker/adapter-core": "^1.0.3"
   },
   "main": "lupusec.js",
   "scripts": {
