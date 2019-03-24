@@ -334,9 +334,8 @@ async function changeAdapterConfigAsync(polltime) {
 
 }
 
-
 async function mainAsync() {
-  await changeAdapterConfigAsync(1.0);
+  await changeAdapterConfigAsync(0.5);
   lupusecAsync = new LupusAync.Lupus(adapter);
   let ping = await pingalarmAsync(adapter.config.alarm_host);
   let check = checkparameter();
