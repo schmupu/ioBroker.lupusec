@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "news": {
+            "1.1.0": {
+                "en": "Redesign. Node 8 or higher is now required",
+                "de": "Neugestaltung. ",
+                "ru": "Редизайн. ",
+                "pt": "Redesenhar. ",
+                "nl": "Redesign. ",
+                "fr": "Refonte. ",
+                "it": "Riprogettare. ",
+                "es": "Rediseño ",
+                "pl": "Przeprojektowanie. ",
+                "zh-cn": "重新设计。"
+            },
             "1.0.0": {
                 "en": "Support of compact mode",
                 "de": "Compact Mode Unterstütztung",

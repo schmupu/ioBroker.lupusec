@@ -8,7 +8,7 @@
 
 [![NPM](https://nodei.co/npm/iobroker.lupusec.png?downloads=true)](https://nodei.co/npm/iobroker.lupusec/)
 
-Requires node.js 6.0 or higher and Admin v3!
+Requires node.js 8.0 or higher and Admin v3!
 
 This adapter connects the Lupusec alarm system XT1 Plus, XT2, XT2 Plus and XT3 with ioBroker.
 The XT1 (without Plus) will not be supported. You can read the status of the Lupusec sensors
@@ -53,6 +53,9 @@ at Thorsten Stueben <thorsten@stueben.de>.
 
 
 ## Changelog
+
+### 1.1.0 (23.03.2019)
+* (Stübi) Redesign. Node 8 or higher is now required
 
 ### 1.0.0 (22.12.2018)
 * (Stübi) Support js-controller compact mode   
