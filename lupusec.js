@@ -67,8 +67,8 @@ function startAdapter(options) {
                 } catch (error) {
                   // 
                 }
-                // await lupusecAsync.deviceSwitchPSSPost({ id: 'ZS:a61d01', switch: 1 });
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), 1, false);
+                await lupusecAsync.deviceSwitchPSSPost(form);
+                // await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), 1, false);
               }
               break;
             // Dimmer / Unterputzrelais
