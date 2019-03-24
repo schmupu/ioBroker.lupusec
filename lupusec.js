@@ -67,8 +67,8 @@ function startAdapter(options) {
                 } catch (error) {
                   // 
                 }
-                await lupusecAsync.deviceSwitchPSSPost(form);
-                // await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), 1, false);
+                // await lupusecAsync.deviceSwitchPSSPost(form);
+                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), 1, false);
               }
               break;
             // Dimmer / Unterputzrelais
@@ -121,8 +121,8 @@ function startAdapter(options) {
                   form = {
                     id: key,
                     hue: hue || 0,
-                    mod: 2,
-                    saturation: saturation || 0
+                    saturation: saturation || 0,
+                    mod: 2
                   };
                   await lupusecAsync.addToProcess(async () => await lupusecAsync.DeviceHueColorControl(form), 1, false);
                 }, '74_hue');
