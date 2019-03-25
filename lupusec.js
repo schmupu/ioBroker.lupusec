@@ -352,7 +352,7 @@ async function mainAsync() {
     await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), 2, true);
     await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), 2, true);
     // await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), 2, true);
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoGet(), 2, true);
+    // await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoGet(), 2, true);
     adapter.subscribeStates(adapter.namespace + '.devices.*.status_ex');
     adapter.subscribeStates(adapter.namespace + '.devices.*.hue');
     adapter.subscribeStates(adapter.namespace + '.devices.*.sat');
