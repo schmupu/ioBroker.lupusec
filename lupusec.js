@@ -1,6 +1,7 @@
 'use strict';
 
 // you have to require the utils module and call adapter function
+const ping = require('ping');
 const utils = require('@iobroker/adapter-core');
 const LupusAync = require(__dirname + '/lib/lupusasync');
 let lupusecAsync = null;
@@ -305,7 +306,6 @@ function checkparameter() {
 
 
 function pingalarmAsync(host) {
-  let ping = require('ping');
   return new Promise((resolve, reject) => {
     ping.sys.probe(host, (isAlive) => {
       let msg = isAlive ? 'Lupusec Alarmsystem ' + host + ' is alive' : 'Lupusec Alarmsystem ' + host + ' is not reachable';
