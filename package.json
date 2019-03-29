@@ -30,7 +30,8 @@
     "@iobroker/adapter-core": "^1.0.3",
     "ping": "^0.2.1",
     "request": "^2.79.0",
-    "request-promise": "^4.2.4"
+    "request-promise": "^4.2.4",
+    "semver": "^5.7.0"
   },
   "devDependencies": {
     "axios": "^0.18.0",
@@ -38,6 +39,9 @@
     "gulp": "^4.0.0",
     "mocha": "^4.1.0",
     "@iobroker/testing": "^1.1.10"
+  },
+  "engines": {
+    "node": ">=8.0.0"
   },
   "main": "lupusec.js",
   "scripts": {

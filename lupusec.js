@@ -3,10 +3,12 @@
 // you have to require the utils module and call adapter function
 const ping = require('ping');
 const utils = require('@iobroker/adapter-core');
+const semver = require('semver');
 const LupusAync = require(__dirname + '/lib/lupusasync');
 let lupusecAsync = null;
 
 const adapterName = require('./package.json').name.split('.').pop();
+const adapterNodeVer = require('./package.json').engines.node;
 let adapter;
 
 function startAdapter(options) {
@@ -229,6 +231,15 @@ function startAdapter(options) {
 
     }
 
+  });
+
+
+  adapter.on('ready', () => {
+    adapter.log.info('Starting Adapter ' + adapter.namespace + ' in version ' + adapter.version);
+    if (!semver.satisfies(process.version, adapterNodeVer)) {
+      adapter.log.error(`Required node version ${adapterNodeVer} not satisfied with current version ${process.version}.`);
+      return;
+    }
   });
 
 
