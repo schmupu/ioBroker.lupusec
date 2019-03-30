@@ -3,12 +3,10 @@
 // you have to require the utils module and call adapter function
 const ping = require('ping');
 const utils = require('@iobroker/adapter-core');
-const semver = require('semver');
 const LupusAync = require(__dirname + '/lib/lupusasync');
-let lupusecAsync = null;
-
 const adapterName = require('./package.json').name.split('.').pop();
 const adapterNodeVer = require('./package.json').engines.node;
+let lupusecAsync = null;
 let adapter;
 
 function startAdapter(options) {
@@ -233,16 +231,6 @@ function startAdapter(options) {
 
   });
 
-
-  adapter.on('ready', () => {
-    adapter.log.info('Starting Adapter ' + adapter.namespace + ' in version ' + adapter.version);
-    if (!semver.satisfies(process.version, adapterNodeVer)) {
-      adapter.log.error(`Required node version ${adapterNodeVer} not satisfied with current version ${process.version}.`);
-      return;
-    }
-  });
-
-
   adapter.on('ready', async () => {
     try {
       let obj = await adapter.getForeignObjectAsync('system.config');
@@ -273,7 +261,11 @@ function startAdapter(options) {
   return adapter;
 }
 
-// decrypt password
+/**
+ * decrypt password
+ * @param {*} key 
+ * @param {*} value 
+ */
 function decrypt(key, value) {
   let result = '';
   if (value.startsWith('(crypt)')) {
@@ -287,9 +279,13 @@ function decrypt(key, value) {
   return result;
 }
 
-// Execute a callback function after x msec with a delayname. if you call callByDelay
-// again, with a callback funtion, the older one will be canceld if not executed
-// till now
+/**
+ * Execute a callback function after x msec with a delayname. if you call callByDelay
+ * again, with a callback funtion, the older one will be canceld if not executed
+ * till now
+ * @param {*} callback 
+ * @param {*} delayname 
+ */
 function callByDelay(callback, delayname) {
   if (callByDelay.obj === undefined) {
     callByDelay.obj = {};
@@ -300,8 +296,9 @@ function callByDelay(callback, delayname) {
   }, 500);
 }
 
-
-// Check Paerameter
+/**
+ * Check Paerameter
+ */
 function checkparameter() {
   adapter.log.info('Checking the ioBroker Lupusec configuration');
   if (!adapter.config.alarm_host || !adapter.config.alarm_port) {
@@ -381,7 +378,9 @@ async function mainAsync() {
   }
 }
 
-// If started as allInOne mode => return function to create instance
+/**
+ * If started as allInOne mode => return function to create instance
+ */
 if (typeof module !== 'undefined' && module.parent) {
   module.exports = startAdapter;
 } else {

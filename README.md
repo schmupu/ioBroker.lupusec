@@ -1,7 +1,6 @@
 ![Logo](admin/lupusec.png)
 
 # ioBroker.lupusec
-=================
 
 [![Build Status](https://travis-ci.org/schmupu/ioBroker.lupusec.svg?branch=master)](https://travis-ci.org/schmupu/ioBroker.lupusec) ![Number of Installations](http://iobroker.live/badges/lupusec-installed.svg) 
 ![Number of Installations](http://iobroker.live/badges/lupusec-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.lupusec.svg)](https://www.npmjs.com/package/iobroker.lupusec) 
