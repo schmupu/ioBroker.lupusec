@@ -2,8 +2,11 @@
 
 # ioBroker.lupusec
 
-[![Build Status](https://travis-ci.org/schmupu/ioBroker.lupusec.svg?branch=master)](https://travis-ci.org/schmupu/ioBroker.lupusec) ![Number of Installations](http://iobroker.live/badges/lupusec-installed.svg) 
-![Number of Installations](http://iobroker.live/badges/lupusec-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.lupusec.svg)](https://www.npmjs.com/package/iobroker.lupusec) 
+[![Travis Build Status](https://travis-ci.org/schmupu/ioBroker.lupusec.svg?branch=master)](https://travis-ci.org/schmupu/ioBroker.lupusec)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/schmupu/ioBroker.lupusec?branch=master&svg=true)](https://ci.appveyor.com/project/schmupu/ioBroker-lupusec/)
+![Stable Version](http://iobroker.live/badges/lupusec-stable.svg) 
+![Number of Installations](http://iobroker.live/badges/lupusec-installed.svg) 
+[![NPM version](http://img.shields.io/npm/v/iobroker.lupusec.svg)](https://www.npmjs.com/package/iobroker.lupusec) 
 [![Downloads](https://img.shields.io/npm/dm/iobroker.lupusec.svg)](https://www.npmjs.com/package/iobroker.lupusec) 
 [![NPM](https://nodei.co/npm/iobroker.lupusec.png?downloads=true)](https://nodei.co/npm/iobroker.lupusec/)
 
