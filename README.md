@@ -52,7 +52,7 @@ at Thorsten Stueben <thorsten@stueben.de>.
 
 ## Changelog
 ### 1.1.1 (27.03.2019)
-* (Stübi) Lupusec alarm online status 
+* (Stübi) Lupusec alarm online status added
 
 ### 1.1.0 (23.03.2019)
 * (Stübi) Totally redesign of the Lupusec adapter. Node 8 or higher is now required
