@@ -69,6 +69,7 @@ at Thorsten Stueben <thorsten@stueben.de>.
 * (Stübi) Bugfixing Radiator thermostat V1/V2
 * (Stübi) Bugfixing Dimmer
 * (Stübi) Bugfixing PD Status (Timer) for relay, power switch
+* (Stübi) Bugfixing status switch for rollter/shutter device
 
 ### 1.1.1 (27.03.2019)
 * (Stübi) Lupusec alarm online status added

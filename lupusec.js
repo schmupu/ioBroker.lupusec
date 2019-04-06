@@ -146,15 +146,10 @@ function startAdapter(options) {
             // Rollläden
             case 76:
               if (statusname == 'switch') {
-                try {
-                  await adapter.setStateAsync(id, { val: 0, ack: true });
-                } catch (error) {
-                  //    
-                }
-                // (0: runterfahren/zu, 1: hochfahren/auf)
+                // (0: runterfahren/zu, 1: hochfahren/auf, 2: stop)
                 form = {
                   id: key,
-                  switch: status == 0 ? 0 : 1
+                  switch: status
                 };
                 await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), 1, false);
               }
