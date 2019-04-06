@@ -38,14 +38,18 @@ Fully supported and individually adapted are following devices:
   - Smoke Detector / Heat Detector (Type 14)
   - Status Indicator / Mini Indoor Siren (Type 22)
   - Power Switch (Type 24)
+  - 1 channel relay with ZigBee repeater (Type 24)
+  - 2 channel relay with ZigBee repeater (Type 24)
   - Keypad (Type 37)
-  - Power Switch Meter (Type 49)
+  - Power Switch Meter (Type 48)
   - Room sensor V1 (Type 54)
   - Dimmer (Type 66)
   - Hue (Type 74)
   - Roller shutter relay V1 (Type 76)
-  - Light sensor (Type 78)
   - Radiator thermostat (Type 79)
+  - Radiator thermostat V2 (Type 79)
+  - Light sensor (Type 78)
+  - CO sensor (Type 13)
 
 The two states apple_home_a1 and lupusec.0.status.apple_home_a2 for the Apple Homekit adapter yahka supported. You can turn in addition to the lupusec states the alarm system for area 1 and 2 on and off.  
 
@@ -54,6 +58,18 @@ at Thorsten Stueben <thorsten@stueben.de>.
 
 
 ## Changelog
+
+### 1.1.2 (06.04.2019)
+* (Stübi) Add light sensor 
+* (Stübi) Add CO sensor
+* (Stübi) Add water sensor V2
+* (Stübi) Add Radiator thermostat V2
+* (Stübi) Add 1 channel relay with ZigBee repeater (Type 24)
+* (Stübi) Add 2 channel relay with ZigBee repeater (Type 24)
+* (Stübi) Bugfixing Radiator thermostat V1/V2
+* (Stübi) Bugfixing Dimmer
+* (Stübi) Bugfixing PD Status (Timer) for relay, power switch
+
 ### 1.1.1 (27.03.2019)
 * (Stübi) Lupusec alarm online status added
 
