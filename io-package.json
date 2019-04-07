@@ -4,7 +4,16 @@
         "version": "1.1.2",
         "news": {
             "1.1.2": {
-                "en": "Add CO, ligth and water (v2) sensor"
+                "en": "Add CO, ligth and water (v2) sensor",
+                "de": "Fügen Sie den Sensor für CO, Licht und Wasser (v2) hinzu",
+                "ru": "Добавьте датчик CO, освещенности и воды (v2)",
+                "pt": "Adicione o sensor CO, ligth e water (v2)",
+                "nl": "Voeg CO, ligth en water (v2) sensor toe",
+                "fr": "Ajouter un capteur de CO, de lumière et d’eau (v2)",
+                "it": "Aggiungi sensore di CO, luminosità e acqua (v2)",
+                "es": "Añadir sensor de CO, luz y agua (v2)",
+                "pl": "Dodaj czujnik CO, ligth i wody (v2)",
+                "zh-cn": "添加CO，ligth和水（v2）传感器"
             },
             "1.1.1": {
                 "en": "Add status Lupusec online",
