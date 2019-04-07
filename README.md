@@ -77,7 +77,7 @@ Detailed view of a sensor or device. In this example you see the CO sensor. On C
 * (Stübi) Add Radiator thermostat V2
 * (Stübi) Add 1 channel relay with ZigBee repeater (Type 24)
 * (Stübi) Add 2 channel relay with ZigBee repeater (Type 24)
-* (Stübi) If you change the sensor name in Lupusec App, it will be changed in ioBroker for all channels too 
+* (Stübi) If you change the sensor name in the Lupusec App, it will be change in ioBroker too 
 * (Stübi) Bugfixing Radiator thermostat V1/V2
 * (Stübi) Bugfixing Dimmer
 * (Stübi) Bugfixing PD Status (Timer) for relay, power switch
