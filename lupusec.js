@@ -155,11 +155,14 @@ function startAdapter(options) {
               }
               // down or up x %
               if (statusname == 'level') {
-                form = {
-                  id: key,
-                  level: status
-                };
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), 1, false);
+                // erst nach 500 ms ausführen, falls sich wert noch ändert!
+                await lupusecAsync.addToProcess(lupusecAsync.callByDelay(async () => {
+                  form = {
+                    id: key,
+                    level: status
+                  };
+                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), 1, false);
+                }, key, statusname), 1, false);
               }
               break;
 
@@ -182,12 +185,15 @@ function startAdapter(options) {
                 await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), 1, false);
               }
               if (statusname == 'set_temperature') {
-                form = {
-                  id: key,
-                  act: 't_setpoint',
-                  thermo_setpoint: Math.trunc(100 * Math.round(2 * status) / 2)
-                };
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), 1, false);
+                // erst nach 500 ms ausführen, falls sich wert noch ändert!
+                await lupusecAsync.addToProcess(lupusecAsync.callByDelay(async () => {
+                  form = {
+                    id: key,
+                    act: 't_setpoint',
+                    thermo_setpoint: Math.trunc(100 * Math.round(2 * status) / 2)
+                  };
+                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), 1, false);
+                }, key, 'status'), 1, false);
               }
               break;
 

@@ -26,8 +26,8 @@ The easiest way is to configure the lupusec.iobroker adapter via the discovery a
 2. Manually configuration of the adapter
 Choose the IP-Address or hostname from the Lupusec alarm system. Choose https (recommended) if possible.
 For only reading the status, select a user without write access. If you want to change the status
-(for example, turn on/off the light or arm/disarm the alarm) pick a user with write access.
-
+(for example, turn on/off the light or arm/disarm the alarm) pick a user with write access.      
+![admin](docs/en/img/lupusec_admin.png)
 
 By default all Lupusec devices will be on the ioBroker object tab  displayed.
 Fully supported and individually adapted are following devices:
@@ -56,6 +56,17 @@ The two states apple_home_a1 and lupusec.0.status.apple_home_a2 for the Apple Ho
 If you own a device that is not listed in the list above, please contact me
 at Thorsten Stueben <thorsten@stueben.de>.
 
+## Objects
+### Lupusec Status
+ioBroker offers you the same staus objects as in the Lupusec app does.
+![lupusec_obj_status](docs/en/img/lupusec_obj_status.png)
+
+
+### Lupusec Devices 
+You find all supported Lupsec sensors and devices under 'devices'. If a device is missing, please contact me.
+![lupusec_obj_status](docs/en/img/lupusec_obj_devices.png)
+Detailed view of a sensor or device. In this example you see the CO sensor. On CO alarm the state 'alarm_status_ex' change to true and 'alarm_status' change to 'CO'.
+![lupusec_obj_status](docs/en/img/lupusec_obj_devices_type09.png)
 
 ## Changelog
 
@@ -66,6 +77,7 @@ at Thorsten Stueben <thorsten@stueben.de>.
 * (Stübi) Add Radiator thermostat V2
 * (Stübi) Add 1 channel relay with ZigBee repeater (Type 24)
 * (Stübi) Add 2 channel relay with ZigBee repeater (Type 24)
+* (Stübi) If you change the sensor name in Lupusec App, it will be changed in ioBroker for all channels too 
 * (Stübi) Bugfixing Radiator thermostat V1/V2
 * (Stübi) Bugfixing Dimmer
 * (Stübi) Bugfixing PD Status (Timer) for relay, power switch
@@ -97,6 +109,10 @@ at Thorsten Stueben <thorsten@stueben.de>.
 * (Stübi) Directory widged deleted
 * (Stübi) Port can be added
 
+## Planed
+Following things are planed in the future:
+* support more sensors / devices
+* writing a documentation for every sensor / device
 
 ## License
 The MIT License (MIT)
