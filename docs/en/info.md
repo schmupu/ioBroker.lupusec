@@ -4,6 +4,8 @@ But it is not possible to change the settings of the Lupusec sensors and devices
 
 ## Generic Information
 All sensors and devices own follwoing states.
+
+
 | state          	| descriptinon 	| read/write 	|
 |-----------------	|--------------	|------------	|
 | area          	| area of alarm system           	| read       	|
@@ -12,7 +14,7 @@ All sensors and devices own follwoing states.
 | cond_ok        	| conditon of sensor okay             	| read       	|
 | name           	| name of sensor             	| read/write       	|
 | rssi          	| value of Received Signal Strength Indication of sensor             	| read       	|
-| tamper_ok        	| tampering contact is okay. This action can only be applied to alarm sensors.              	| read       	|
+| tamper_ok        	| tampering contact is okay. This action can only be applied to alarm sensors.  | read       	|
 | type           	| sensor type as number             	| read       	|
 | type_name        	| sensor type as text            	| read       	|
 | zone          	| sensor zone       	| read       	|
