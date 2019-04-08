@@ -1,13 +1,30 @@
-# Devices
+# Sensor / Devices
+Every sensor or device sends a whole bunch of information. In ioBroker you see all the status information you can see in the Lupusec App. too. You have in ioBroker the same functionality too control the devices like switches, relays, shutter, ... like in the Lupusec App.
+But it is not possible to change the settings of the Lupusec sensors and devices in ioBroker. Technical it is possible, but I think it does not make sense till now.  
+
+## Generic Information
+All sensors and devices own follwoing states.
+| state          	| descriptinon 	| read/write 	|
+|-----------------	|--------------	|------------	|
+| area          	| area of alarm system           	| read       	|
+| battery_ok    	| the state ist false, if battery of the sensor is low or flat             	| read       	|
+| bypass         	| This action allows you to activate or deactivate the bypass function of the selected sensor. This action can only be applied to alarm sensors.              	| read       	|
+| cond_ok        	| conditon of sensor okay             	| read       	|
+| name           	| name of sensor             	| read/write       	|
+| rssi          	| value of Received Signal Strength Indication of sensor             	| read       	|
+| tamper_ok        	| tampering contact is okay. This action can only be applied to alarm sensors.              	| read       	|
+| type           	| sensor type as number             	| read       	|
+| type_name        	| sensor type as text            	| read       	|
+| zone          	| sensor zone       	| read       	|
 
 ## Door contact / window contact (Type 4)
-
-![lupusec_obj_status](../../admin/icons/4.png)
 
 | Status          	| Descriptinon 	| Read/Write 	|
 |-----------------	|--------------	|------------	|
 | alarm_status    	|            	| read       	|
 | alarm_status_ex 	|              	| read       	|
+| status         	|              	| read       	|
+| status_ex      	|              	| read       	|
 
 ## Water sensor (Type 5)
 ## Motion detector / 360 degree motion detector (Type 9)

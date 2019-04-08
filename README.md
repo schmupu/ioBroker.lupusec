@@ -15,7 +15,7 @@
 This adapter connects the Lupusec alarm system XT1 Plus, XT2, XT2 Plus and XT3 with ioBroker.
 The XT1 (without Plus) will not be supported. You can read the status of the Lupusec sensors
 like door, windows, water, smoke sensors and the status of the alarm system.
-You can turn on switches and arm/disarm the alarm system.
+For example, you can turn on switches, control your shutter and arm/disarm the alarm system.
 
 You can find detailed information here: [Lupus](https://www.lupus-electronics.de/en)
 
@@ -69,6 +69,9 @@ Detailed view of a sensor or device. In this example you see the CO sensor. On C
 ![lupusec_obj_status](docs/en/img/lupusec_obj_devices_type09.png)
 
 ## Changelog
+
+### 1.1.3 (10.04.2019)
+* (Stübi) New Logo
 
 ### 1.1.2 (06.04.2019)
 * (Stübi) Add light sensor 
