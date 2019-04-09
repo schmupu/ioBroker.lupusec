@@ -6,7 +6,7 @@ But it is not possible to change the settings of the Lupusec sensors and devices
 All sensors and devices own follwoing states.
 
 
-| state          	| descriptinon 	| read/write 	|
+| state          	| descriptions 	| read/write 	|
 |-----------------	|--------------	|------------	|
 | area          	| area of alarm system           	| read       	|
 | battery_ok    	| the state ist false, if battery of the sensor is low or flat             	| read       	|

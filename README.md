@@ -34,7 +34,9 @@ Fully supported and individually adapted are following devices:
 
   - Door contact / window contact (Type 4)
   - Water sensor (Type 5)
+  - Panic Button (Type 7)
   - Motion detector / 360 degree motion detector (Type 9)
+  - CO sensor (Type 13)
   - Smoke Detector / Heat Detector (Type 14)
   - Status Indicator / Mini Indoor Siren (Type 22)
   - Power Switch (Type 24)
@@ -43,13 +45,17 @@ Fully supported and individually adapted are following devices:
   - Keypad (Type 37)
   - Power Switch Meter (Type 48)
   - Room sensor V1 (Type 54)
+  - Heat detector (Type 58)
   - Dimmer (Type 66)
+  - Light Switch V2 (Type 66)
   - Hue (Type 74)
   - Roller shutter relay V1 (Type 76)
   - Radiator thermostat (Type 79)
   - Radiator thermostat V2 (Type 79)
   - Light sensor (Type 78)
-  - CO sensor (Type 13)
+  - Scenario Switch V2 (Type 81)
+  - Shock sensor (Type 93)
+
 
 The two states apple_home_a1 and lupusec.0.status.apple_home_a2 for the Apple Homekit adapter yahka supported. You can turn in addition to the lupusec states the alarm system for area 1 and 2 on and off.  
 
@@ -58,7 +64,7 @@ at Thorsten Stueben <thorsten@stueben.de>.
 
 ## Objects
 ### Lupusec Status
-ioBroker offers you the same staus objects as in the Lupusec app does.
+ioBroker offers you the same status objects as in the Lupusec app does.
 ![lupusec_obj_status](docs/en/img/lupusec_obj_status.png)
 
 
@@ -72,7 +78,12 @@ Detailed view of a sensor or device. In this example you see the CO sensor. On C
 
 ### 1.1.3 (10.04.2019)
 * (Stübi) New Logo
-
+* (Stübi) Add device Panic Button
+* (Stübi) Add status indicator 
+* (Stübi) Add sensor Heat detector
+* (Stübi) Add shock sensor 
+* (Stübi) Add Light Switch V2
+ 
 ### 1.1.2 (06.04.2019)
 * (Stübi) Add light sensor 
 * (Stübi) Add CO sensor
