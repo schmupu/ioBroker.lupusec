@@ -1,10 +1,31 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.1.3",
+        "version": "1.1.4",
         "news": {
+            "1.1.4": {
+                "en": "Add new devices",
+                "de": "Neue Geräte hinzufügen",
+                "ru": "Добавить новые устройства",
+                "pt": "Adicione novos dispositivos",
+                "nl": "Voeg nieuwe apparaten toe",
+                "fr": "Ajouter de nouveaux appareils",
+                "it": "Aggiungi nuovi dispositivi",
+                "es": "Agregar nuevos dispositivos",
+                "pl": "Dodaj nowe urządzenia",
+                "zh-cn": "添加新设备"
+            },
             "1.1.3": {
-                "en": "Add new sesors"
+                "en": "Add new sensors",
+                "de": "Neue Sensoren hinzufügen",
+                "ru": "Добавить новые датчики",
+                "pt": "Adicionar novos sensores",
+                "nl": "Voeg nieuwe sensoren toe",
+                "fr": "Ajouter de nouveaux capteurs",
+                "it": "Aggiungi nuovi sensori",
+                "es": "Añadir nuevos sensores",
+                "pl": "Dodaj nowe czujniki",
+                "zh-cn": "添加新传感器"
             },
             "1.1.2": {
                 "en": "Add CO, ligth and water (v2) sensor",
