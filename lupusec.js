@@ -349,7 +349,7 @@ async function changeAdapterConfigAsync(polltime) {
 }
 
 async function mainAsync() {
-  await changeAdapterConfigAsync(0.5);
+  await changeAdapterConfigAsync(0.25);
   lupusecAsync = new LupusAync.Lupus(adapter);
   let ping = await pingalarmAsync(adapter.config.alarm_host);
   let check = checkparameter();
@@ -366,6 +366,7 @@ async function mainAsync() {
     await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), 2, true);
     await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), 2, true);
     await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), 2, true);
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.ipCamGet(), 2, true);
     // await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoGet(), 2, true);
     adapter.subscribeStates(adapter.namespace + '.devices.*.status_ex');
     adapter.subscribeStates(adapter.namespace + '.devices.*.hue');
