@@ -79,6 +79,9 @@ Detailed view of a sensor or device. In this example you see the CO sensor. On C
 
 ## Changelog
 
+### 1.1.5 (24.04.2019)
+* (Stübi) Add buttons for Scenario Switch V2 and Bugfixing
+
 ### 1.1.4 (13.04.2019)
 * (Stübi) Add device outside alarm
 * (Stübi) Add device inside alarm

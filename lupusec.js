@@ -195,6 +195,18 @@ function startAdapter(options) {
               }
               break;
 
+            case 81:
+              if (statusname && statusname.startsWith('sresp_button_')) {
+                form = {
+                  id: key,
+                  sarea: lupusecAsync.getState(idparent + '.area'),
+                  szone: lupusecAsync.getState(idparent + '.zone'),
+                };
+                form[statusname] = status;
+                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), 1, false);
+              }
+              break;
+
             default:
               break;
           }
@@ -353,7 +365,7 @@ async function mainAsync() {
     await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListGet(), 2, true);
     await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), 2, true);
     await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), 2, true);
-    // await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), 2, true);
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), 2, true);
     // await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoGet(), 2, true);
     adapter.subscribeStates(adapter.namespace + '.devices.*.status_ex');
     adapter.subscribeStates(adapter.namespace + '.devices.*.hue');
@@ -362,6 +374,7 @@ async function mainAsync() {
     adapter.subscribeStates(adapter.namespace + '.devices.*.off');
     adapter.subscribeStates(adapter.namespace + '.devices.*.mode');
     adapter.subscribeStates(adapter.namespace + '.devices.*.name');
+    adapter.subscribeStates(adapter.namespace + '.devices.*.sresp_button_*');
     // adapter.subscribeStates(adapter.namespace + '.devices.*.mod');
     adapter.subscribeStates(adapter.namespace + '.devices.*.set_temperature');
     adapter.subscribeStates(adapter.namespace + '.devices.*.switch');
