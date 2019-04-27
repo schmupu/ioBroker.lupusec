@@ -334,13 +334,24 @@ function pingalarmAsync(host) {
   });
 }
 
-async function changeAdapterConfigAsync(polltime) {
+async function changeAdapterConfigAsync(polltime, changedate) {
   let id = 'system.adapter.' + adapter.namespace;
+  if(!changedate) { 
+    changedate = new Date(); 
+  } else {
+    let pattern = /(\d{1,2})\.(\d{1,2})\.(\d{4})/;
+    changedate = new Date(changedate.replace(pattern,'$3-$2-$1'));
+  }
+  let unixtime = Math.round(changedate.getTime());
   try {
     let obj = await adapter.getForeignObjectAsync(id);
-    if (obj && obj.native && obj.native.alarm_polltime != polltime) {
-      obj.native.alarm_polltime = polltime;
-      await adapter.setForeignObjectAsync(id, obj);
+    if (obj && obj.native) {
+      let lastChange = new Date(obj.ts); // only for debuging Interesting
+      if (obj.native.alarm_polltime != polltime && unixtime > obj.ts) {
+        adapter.log.info('Changing poll time from ' + obj.native.alarm_polltime + ' sec. to ' + polltime + ' sec.');
+        obj.native.alarm_polltime = polltime;
+        await adapter.setForeignObjectAsync(id, obj);
+      }
     }
   } catch (error) {
     //
@@ -349,7 +360,7 @@ async function changeAdapterConfigAsync(polltime) {
 }
 
 async function mainAsync() {
-  await changeAdapterConfigAsync(0.25);
+  await changeAdapterConfigAsync(0.5, '27.04.2019');
   lupusecAsync = new LupusAync.Lupus(adapter);
   let ping = await pingalarmAsync(adapter.config.alarm_host);
   let check = checkparameter();
@@ -366,7 +377,6 @@ async function mainAsync() {
     await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), 2, true);
     await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), 2, true);
     await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), 2, true);
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.ipCamGet(), 2, true);
     // await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoGet(), 2, true);
     adapter.subscribeStates(adapter.namespace + '.devices.*.status_ex');
     adapter.subscribeStates(adapter.namespace + '.devices.*.hue');
