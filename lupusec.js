@@ -360,7 +360,7 @@ async function changeAdapterConfigAsync(polltime, changedate) {
 }
 
 async function mainAsync() {
-  await changeAdapterConfigAsync(0.5, '28.04.2019');
+  await changeAdapterConfigAsync(0.25, '28.04.2019');
   lupusecAsync = new LupusAync.Lupus(adapter);
   let ping = await pingalarmAsync(adapter.config.alarm_host);
   let check = checkparameter();
@@ -373,11 +373,11 @@ async function mainAsync() {
       adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
     }
     await lupusecAsync.startProcess();
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListGet(), 2, true);
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), 2, true);
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), 2, true);
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), 2, true);
-    // await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoGet(), 2, true);
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListGet(), true);
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), true);
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), true);
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), true);
+    // await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoGet(), true);
     adapter.subscribeStates(adapter.namespace + '.devices.*.status_ex');
     adapter.subscribeStates(adapter.namespace + '.devices.*.hue');
     adapter.subscribeStates(adapter.namespace + '.devices.*.sat');
