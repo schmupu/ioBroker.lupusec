@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.1.5",
+        "version": "1.1.6",
         "news": {
+            "1.1.6": {
+                "en": "New features. See readme",
+                "de": "Neue Eigenschaften. ",
+                "ru": "Новые возможности. ",
+                "pt": "Novas características. ",
+                "nl": "Nieuwe functies. ",
+                "fr": "Nouvelles fonctionnalités. ",
+                "it": "Nuove caratteristiche. ",
+                "es": "Nuevas características. ",
+                "pl": "Nowe funkcje. ",
+                "zh-cn": "新功能。"
+            },
             "1.1.5": {
                 "en": "Add buttons for Scenario Switch V2 and Bugfixing",
                 "de": "Buttons für Scenario Switch V2 hinzugefügt und Bugfixing",
