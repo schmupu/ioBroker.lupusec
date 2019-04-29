@@ -76,15 +76,16 @@ function startAdapter(options) {
                   switch: status
                 };
                 // await lupusecAsync.deviceSwitchPSSPost(form);
-                await lupusecAsync.addToProcess(async () => {
-                  try {
-                    // if push button, than turn button to off again
-                    let state = await adapter.getStateAsync(idparent + '.always_off');
-                    if (status === 1 && state && state.val === 1)
-                      await adapter.setStateAsync(id, { val: false, ack: false });
-                  } catch (error) { /* */ }
-                  await lupusecAsync.deviceSwitchPSSPost(form);
-                }, 1, false);
+                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), id, 1, false);
+              }
+              if (statusname === 'always_off') {
+                form = {
+                  id: key,
+                  sarea: lupusecAsync.getState(idparent + '.area'),
+                  szone: lupusecAsync.getState(idparent + '.zone'),
+                };
+                form[statusname] = status;
+                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), 1, false);
               }
               break;
             // Dimmer / Unterputzrelais
@@ -128,8 +129,8 @@ function startAdapter(options) {
                   if (statusname === 'hue') hue = status;
                   if (statusname === 'sat') saturation = status;
                   try {
-                    if (statusname === 'sat') saturation = await adapter.getStateAsync(iddevice + '.sat');
-                    if (statusname === 'hue') hue = await adapter.getStateAsync(iddevice + '.hue');
+                    if (statusname === 'hue') saturation = await adapter.getStateAsync(iddevice + '.sat');
+                    if (statusname === 'sat') hue = await adapter.getStateAsync(iddevice + '.hue');
                   } catch (error) {
                     // 
                   }
