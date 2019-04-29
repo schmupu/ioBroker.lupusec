@@ -52,21 +52,11 @@ function startAdapter(options) {
             case 4:
               break;
             // Schalter
-            case 24:
-            case 37:
-              if (statusname && statusname.startsWith('sresp_button_')) {
-                if (statusname === 'sresp_button_123') statusname = 'sresp_panic';
-                if (statusname === 'sresp_button_456') statusname = 'sresp_fire';
-                if (statusname === 'sresp_button_789') statusname = 'sresp_medical';
-                form = {
-                  id: key,
-                  sarea: lupusecAsync.getState(idparent + '.area'),
-                  szone: lupusecAsync.getState(idparent + '.zone'),
-                };
-                form[statusname] = status;
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), 1, false);
-              }
+            case 7:
               break;
+            case 37:
+              break;
+            case 24:
             case 48:
               if (statusname === 'status_ex') {
                 status === false ? status = 0 : status = 1;
@@ -87,15 +77,6 @@ function startAdapter(options) {
                 };
                 // await lupusecAsync.deviceSwitchPSSPost(form);
                 await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), 1, false);
-              }
-              if (statusname === 'always_off') {
-                form = {
-                  id: key,
-                  sarea: lupusecAsync.getState(idparent + '.area'),
-                  szone: lupusecAsync.getState(idparent + '.zone'),
-                };
-                form[statusname] = status;
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), 1, false);
               }
               break;
             // Dimmer / Unterputzrelais
@@ -164,6 +145,15 @@ function startAdapter(options) {
                   await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), 1, false);
                 }, key, statusname), 1, false);
               }
+              if (statusname === 'always_off') {
+                form = {
+                  id: key,
+                  sarea: lupusecAsync.getState(idparent + '.area'),
+                  szone: lupusecAsync.getState(idparent + '.zone'),
+                };
+                form[statusname] = status;
+                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), 1, false);
+              }
               break;
 
             // Rollläden
@@ -219,22 +209,12 @@ function startAdapter(options) {
                 }, key, 'status'), 1, false);
               }
               break;
-
             case 81:
-              if (statusname && statusname.startsWith('sresp_button_')) {
-                form = {
-                  id: key,
-                  sarea: lupusecAsync.getState(idparent + '.area'),
-                  szone: lupusecAsync.getState(idparent + '.zone'),
-                };
-                form[statusname] = status;
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), 1, false);
-              }
               break;
-
             default:
               break;
           }
+          /*
           if (statusname === 'name') {
             form = {
               id: key,
@@ -245,6 +225,23 @@ function startAdapter(options) {
             await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), 1, false);
           }
           if (statusname === 'send_notify') {
+            form = {
+              id: key,
+              sarea: lupusecAsync.getState(idparent + '.area'),
+              szone: lupusecAsync.getState(idparent + '.zone'),
+            };
+            form[statusname] = status;
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), 1, false);
+          }
+          */
+          if (statusname && (statusname.startsWith('sresp_button_') || statusname === 'sresp_emergency') ||
+            statusname === 'name' || statusname === 'send_notify' || statusname === 'bypass' ||
+            statusname === 'bypass_tamper' || statusname === 'schar_latch_rpt') {
+            if (statusname === 'sresp_button_123') statusname = 'sresp_panic';
+            if (statusname === 'sresp_button_456') statusname = 'sresp_fire';
+            if (statusname === 'sresp_button_789') statusname = 'sresp_medical';
+            if (statusname === 'name') statusname = 'sname';
+            if (statusname === 'bypass') statusname = 'scond_bypass';
             form = {
               id: key,
               sarea: lupusecAsync.getState(idparent + '.area'),
@@ -394,7 +391,7 @@ async function changeAdapterConfigAsync(polltime, changedate) {
 }
 
 async function mainAsync() {
-  await changeAdapterConfigAsync(0.5, '28.04.2019');
+  await changeAdapterConfigAsync(0.5, '29.04.2019');
   lupusecAsync = new LupusAync.Lupus(adapter);
   let ping = await pingalarmAsync(adapter.config.alarm_host);
   let check = checkparameter();
@@ -411,7 +408,8 @@ async function mainAsync() {
     await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), true);
     await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), true);
     await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), true);
-    // await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoGet(), true);
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceThermoAllGet(), true);
+   
     adapter.subscribeStates(adapter.namespace + '.devices.*.status_ex');
     adapter.subscribeStates(adapter.namespace + '.devices.*.hue');
     adapter.subscribeStates(adapter.namespace + '.devices.*.sat');
@@ -420,8 +418,12 @@ async function mainAsync() {
     adapter.subscribeStates(adapter.namespace + '.devices.*.mode');
     adapter.subscribeStates(adapter.namespace + '.devices.*.name');
     adapter.subscribeStates(adapter.namespace + '.devices.*.sresp_button_*');
+    adapter.subscribeStates(adapter.namespace + '.devices.*.sresp_emergency');
     adapter.subscribeStates(adapter.namespace + '.devices.*.send_notify');
     adapter.subscribeStates(adapter.namespace + '.devices.*.always_off');
+    adapter.subscribeStates(adapter.namespace + '.devices.*.bypass');
+    adapter.subscribeStates(adapter.namespace + '.devices.*.bypass_tamper');
+    adapter.subscribeStates(adapter.namespace + '.devices.*.schar_latch_rpt');
     // adapter.subscribeStates(adapter.namespace + '.devices.*.mod');
     adapter.subscribeStates(adapter.namespace + '.devices.*.set_temperature');
     adapter.subscribeStates(adapter.namespace + '.devices.*.switch');
