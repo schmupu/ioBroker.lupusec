@@ -76,7 +76,15 @@ function startAdapter(options) {
                   switch: status
                 };
                 // await lupusecAsync.deviceSwitchPSSPost(form);
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), 1, false);
+                await lupusecAsync.addToProcess(async () => {
+                  try {
+                    // if push button, than turn button to off again
+                    let state = await adapter.getStateAsync(idparent + '.always_off');
+                    if (status === 1 && state && state.val === 1)
+                      await adapter.setStateAsync(id, { val: false, ack: false });
+                  } catch (error) { /* */ }
+                  await lupusecAsync.deviceSwitchPSSPost(form);
+                }, 1, false);
               }
               break;
             // Dimmer / Unterputzrelais
