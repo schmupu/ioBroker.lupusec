@@ -85,7 +85,7 @@ function startAdapter(options) {
                   szone: lupusecAsync.getState(idparent + '.zone'),
                 };
                 form[statusname] = status;
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), 1, false);
+                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), id, 1, false);
               }
               break;
             // Dimmer / Unterputzrelais
@@ -96,7 +96,7 @@ function startAdapter(options) {
                   id: key,
                   switch: status
                 };
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), 1, false);
+                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), id, 1, false);
               }
               if (statusname === 'level') {
                 // erst nach 500 ms ausführen, falls sich wert noch ändert!
@@ -105,7 +105,7 @@ function startAdapter(options) {
                     id: key,
                     level: status
                   };
-                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), 1, false);
+                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), id, 1, false);
                 }, key, statusname), 1, false);
               }
               break;
@@ -118,7 +118,7 @@ function startAdapter(options) {
                   id: key,
                   switch: status
                 };
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), 1, false);
+                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), id, 1, false);
               }
 
               if (statusname === 'hue' || statusname === 'sat') {
@@ -140,7 +140,7 @@ function startAdapter(options) {
                     saturation: saturation || 0,
                     mod: 2
                   };
-                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceHueColorControl(form), 1, false);
+                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceHueColorControl(form), id, 1, false);
                 }, key, statusname), 1, false);
               }
               if (statusname === 'level') {
@@ -150,7 +150,7 @@ function startAdapter(options) {
                     id: key,
                     level: status
                   };
-                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), 1, false);
+                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), id, 1, false);
                 }, key, statusname), 1, false);
               }
               if (statusname === 'always_off') {
@@ -160,7 +160,7 @@ function startAdapter(options) {
                   szone: lupusecAsync.getState(idparent + '.zone'),
                 };
                 form[statusname] = status;
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), 1, false);
+                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), id, 1, false);
               }
               break;
 
@@ -172,7 +172,7 @@ function startAdapter(options) {
                   id: key,
                   switch: status
                 };
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), 1, false);
+                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), id, 1, false);
               }
               // down or up x %
               if (statusname === 'level') {
@@ -182,7 +182,7 @@ function startAdapter(options) {
                     id: key,
                     level: status
                   };
-                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), 1, false);
+                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), id, 1, false);
                 }, key, statusname), 1, false);
               }
               break;
@@ -195,7 +195,7 @@ function startAdapter(options) {
                   act: 't_schd_setting',
                   thermo_schd_setting: status == 0 ? 0 : 1
                 };
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), 1, false);
+                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), id, 1, false);
               }
               if (statusname === 'off') {
                 form = {
@@ -203,7 +203,7 @@ function startAdapter(options) {
                   act: 't_mode',
                   thermo_mode: status == true ? 0 : 4
                 };
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), 1, false);
+                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), id, 1, false);
               }
               if (statusname === 'set_temperature') {
                 // erst nach 500 ms ausführen, falls sich wert noch ändert!
@@ -213,7 +213,7 @@ function startAdapter(options) {
                     act: 't_setpoint',
                     thermo_setpoint: Math.trunc(100 * Math.round(2 * status) / 2)
                   };
-                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), 1, false);
+                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), id, 1, false);
                 }, key, 'status'), 1, false);
               }
               break;
@@ -256,25 +256,25 @@ function startAdapter(options) {
               szone: lupusecAsync.getState(idparent + '.zone'),
             };
             form[statusname] = status;
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), 1, false);
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), id, 1, false);
           }
         }
 
         // Area 1 alarm modus
         if (id == adapter.namespace + '.status.mode_pc_a1') {
-          await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 1, mode: state.val }), 1, false);
+          await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 1, mode: state.val }), id, 1, false);
         }
 
         // Area 2 alarm modus
         if (id == adapter.namespace + '.status.mode_pc_a2') {
-          await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 2, mode: state.val }), 1, false);
+          await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 2, mode: state.val }), id, 1, false);
         }
 
         // Area 1 alarm modus
         if (id == adapter.namespace + '.status.apple_home_a1') {
           let mode_pc_a1 = lupusecAsync.getLupusecFromAppleStautus(state.val);
           if (mode_pc_a1 >= 0 && mode_pc_a1 <= 4) {
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 1, mode: mode_pc_a1 }), 1, false);
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 1, mode: mode_pc_a1 }), id, 1, false);
           }
         }
 
@@ -282,7 +282,7 @@ function startAdapter(options) {
         if (id == adapter.namespace + '.status.apple_home_a2') {
           let mode_pc_a2 = lupusecAsync.getLupusecFromAppleStautus(state.val);
           if (mode_pc_a2 >= 0 && mode_pc_a2 <= 4) {
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 2, mode: mode_pc_a2 }), 1, false);
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 2, mode: mode_pc_a2 }), id, 1, false);
           }
         }
 
