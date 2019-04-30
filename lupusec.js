@@ -49,13 +49,6 @@ function startAdapter(options) {
           let status = state.val;
           let form = {};
           switch (type) {
-            case 4:
-              break;
-            // Schalter
-            case 7:
-              break;
-            case 37:
-              break;
             case 24:
             case 48:
               if (statusname === 'status_ex') {
@@ -120,20 +113,21 @@ function startAdapter(options) {
                 };
                 await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), id, 1, false);
               }
-
               if (statusname === 'hue' || statusname === 'sat') {
                 // erst nach 500 ms ausführen, falls sich wert noch ändert!
                 await lupusecAsync.addToProcess(lupusecAsync.callByDelay(async () => {
                   let hue;
                   let saturation;
-                  if (statusname === 'hue') hue = status;
-                  if (statusname === 'sat') saturation = status;
                   try {
-                    if (statusname === 'hue') saturation = await adapter.getStateAsync(iddevice + '.sat');
-                    if (statusname === 'sat') hue = await adapter.getStateAsync(iddevice + '.hue');
-                  } catch (error) {
-                    // 
-                  }
+                    if (statusname === 'hue') {
+                      hue = status;
+                      saturation = await adapter.getStateAsync(iddevice + '.sat');
+                    }
+                    if (statusname === 'sat') {
+                      saturation = status;
+                      hue = await adapter.getStateAsync(iddevice + '.hue');
+                    }
+                  } catch (error) { /* */ }
                   form = {
                     id: key,
                     hue: hue || 0,
@@ -222,26 +216,7 @@ function startAdapter(options) {
             default:
               break;
           }
-          /*
-          if (statusname === 'name') {
-            form = {
-              id: key,
-              sarea: lupusecAsync.getState(idparent + '.area'),
-              szone: lupusecAsync.getState(idparent + '.zone'),
-              sname: status
-            };
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), 1, false);
-          }
-          if (statusname === 'send_notify') {
-            form = {
-              id: key,
-              sarea: lupusecAsync.getState(idparent + '.area'),
-              szone: lupusecAsync.getState(idparent + '.zone'),
-            };
-            form[statusname] = status;
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), 1, false);
-          }
-          */
+          // Rules for all sensors
           if (statusname && (statusname.startsWith('sresp_button_') || statusname === 'sresp_emergency') ||
             statusname === 'name' || statusname === 'send_notify' || statusname === 'bypass' ||
             statusname === 'bypass_tamper' || statusname === 'schar_latch_rpt') {
@@ -259,17 +234,14 @@ function startAdapter(options) {
             await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), id, 1, false);
           }
         }
-
         // Area 1 alarm modus
         if (id == adapter.namespace + '.status.mode_pc_a1') {
           await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 1, mode: state.val }), id, 1, false);
         }
-
         // Area 2 alarm modus
         if (id == adapter.namespace + '.status.mode_pc_a2') {
           await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 2, mode: state.val }), id, 1, false);
         }
-
         // Area 1 alarm modus
         if (id == adapter.namespace + '.status.apple_home_a1') {
           let mode_pc_a1 = lupusecAsync.getLupusecFromAppleStautus(state.val);
@@ -277,7 +249,6 @@ function startAdapter(options) {
             await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 1, mode: mode_pc_a1 }), id, 1, false);
           }
         }
-
         // Area 2 alarm modus
         if (id == adapter.namespace + '.status.apple_home_a2') {
           let mode_pc_a2 = lupusecAsync.getLupusecFromAppleStautus(state.val);
@@ -285,11 +256,8 @@ function startAdapter(options) {
             await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 2, mode: mode_pc_a2 }), id, 1, false);
           }
         }
-
       }
-
     }
-
   });
 
   adapter.on('ready', async () => {
