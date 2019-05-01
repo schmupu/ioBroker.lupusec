@@ -292,14 +292,11 @@ async function changeAdapterConfigAsync(polltime, changedate) {
         await adapter.setForeignObjectAsync(id, obj);
       }
     }
-  } catch (error) {
-    //
-  }
-
+  } catch (error) { /* */ }
 }
 
 async function mainAsync() {
-  await changeAdapterConfigAsync(0.25, '29.04.2019');
+  await changeAdapterConfigAsync(0.25, '01.05.2019');
   lupusecAsync = new LupusAync.Lupus(adapter);
   let ping = await pingalarmAsync(adapter.config.alarm_host);
   let check = checkparameter();

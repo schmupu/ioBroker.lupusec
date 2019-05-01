@@ -79,7 +79,7 @@ Detailed view of a sensor or device. In this example you see the CO sensor. On C
 
 ## Changelog
 
-### 1.1.6 (28.04.2019)
+### 1.1.6 (01.05.2019)
 * (Stübi) New feature: you can change the buttons for keypad
 * (Stübi) New feature: add push notifications to sensors
 * (Stübi) New feature: change switch from switch to push button 
