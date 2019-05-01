@@ -69,7 +69,6 @@ function startAdapter(options) {
               pd: pdstatus,
               switch: status
             };
-            // await lupusecAsync.deviceSwitchPSSPost(form);
             await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), { key: id, prio: 1, loop: false });
           }
           if (statusname === 'level') {
