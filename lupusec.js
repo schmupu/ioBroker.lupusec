@@ -9,6 +9,15 @@ const adapterNodeVer = require('./package.json').engines.node;
 let lupusecAsync = null;
 let adapter;
 
+
+/**
+ * Wait / Sleep x milliseconds
+ * @param {number} ms - time in ms to wail
+ */
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 function startAdapter(options) {
   options = options || {};
   options.name = adapterName;
@@ -32,194 +41,117 @@ function startAdapter(options) {
 
   // is called if a subscribed state changes
   adapter.on('stateChange', async (id, state) => {
-    // Warning, state can be null if it was deleted
-    //  adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
-    // you can use the ack flag to detect if it is status (true) or command (false)
-    if (state && !state.ack) {
-      if (lupusecAsync) {
+    if (id && state && !state.ack && lupusecAsync) {
+      if (id.startsWith(adapter.namespace + '.devices.')) {
         const regstatusex = /.+\.devices\.(.+)\.(.+)/gm;
         let m = regstatusex.exec(id);
         let idparent = id.split('.').slice(0, -1).join('.');
         let iddevice = id.split('.').slice(2, -1).join('.');
-        let idtype = idparent + '.type';
         if (m !== null) {
           let key = m[1]; // Device ID
-          let type = lupusecAsync.getTypeById(key) || 0;
           let statusname = m[2]; // statusname
           let status = state.val;
           let form = {};
-          switch (type) {
-            case 24:
-            case 48:
-              if (statusname === 'status_ex') {
-                status === false ? status = 0 : status = 1;
-                // PD Wert mitnehmen, falls vorhanden
-                let idpd = idparent + '.pd';
-                let pdstatus = 0;
-                try {
-                  let state = await adapter.getStateAsync(idpd);
-                  if (state && state.val) { pdstatus = ':' + state.val; }
-                  if (state && !state.ack) await adapter.setStateAsync(idpd, { val: state.val, ack: true });
-                } catch (error) {
-                  // 
-                }
-                form = {
-                  id: key,
-                  pd: pdstatus,
-                  switch: status
-                };
-                // await lupusecAsync.deviceSwitchPSSPost(form);
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), id, 1, false);
-              }
-              if (statusname === 'always_off') {
-                form = {
-                  id: key,
-                  sarea: lupusecAsync.getState(idparent + '.area'),
-                  szone: lupusecAsync.getState(idparent + '.zone'),
-                };
-                form[statusname] = status;
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), id, 1, false);
-              }
-              break;
-            // Dimmer / Unterputzrelais
-            case 66:
-              if (statusname === 'status_ex') {
-                status === false ? status = 0 : status = 1;
-                form = {
-                  id: key,
-                  switch: status
-                };
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), id, 1, false);
-              }
-              if (statusname === 'level') {
-                // erst nach 500 ms ausführen, falls sich wert noch ändert!
-                await lupusecAsync.addToProcess(lupusecAsync.callByDelay(async () => {
-                  form = {
-                    id: key,
-                    level: status
-                  };
-                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), id, 1, false);
-                }, key, statusname), 1, false);
-              }
-              break;
-
-            // HUE Lampe
-            case 74:
-              if (statusname === 'status_ex') {
-                status === false ? status = 0 : status = 1;
-                form = {
-                  id: key,
-                  switch: status
-                };
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), id, 1, false);
-              }
-              if (statusname === 'hue' || statusname === 'sat') {
-                // erst nach 500 ms ausführen, falls sich wert noch ändert!
-                await lupusecAsync.addToProcess(lupusecAsync.callByDelay(async () => {
-                  let hue;
-                  let saturation;
-                  try {
-                    if (statusname === 'hue') {
-                      hue = status;
-                      saturation = await adapter.getStateAsync(iddevice + '.sat');
-                    }
-                    if (statusname === 'sat') {
-                      saturation = status;
-                      hue = await adapter.getStateAsync(iddevice + '.hue');
-                    }
-                  } catch (error) { /* */ }
-                  form = {
-                    id: key,
-                    hue: hue || 0,
-                    saturation: saturation || 0,
-                    mod: 2
-                  };
-                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceHueColorControl(form), id, 1, false);
-                }, key, statusname), 1, false);
-              }
-              if (statusname === 'level') {
-                // erst nach 500 ms ausführen, falls sich wert noch ändert!
-                await lupusecAsync.addToProcess(lupusecAsync.callByDelay(async () => {
-                  form = {
-                    id: key,
-                    level: status
-                  };
-                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), id, 1, false);
-                }, key, statusname), 1, false);
-              }
-              if (statusname === 'always_off') {
-                form = {
-                  id: key,
-                  sarea: lupusecAsync.getState(idparent + '.area'),
-                  szone: lupusecAsync.getState(idparent + '.zone'),
-                };
-                form[statusname] = status;
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), id, 1, false);
-              }
-              break;
-
-            // Rollläden
-            case 76:
-              if (statusname === 'switch') {
-                // (0: runterfahren/zu, 1: hochfahren/auf, 2: stop)
-                form = {
-                  id: key,
-                  switch: status
-                };
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), id, 1, false);
-              }
-              // down or up x %
-              if (statusname === 'level') {
-                // erst nach 500 ms ausführen, falls sich wert noch ändert!
-                await lupusecAsync.addToProcess(lupusecAsync.callByDelay(async () => {
-                  form = {
-                    id: key,
-                    level: status
-                  };
-                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), id, 1, false);
-                }, key, statusname), 1, false);
-              }
-              break;
-
-            // Thermometer
-            case 79:
-              if (statusname === 'mode') {
-                form = {
-                  id: key,
-                  act: 't_schd_setting',
-                  thermo_schd_setting: status == 0 ? 0 : 1
-                };
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), id, 1, false);
-              }
-              if (statusname === 'off') {
-                form = {
-                  id: key,
-                  act: 't_mode',
-                  thermo_mode: status == true ? 0 : 4
-                };
-                await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), id, 1, false);
-              }
-              if (statusname === 'set_temperature') {
-                // erst nach 500 ms ausführen, falls sich wert noch ändert!
-                await lupusecAsync.addToProcess(lupusecAsync.callByDelay(async () => {
-                  form = {
-                    id: key,
-                    act: 't_setpoint',
-                    thermo_setpoint: Math.trunc(100 * Math.round(2 * status) / 2)
-                  };
-                  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), id, 1, false);
-                }, key, 'status'), 1, false);
-              }
-              break;
-            case 81:
-              break;
-            default:
-              break;
+          if (statusname === 'status_ex') {
+            status === false ? status = 0 : status = 1;
+            // PD Wert mitnehmen, falls vorhanden
+            let idpd = idparent + '.pd';
+            let pdstatus = 0;
+            try {
+              let state = await adapter.getStateAsync(idpd);
+              if (state && state.val) { pdstatus = ':' + state.val; }
+              if (state && !state.ack) await adapter.setStateAsync(idpd, { val: state.val, ack: true });
+            } catch (error) {
+              // 
+            }
+            form = {
+              id: key,
+              pd: pdstatus,
+              switch: status
+            };
+            // await lupusecAsync.deviceSwitchPSSPost(form);
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), { key: id, prio: 1, loop: false });
           }
-          // Rules for all sensors
+          if (statusname === 'level') {
+            // erst nach 500 ms ausführen, falls sich wert noch ändert!
+            await lupusecAsync.addToProcess(lupusecAsync.callByDelay(async () => {
+              form = {
+                id: key,
+                level: status
+              };
+              await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), { key: id, prio: 1, loop: false });
+            }, key, statusname), { prio: 1, loop: false });
+          }
+          if (statusname === 'hue' || statusname === 'sat') {
+            // erst nach 500 ms ausführen, falls sich wert noch ändert!
+            await lupusecAsync.addToProcess(lupusecAsync.callByDelay(async () => {
+              let hue;
+              let saturation;
+              try {
+                if (statusname === 'hue') {
+                  hue = status;
+                  saturation = await adapter.getStateAsync(iddevice + '.sat');
+                }
+                if (statusname === 'sat') {
+                  saturation = status;
+                  hue = await adapter.getStateAsync(iddevice + '.hue');
+                }
+              } catch (error) { /* */ }
+              form = {
+                id: key,
+                hue: hue || 0,
+                saturation: saturation || 0,
+                mod: 2
+              };
+              await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceHueColorControl(form), { key: id, prio: 1, loop: false });
+            }, key, statusname), { prio: 1, loop: false });
+          }
+          if (statusname === 'switch') {
+            // (0: runterfahren/zu, 1: hochfahren/auf, 2: stop)
+            form = {
+              id: key,
+              switch: status
+            };
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), { key: id, prio: 1, loop: false });
+          }
+          if (statusname === 'thermo_offset') { // Thermostat (Type 79)
+            form = {
+              id: key,
+              act: 't_offset',
+              thermo_offset: Math.round(status * 10)
+            };
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), { key: id, prio: 1, loop: false });
+          }
+          if (statusname === 'mode') { // Thermostat (Type 79)
+            form = {
+              id: key,
+              act: 't_schd_setting',
+              thermo_schd_setting: status == 0 ? 0 : 1
+            };
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), { key: id, prio: 1, loop: false });
+          }
+          if (statusname === 'off') { // Thermostat (Type 79)
+            form = {
+              id: key,
+              act: 't_mode',
+              thermo_mode: status == true ? 0 : 4
+            };
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), { key: id, prio: 1, loop: false });
+          }
+          if (statusname === 'set_temperature') { // Thermostat (Type 79)
+            // erst nach 500 ms ausführen, falls sich wert noch ändert!
+            await lupusecAsync.addToProcess(lupusecAsync.callByDelay(async () => {
+              form = {
+                id: key,
+                act: 't_setpoint',
+                thermo_setpoint: Math.trunc(100 * Math.round(2 * status) / 2)
+              };
+              await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), { key: id, prio: 1, loop: false });
+            }, key, 'status'), { prio: 1, loop: false });
+          }
           if (statusname && (statusname.startsWith('sresp_button_') || statusname === 'sresp_emergency') ||
             statusname === 'name' || statusname === 'send_notify' || statusname === 'bypass' ||
-            statusname === 'bypass_tamper' || statusname === 'schar_latch_rpt') {
+            statusname === 'bypass_tamper' || statusname === 'schar_latch_rpt' || statusname === 'always_off') {
             if (statusname === 'sresp_button_123') statusname = 'sresp_panic';
             if (statusname === 'sresp_button_456') statusname = 'sresp_fire';
             if (statusname === 'sresp_button_789') statusname = 'sresp_medical';
@@ -231,29 +163,31 @@ function startAdapter(options) {
               szone: lupusecAsync.getState(idparent + '.zone'),
             };
             form[statusname] = status;
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), id, 1, false);
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), { key: id, prio: 1, loop: false });
           }
         }
+      }
+      if (id.startsWith(adapter.namespace + '.status.')) {
         // Area 1 alarm modus
-        if (id == adapter.namespace + '.status.mode_pc_a1') {
-          await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 1, mode: state.val }), id, 1, false);
+        if (id === adapter.namespace + '.status.mode_pc_a1') {
+          await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 1, mode: state.val }), { key: id, prio: 1, loop: false });
         }
         // Area 2 alarm modus
-        if (id == adapter.namespace + '.status.mode_pc_a2') {
-          await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 2, mode: state.val }), id, 1, false);
+        if (id === adapter.namespace + '.status.mode_pc_a2') {
+          await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 2, mode: state.val }), { key: id, prio: 1, loop: false });
         }
         // Area 1 alarm modus
-        if (id == adapter.namespace + '.status.apple_home_a1') {
+        if (id === adapter.namespace + '.status.apple_home_a1') {
           let mode_pc_a1 = lupusecAsync.getLupusecFromAppleStautus(state.val);
           if (mode_pc_a1 >= 0 && mode_pc_a1 <= 4) {
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 1, mode: mode_pc_a1 }), id, 1, false);
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 1, mode: mode_pc_a1 }), { key: id, prio: 1, loop: false });
           }
         }
         // Area 2 alarm modus
-        if (id == adapter.namespace + '.status.apple_home_a2') {
+        if (id === adapter.namespace + '.status.apple_home_a2') {
           let mode_pc_a2 = lupusecAsync.getLupusecFromAppleStautus(state.val);
           if (mode_pc_a2 >= 0 && mode_pc_a2 <= 4) {
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 2, mode: mode_pc_a2 }), id, 1, false);
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 2, mode: mode_pc_a2 }), { key: id, prio: 1, loop: false });
           }
         }
       }
@@ -308,7 +242,6 @@ function decrypt(key, value) {
   return result;
 }
 
-
 /**
  * Check Paerameter
  */
@@ -324,7 +257,6 @@ function checkparameter() {
   }
   return true;
 }
-
 
 function pingalarmAsync(host) {
   return new Promise((resolve, reject) => {
@@ -367,7 +299,7 @@ async function changeAdapterConfigAsync(polltime, changedate) {
 }
 
 async function mainAsync() {
-  await changeAdapterConfigAsync(0.5, '29.04.2019');
+  await changeAdapterConfigAsync(0.25, '29.04.2019');
   lupusecAsync = new LupusAync.Lupus(adapter);
   let ping = await pingalarmAsync(adapter.config.alarm_host);
   let check = checkparameter();
@@ -380,11 +312,11 @@ async function mainAsync() {
       adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
     }
     await lupusecAsync.startProcess();
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListGet(), true);
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), true);
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), true);
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), true);
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceThermoAllGet(), true);
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListGet(), { loop: true });
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), { loop: true });
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), { loop: true });
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), { loop: true });
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceThermoAllGet(), { loop: true });
 
     adapter.subscribeStates(adapter.namespace + '.devices.*.status_ex');
     adapter.subscribeStates(adapter.namespace + '.devices.*.hue');
@@ -400,6 +332,7 @@ async function mainAsync() {
     adapter.subscribeStates(adapter.namespace + '.devices.*.bypass');
     adapter.subscribeStates(adapter.namespace + '.devices.*.bypass_tamper');
     adapter.subscribeStates(adapter.namespace + '.devices.*.schar_latch_rpt');
+    adapter.subscribeStates(adapter.namespace + '.devices.*.thermo_offset');
     // adapter.subscribeStates(adapter.namespace + '.devices.*.mod');
     adapter.subscribeStates(adapter.namespace + '.devices.*.set_temperature');
     adapter.subscribeStates(adapter.namespace + '.devices.*.switch');
