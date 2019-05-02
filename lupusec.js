@@ -313,7 +313,7 @@ async function mainAsync() {
     await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), { loop: true });
     await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), { loop: true });
     await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceThermoAllGet(), { loop: true });
-
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.getWebcamSnapshots(), { loop: false });
     adapter.subscribeStates(adapter.namespace + '.devices.*.status_ex');
     adapter.subscribeStates(adapter.namespace + '.devices.*.hue');
     adapter.subscribeStates(adapter.namespace + '.devices.*.sat');
