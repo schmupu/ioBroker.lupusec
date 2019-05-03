@@ -6,6 +6,7 @@
     "Password": "Mot de passe",
     "Port": "Port",
     "User": "Utilisateur",
+    "Webcam Port": "Port fournira la webcam Lupusec sur ioBroker",
     "alarm system": "système d'alarme",
     "https": "https",
     "on save adapter restarts with new config immediately": "sur l'adaptateur de sauvegarde redémarre avec la nouvelle config immédiatement",

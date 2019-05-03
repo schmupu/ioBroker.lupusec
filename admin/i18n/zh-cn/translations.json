@@ -6,6 +6,7 @@
     "Password": "密码",
     "Port": "港口",
     "User": "用户",
+    "Webcam Port": "在ioBroker中提供Lupusec网络摄像头的端口",
     "alarm system": "警报系统",
     "https": "HTTPS",
     "on save adapter restarts with new config immediately": "保存适配器立即重新启动新配置",

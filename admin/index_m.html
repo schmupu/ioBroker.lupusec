@@ -63,20 +63,20 @@
       if (settings.alarm_password_confirm === undefined) settings.alarm_password_confirm = '';
 
 
-      $('.value').each(function() {
+      $('.value').each(function () {
         var $key = $(this);
         var id = $key.attr('id');
         if ($key.attr('type') === 'checkbox') {
           // do not call onChange direct, because onChange could expect some arguments
-          $key.prop('checked', settings[id]).change(function() {
+          $key.prop('checked', settings[id]).change(function () {
             onChange();
           });
         } else {
           // do not call onChange direct, because onChange could expect some arguments
           var val = $key.data('crypt') && settings[id] ? decrypt(secret, settings[id]) : settings[id];
-          $key.val(val).change(function() {
+          $key.val(val).change(function () {
             onChange();
-          }).keyup(function() {
+          }).keyup(function () {
             onChange();
           });
         }
@@ -91,7 +91,7 @@
 
     function load(settings, onChange) {
 
-      socket.emit('getObject', 'system.config', function(err, obj) {
+      socket.emit('getObject', 'system.config', function (err, obj) {
         secret = (obj.native ? obj.native.secret : '') || 'Zgfr56gFe87jJOM';
         loadHelper(settings, onChange);
       });
@@ -104,7 +104,7 @@
     function save(callback) {
       // example: select elements with class=value and build settings object
       var obj = {};
-      $('.value').each(function() {
+      $('.value').each(function () {
         var $this = $(this);
         if ($this.attr('type') === 'checkbox') {
           obj[$this.attr('id')] = $this.prop('checked');
@@ -201,7 +201,6 @@
         </div>
       </div>
 
-
       <div class="row">
         <div class="input-field col s12">
           <input class="value" id="alarm_https" type="checkbox" />
@@ -212,6 +211,13 @@
           <input class="value" id="alarm_allstates" type="checkbox" />
           <label for="alarm_allstates" class="translate">Show all fields (not recomended)</label>
         </div-->
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12 m4 l4">
+          <input class="value number" id="webcam_port" min="1" max="65565" type="number" />
+          <label class="translate" for="webcam_port">Webcam Port</label>
+        </div>
       </div>
 
       <div class="row">

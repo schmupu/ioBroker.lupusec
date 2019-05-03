@@ -157,7 +157,8 @@
         "alarm_password": "",
         "alarm_password_confirm": "",
         "alarm_polltime": 1,
-        "alarm_allstates": false
+        "alarm_allstates": false,
+        "webcam_port": 7000
     },
     "objects": [],
     "instanceObjects": []

@@ -84,6 +84,8 @@ Detailed view of a sensor or device. In this example you see the CO sensor. On C
 * (Stübi) New feature: add push notifications to sensors
 * (Stübi) New feature: change switch from switch to push button 
 * (Stübi) New feature: now you can change status for tamper, bypass and reporting for sensors
+* (Stübi) New feature: Webcam support. You can get the link of Lupusec provided webcams.
+
 
 ### 1.1.5 (24.04.2019)
 * (Stübi) Add buttons for Scenario Switch V2 and Bugfixing
