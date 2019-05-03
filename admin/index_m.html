@@ -30,7 +30,7 @@
       result = '(crypt)' + result;
       return result;
     }
-    
+
     function decrypt(key, value) {
       let result = '';
       if (value.startsWith('(crypt)')) {
@@ -85,7 +85,7 @@
 
     function load(settings, onChange) {
 
-      getIPs(function(ips) {
+      getIPs(function (ips) {
         for (var i = 0; i < ips.length; i++) {
           $('#webcam_bind').append('<option value="' + ips[i].address + '">' + ips[i].name + '</option>');
         }
@@ -235,6 +235,12 @@
           </div>
         </div>
 
+        <div class="row">
+          <div class="input-field col s12">
+            <input class="value" id="webcam_providing" type="checkbox" />
+            <label for="webcam_providing" class="translate">Provide Lupusec Webcams</label>
+          </div>
+        </div>
         <div class="row">
           <div class="col s12 m8 l5">
             <select class="value" id="webcam_bind"></select>
