@@ -6,6 +6,7 @@
     "Password": "Parola d'ordine",
     "Port": "Porta",
     "User": "Utente",
+    "Webcam IP-Address to Listen": "Indirizzo vincolante per la fornitura di webcam Lupusec",
     "Webcam Port": "Porta per fornire la webcam Lupusec in ioBroker",
     "alarm system": "sistema d'allarme",
     "https": "https",

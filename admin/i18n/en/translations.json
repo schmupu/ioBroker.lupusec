@@ -6,6 +6,7 @@
     "Password": "Password",
     "Port": "Port",
     "User": "User",
+    "Webcam IP-Address to Listen": "Bind address for providing Lupusec Webcams",
     "Webcam Port": "Port to provide Lupusec webcam in ioBroker",
     "alarm system": "alarm system",
     "https": "https",

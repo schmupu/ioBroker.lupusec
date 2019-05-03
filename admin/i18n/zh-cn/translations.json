@@ -6,6 +6,7 @@
     "Password": "密码",
     "Port": "港口",
     "User": "用户",
+    "Webcam IP-Address to Listen": "绑定提供Lupusec网络摄像头的地址",
     "Webcam Port": "在ioBroker中提供Lupusec网络摄像头的端口",
     "alarm system": "警报系统",
     "https": "HTTPS",

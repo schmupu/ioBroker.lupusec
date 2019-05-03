@@ -6,6 +6,7 @@
     "Password": "пароль",
     "Port": "порт",
     "User": "пользователь",
+    "Webcam IP-Address to Listen": "Привязать адрес для предоставления веб-камер Lupusec",
     "Webcam Port": "Порт для предоставления веб-камеры Lupusec в ioBroker",
     "alarm system": "аварийная система",
     "https": "https",
