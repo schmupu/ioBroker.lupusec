@@ -313,7 +313,13 @@ async function mainAsync() {
     await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), { loop: true });
     await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), { loop: true });
     await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceThermoAllGet(), { loop: true });
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.getWebcamSnapshots(), { loop: true, wait: 60 });
+    // Starting Webcam 
+    if (adapter.config.webcam_providing) {
+      await lupusecAsync.addToProcess(async () => await lupusecAsync.getWebcamSnapshots(), { loop: true, wait: 60 });
+    } else {
+      let deviceid = 'webcams';
+      adapter.deleteDevice(deviceid);
+    }
 
     adapter.subscribeStates(adapter.namespace + '.devices.*.status_ex');
     adapter.subscribeStates(adapter.namespace + '.devices.*.hue');
