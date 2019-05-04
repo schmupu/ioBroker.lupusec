@@ -80,8 +80,7 @@ Detailed view of a sensor or device. In this example you see the CO sensor. On C
 ![lupusec_obj_status](docs/en/img/lupusec_obj_devices_type09.png)
 
 ### Lupusec Webcams
-You find all connected surveillance cams under 'webcams'. You can copy the link provided in the 'image' and 'stream' state to your web browser for opening. If you use the ioBroker web adapter, you can open the cam images (not streams) with following link: 
-http://<ip-of-web-adapter-instanz>:<port-of-web-adapter-instanz>/lupusec.X/image/camY.jpg. For example http://192.168.1.2:8083/lupusec.0/image/cam1.jpg  
+You find all connected surveillance cams under 'webcams'. You can copy the link provided in the 'image' and 'stream' state to your web browser for opening. 
 ![lupusec_obj_webcam](docs/en/img/lupusec_obj_webcam.png)
 
 ## Changelog
