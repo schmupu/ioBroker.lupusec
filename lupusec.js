@@ -7,6 +7,7 @@ const LupusAync = require(__dirname + '/lib/lupusasync');
 const adapterName = require('./package.json').name.split('.').pop();
 const adapterNodeVer = require('./package.json').engines.node;
 let lupusecAsync = null;
+let systemLanguage = 'EN';
 let adapter;
 
 
@@ -242,6 +243,7 @@ function startAdapter(options) {
           adapter.config.alarm_password_confirm = decrypt('Zgfr56gFe87jJOM', adapter.config.alarm_password_confirm);
         }
       }
+      if (obj && obj.common && obj.common.language) systemLanguage = (obj.common.language).toUpperCase();
       await mainAsync();
     } catch (error) {
       adapter.log.error('Error reading system.config: ' + error);
@@ -313,6 +315,8 @@ async function changeAdapterConfigAsync(polltime, changedate) {
     let obj = await adapter.getForeignObjectAsync(id);
     if (obj && obj.native) {
       let lastChange = new Date(obj.ts); // only for debuging Interesting
+      lastChange.setHours(0, 0, 0);
+      obj.ts = lastChange.getTime();  
       if (obj.native.alarm_polltime != polltime && unixtime > obj.ts) {
         adapter.log.info('Changing poll time from ' + obj.native.alarm_polltime + ' sec. to ' + polltime + ' sec.');
         obj.native.alarm_polltime = polltime;
@@ -323,8 +327,9 @@ async function changeAdapterConfigAsync(polltime, changedate) {
 }
 
 async function mainAsync() {
-  await changeAdapterConfigAsync(0.5, '01.05.2019');
-  lupusecAsync = new LupusAync.Lupus(adapter);
+  let pollsec = 0.75;
+  await changeAdapterConfigAsync(pollsec, '05.05.2019');
+  lupusecAsync = new LupusAync.Lupus(adapter, systemLanguage);
   let ping = await pingalarmAsync(adapter.config.alarm_host);
   let check = checkparameter();
   // wenn alles okay ist, gehts los
@@ -341,10 +346,11 @@ async function mainAsync() {
     await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), { loop: true });
     await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), { loop: true });
     await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceThermoShutterAllGet(), { loop: true });
-    // Starting Webcam 
     if (adapter.config.webcam_providing) {
+      // Starting Webcam 
       await lupusecAsync.addToProcess(async () => await lupusecAsync.getWebcamSnapshots(), { loop: true, wait: 60 });
     } else {
+      // Delete Webcams
       let deviceid = 'webcams';
       adapter.deleteDevice(deviceid);
     }

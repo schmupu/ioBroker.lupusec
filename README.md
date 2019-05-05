@@ -92,9 +92,13 @@ You find all connected surveillance cams under 'webcams'. You can copy the link 
 * (Stübi) New feature: now you can change status for tamper, bypass and reporting for sensors
 * (Stübi) New feature: Webcam support. You can get the link of Lupusec provided webcams.
 * (Stübi) New feature: you can edit the on/off timer for shutters 
+* (Stübi) New feature: Discription of states are now in English or German available
+* (Stübi) Bugfixing: HUE and saturation of HUE devices fixed 
+* (Stübi) Bugfixing: Add role to button 4 of scenario switch.  
 
 ### 1.1.5 (24.04.2019)
-* (Stübi) Add buttons for Scenario Switch V2 and Bugfixing
+* (Stübi) New feature: Add buttons for Scenario Switch V2
+* (Stübi) Bugfixing: Various improvements
 
 ### 1.1.4 (13.04.2019)
 * (Stübi) Add device outside alarm
