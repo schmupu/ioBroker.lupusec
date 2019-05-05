@@ -373,6 +373,7 @@ async function mainAsync() {
     adapter.subscribeStates(adapter.namespace + '.status.mode_pc_a1');
     adapter.subscribeStates(adapter.namespace + '.status.mode_pc_a2');
     adapter.subscribeStates(adapter.namespace + '.status.apple_home_a1');
+    adapter.subscribeStates(adapter.namespace + '.status.apple_home_a2');
   }
 }
 
