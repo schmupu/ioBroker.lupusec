@@ -327,7 +327,7 @@ async function changeAdapterConfigAsync(polltime, changedate) {
 }
 
 async function mainAsync() {
-  let pollsec = 0.75;
+  let pollsec = 0.25;
   await changeAdapterConfigAsync(pollsec, '05.05.2019');
   lupusecAsync = new LupusAync.Lupus(adapter, systemLanguage);
   let ping = await pingalarmAsync(adapter.config.alarm_host);
