@@ -1,10 +1,12 @@
 {
     "Auto": "Auto",
     "Confirm Password": "bevestig wachtwoord",
+    "Expert Settings": "Expert instellingen",
     "Host": "Hostname",
     "Main Settings": "Belangrijkste instellingen",
     "Manual": "Met de hand",
     "Password": "Wachtwoord",
+    "Polltime in sec.": "",
     "Port": "Haven",
     "Provide Lupusec Webcams": "Geef Lupusec Webcams",
     "User": "Gebruiker",

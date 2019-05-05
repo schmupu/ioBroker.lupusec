@@ -1,10 +1,12 @@
 {
     "Auto": "汽车",
     "Confirm Password": "确认密码",
+    "Expert Settings": "专家设置",
     "Host": "主机名",
     "Main Settings": "主要设置",
     "Manual": "手册",
     "Password": "密码",
+    "Polltime in sec.": "",
     "Port": "港口",
     "Provide Lupusec Webcams": "提供Lupusec网络摄像头",
     "User": "用户",

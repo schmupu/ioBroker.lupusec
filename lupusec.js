@@ -316,7 +316,7 @@ async function changeAdapterConfigAsync(polltime, changedate) {
     if (obj && obj.native) {
       let lastChange = new Date(obj.ts); // only for debuging Interesting
       lastChange.setHours(0, 0, 0);
-      obj.ts = lastChange.getTime();  
+      obj.ts = lastChange.getTime();
       if (obj.native.alarm_polltime != polltime && unixtime > obj.ts) {
         adapter.log.info('Changing poll time from ' + obj.native.alarm_polltime + ' sec. to ' + polltime + ' sec.');
         obj.native.alarm_polltime = polltime;
@@ -327,8 +327,8 @@ async function changeAdapterConfigAsync(polltime, changedate) {
 }
 
 async function mainAsync() {
-  let pollsec = 0.75;
-  await changeAdapterConfigAsync(pollsec, '05.05.2019');
+  let pollsec = 0.20; // not faster allowed as every 200 ms
+  if (adapter.config.alarm_polltime < pollsec) await changeAdapterConfigAsync(pollsec);
   lupusecAsync = new LupusAync.Lupus(adapter, systemLanguage);
   let ping = await pingalarmAsync(adapter.config.alarm_host);
   let check = checkparameter();
@@ -340,6 +340,7 @@ async function mainAsync() {
     } else {
       adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
     }
+    adapter.log.info('Polltime ' + adapter.config.alarm_polltime + ' sec.');
     await lupusecAsync.startProcess();
     await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListGet(), { loop: true });
     await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), { loop: true });

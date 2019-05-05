@@ -1,10 +1,12 @@
 {
     "Auto": "Auto",
     "Confirm Password": "Confirmar contraseña",
+    "Expert Settings": "Configuración de expertos",
     "Host": "Hostname",
     "Main Settings": "Ajustes principales",
     "Manual": "Manual",
     "Password": "Contraseña",
+    "Polltime in sec.": "",
     "Port": "Puerto",
     "Provide Lupusec Webcams": "Proporcionar cámaras web Lupusec",
     "User": "Usuario",
