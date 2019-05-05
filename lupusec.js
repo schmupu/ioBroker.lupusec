@@ -18,6 +18,17 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+async function getStateValue(id) {
+  try {
+    let state = await adapter.getStateAsync(id);
+    let value;
+    if (state && state.val) value = state.val;
+    return value;
+  } catch (error) {
+    return undefined;
+  }
+}
+
 function startAdapter(options) {
   options = options || {};
   options.name = adapterName;
@@ -89,11 +100,11 @@ function startAdapter(options) {
               try {
                 if (statusname === 'hue') {
                   hue = status;
-                  saturation = await adapter.getStateAsync(iddevice + '.sat');
+                  saturation = await getStateValue(idparent + '.sat');
                 }
                 if (statusname === 'sat') {
                   saturation = status;
-                  hue = await adapter.getStateAsync(iddevice + '.hue');
+                  hue = await getStateValue(idparent + '.hue');
                 }
               } catch (error) { /* */ }
               form = {
@@ -112,6 +123,23 @@ function startAdapter(options) {
               switch: status
             };
             await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), { key: id, prio: 1, loop: false });
+          }
+          if (statusname === 'on_time' || statusname === 'off_time') { // Thermostat (Type 76) Shutter
+            let on_time, off_time;
+            if (statusname === 'on_time') {
+              on_time = status;
+              off_time = await getStateValue(idparent + '.off_time');
+            }
+            if (statusname === 'off_time') {
+              on_time = await getStateValue(idparent + '.on_time');
+              off_time = status;
+            }
+            form = {
+              id: key,
+              on_time: Math.round(on_time * 10),
+              off_time: Math.round(off_time * 10)
+            };
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditShutterPost(form), { key: id, prio: 1, loop: false });
           }
           if (statusname === 'thermo_offset') { // Thermostat (Type 79)
             form = {
@@ -158,8 +186,8 @@ function startAdapter(options) {
             if (statusname === 'bypass') statusname = 'scond_bypass';
             form = {
               id: key,
-              sarea: lupusecAsync.getState(idparent + '.area'),
-              szone: lupusecAsync.getState(idparent + '.zone'),
+              sarea: await getStateValue(idparent + '.area'),
+              szone: await getStateValue(idparent + '.zone'),
             };
             form[statusname] = status;
             await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), { key: id, prio: 1, loop: false });
@@ -295,7 +323,7 @@ async function changeAdapterConfigAsync(polltime, changedate) {
 }
 
 async function mainAsync() {
-  await changeAdapterConfigAsync(0.25, '01.05.2019');
+  await changeAdapterConfigAsync(0.5, '01.05.2019');
   lupusecAsync = new LupusAync.Lupus(adapter);
   let ping = await pingalarmAsync(adapter.config.alarm_host);
   let check = checkparameter();
@@ -312,7 +340,7 @@ async function mainAsync() {
     await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), { loop: true });
     await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), { loop: true });
     await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), { loop: true });
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceThermoAllGet(), { loop: true });
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceThermoShutterAllGet(), { loop: true });
     // Starting Webcam 
     if (adapter.config.webcam_providing) {
       await lupusecAsync.addToProcess(async () => await lupusecAsync.getWebcamSnapshots(), { loop: true, wait: 60 });
@@ -336,6 +364,8 @@ async function mainAsync() {
     adapter.subscribeStates(adapter.namespace + '.devices.*.bypass_tamper');
     adapter.subscribeStates(adapter.namespace + '.devices.*.schar_latch_rpt');
     adapter.subscribeStates(adapter.namespace + '.devices.*.thermo_offset');
+    adapter.subscribeStates(adapter.namespace + '.devices.*.on_time');
+    adapter.subscribeStates(adapter.namespace + '.devices.*.off_time');
     // adapter.subscribeStates(adapter.namespace + '.devices.*.mod');
     adapter.subscribeStates(adapter.namespace + '.devices.*.set_temperature');
     adapter.subscribeStates(adapter.namespace + '.devices.*.switch');
@@ -343,7 +373,6 @@ async function mainAsync() {
     adapter.subscribeStates(adapter.namespace + '.status.mode_pc_a1');
     adapter.subscribeStates(adapter.namespace + '.status.mode_pc_a2');
     adapter.subscribeStates(adapter.namespace + '.status.apple_home_a1');
-    adapter.subscribeStates(adapter.namespace + '.status.apple_home_a2');
   }
 }
 
