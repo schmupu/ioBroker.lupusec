@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.1.6",
+        "version": "1.1.7",
         "news": {
+            "1.1.7": {
+                "en": "Enhancement of webcam support",
+                "de": "Verbesserung der Webcam-Unterstützung",
+                "ru": "Расширение поддержки веб-камеры",
+                "pt": "Melhoria do suporte da webcam",
+                "nl": "Verbetering van webcam-ondersteuning",
+                "fr": "Amélioration du support de la webcam",
+                "it": "Miglioramento del supporto della webcam",
+                "es": "Mejora del soporte de webcam",
+                "pl": "Ulepszenie obsługi kamery internetowej",
+                "zh-cn": "增强网络摄像头支持"
+            },
             "1.1.6": {
                 "en": "New features. See readme",
                 "de": "Neue Eigenschaften. ",
