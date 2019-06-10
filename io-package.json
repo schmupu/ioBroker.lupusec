@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.1.7",
+        "version": "1.1.8",
         "news": {
+            "1.1.8": {
+                "en": "Add new devices",
+                "de": "Neue Geräte hinzufügen",
+                "ru": "Добавить новые устройства",
+                "pt": "Adicione novos dispositivos",
+                "nl": "Voeg nieuwe apparaten toe",
+                "fr": "Ajouter de nouveaux appareils",
+                "it": "Aggiungi nuovi dispositivi",
+                "es": "Agregar nuevos dispositivos",
+                "pl": "Dodaj nowe urządzenia",
+                "zh-cn": "添加新设备"
+            },
             "1.1.7": {
                 "en": "Enhancement of webcam support",
                 "de": "Verbesserung der Webcam-Unterstützung",

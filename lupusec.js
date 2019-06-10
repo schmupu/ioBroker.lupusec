@@ -193,6 +193,15 @@ function startAdapter(options) {
             form[statusname] = status;
             await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), { key: id, prio: 1, loop: false });
           }
+          // Powermeter
+          if (statusname === 'factor') {
+            form = {
+              id: key,
+              factor: status
+            };
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditMeterPost(form), { key: id, prio: 1, loop: false });
+          }
+
         }
       }
       if (id.startsWith(adapter.namespace + '.status.')) {
@@ -346,7 +355,7 @@ async function mainAsync() {
     await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), { loop: true });
     await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), { loop: true });
     await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), { loop: true });
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceThermoShutterAllGet(), { loop: true });
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceAllGet(), { loop: true });
     if (adapter.config.webcam_providing) {
       // Starting Webcam 
       await lupusecAsync.addToProcess(async () => await lupusecAsync.getWebcamSnapshots(), { loop: true, wait: 60 });
@@ -371,6 +380,7 @@ async function mainAsync() {
     adapter.subscribeStates(adapter.namespace + '.devices.*.bypass_tamper');
     adapter.subscribeStates(adapter.namespace + '.devices.*.schar_latch_rpt');
     adapter.subscribeStates(adapter.namespace + '.devices.*.thermo_offset');
+    adapter.subscribeStates(adapter.namespace + '.devices.*.factor');
     adapter.subscribeStates(adapter.namespace + '.devices.*.on_time');
     adapter.subscribeStates(adapter.namespace + '.devices.*.off_time');
     // adapter.subscribeStates(adapter.namespace + '.devices.*.mod');
