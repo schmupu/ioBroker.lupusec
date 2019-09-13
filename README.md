@@ -89,6 +89,9 @@ You find all connected surveillance cams under 'webcams'. You can copy the link 
 
 ## Changelog
 
+### 1.2.0 (13.09.2019)
+* (Stübi) Changing error handling of adapter
+
 ### 1.1.9 (06.09.2019)
 * (Stübi) Add device: Smoke detector V2
 * (Stübi) Add device: Inwall relay with dimmer V3

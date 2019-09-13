@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.1.9",
+        "version": "1.2.0",
         "news": {
+            "1.2.0": {
+                "en": "Changing error handling",
+                "de": "Fehlerbehandlung ändern",
+                "ru": "Изменение обработки ошибок",
+                "pt": "Alterando a manipulação de erros",
+                "nl": "Veranderende foutafhandeling",
+                "fr": "Changer le traitement des erreurs",
+                "it": "Modifica della gestione degli errori",
+                "es": "Cambio de manejo de errores",
+                "pl": "Zmiana obsługi błędów",
+                "zh-cn": "改变错误处理"
+            },
             "1.1.9": {
                 "en": "Add new devices",
                 "de": "Neue Geräte hinzufügen",
