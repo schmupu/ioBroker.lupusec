@@ -93,6 +93,36 @@ function startAdapter(options) {
               await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), { key: id, prio: 1, loop: false });
             }, key, statusname), { prio: 1, loop: false });
           }
+          if (statusname === 'nuki_cmd') {
+            let statusreq;
+            switch (status) {
+              case 3:
+                statusreq = 1; // unlock 
+                break;
+              case 1:
+                statusreq = 2; // lock
+                break;
+              case 0:
+                statusreq = 3; // open
+                break;
+              default:
+                statusreq = undefined;
+                break;
+            }
+            if (statusreq) {
+              form = {
+                id: key,
+                action: statusreq
+              };
+              try {
+                let idnuki = idparent + '.' + statusname;
+                await adapter.setStateAsync(idnuki, { val: status, ack: true });
+              } catch (error) {
+                // 
+              }
+            }
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceNukiCmd(form), { key: id, prio: 1, loop: false });
+          }
           if (statusname === 'hue' || statusname === 'sat') {
             // erst nach 500 ms ausführen, falls sich wert noch ändert!
             await lupusecAsync.addToProcess(lupusecAsync.callByDelay(async () => {
@@ -391,6 +421,7 @@ async function mainAsync() {
     adapter.subscribeStates(adapter.namespace + '.status.mode_pc_a2');
     adapter.subscribeStates(adapter.namespace + '.status.apple_home_a1');
     adapter.subscribeStates(adapter.namespace + '.status.apple_home_a2');
+    adapter.subscribeStates(adapter.namespace + '.devices.*.nuki_cmd');
   }
 }
 

@@ -53,6 +53,7 @@ Fully supported and individually adapted are following devices:
   - Room sensor V1 (Type 54)
   - LCD temperature sensor (Type 54)  
   - Mini temperature (Type 54)
+  - Nuki door opener (Type 57)
   - Heat detector (Type 58)
   - Dimmer (Type 66)
   - Light Switch V2 (Type 66)
@@ -91,6 +92,7 @@ You find all connected surveillance cams under 'webcams'. You can copy the link 
 
 ### 1.2.0 (13.09.2019)
 * (Stübi) Changing error handling of adapter
+* (Stübi) Add Nuki door opener
 
 ### 1.1.9 (06.09.2019)
 * (Stübi) Add device: Smoke detector V2
