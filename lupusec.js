@@ -93,7 +93,7 @@ function startAdapter(options) {
               await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), { key: id, prio: 1, loop: false });
             }, key, statusname), { prio: 1, loop: false });
           }
-          if (statusname === 'nuki_cmd') {
+          if (statusname === 'nuki_action') {
             let statusreq;
             switch (status) {
               case 3:
@@ -421,7 +421,7 @@ async function mainAsync() {
     adapter.subscribeStates(adapter.namespace + '.status.mode_pc_a2');
     adapter.subscribeStates(adapter.namespace + '.status.apple_home_a1');
     adapter.subscribeStates(adapter.namespace + '.status.apple_home_a2');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.nuki_cmd');
+    adapter.subscribeStates(adapter.namespace + '.devices.*.nuki_action');
   }
 }
 
