@@ -114,14 +114,16 @@ function startAdapter(options) {
                 id: key,
                 action: statusreq
               };
-              try {
+            }
+            await lupusecAsync.addToProcess(async () => {
+              let result = await lupusecAsync.deviceNukiCmd(form);
+              if(result) {
                 let idnuki = idparent + '.' + statusname;
                 await adapter.setStateAsync(idnuki, { val: status, ack: true });
-              } catch (error) {
-                // 
+              } else {
+                adapter.log.error('Action on Nuki not executed, because no positive response from Nuki!');
               }
-            }
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceNukiCmd(form), { key: id, prio: 1, loop: false });
+            }, { key: id, prio: 1, loop: false });
           }
           if (statusname === 'hue' || statusname === 'sat') {
             // erst nach 500 ms ausführen, falls sich wert noch ändert!
