@@ -116,13 +116,23 @@ function startAdapter(options) {
               };
             }
             await lupusecAsync.addToProcess(async () => {
-              let result = await lupusecAsync.deviceNukiCmd(form);
-              if(result) {
-                let idnuki = idparent + '.' + statusname;
-                await adapter.setStateAsync(idnuki, { val: status, ack: true });
-              } else {
-                adapter.log.error('Action on Nuki not executed, because no positive response from Nuki!');
-              }
+              const maxcount = 5; // 5 Tries
+              let counter = 0;
+              let result = 0;
+              do {
+                counter++;
+                result = await lupusecAsync.deviceNukiCmd(form);
+                if (result) {
+                  let idnuki = idparent + '.' + statusname;
+                  await adapter.setStateAsync(idnuki, { val: status, ack: true });
+                } else {
+                  if(counter === maxcount) {
+                    adapter.log.error('Action on Nuki not executed, because no positive response from Nuki!');
+                  } else {
+                    await sleep(500);
+                  }
+                }
+              } while (counter <= maxcount && result === 0);
             }, { key: id, prio: 1, loop: false });
           }
           if (statusname === 'hue' || statusname === 'sat') {
