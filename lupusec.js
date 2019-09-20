@@ -129,6 +129,7 @@ function startAdapter(options) {
                   if(counter === maxcount) {
                     adapter.log.error('Action on Nuki not executed, because no positive response from Nuki!');
                   } else {
+                    adapter.log.debug('Action on Nuki not executed, because no positive response from Nuki!. Will try it in 500 ms again. Try: ' + counter);
                     await sleep(500);
                   }
                 }
