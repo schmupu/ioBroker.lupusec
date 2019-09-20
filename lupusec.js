@@ -126,10 +126,10 @@ function startAdapter(options) {
                   let idnuki = idparent + '.' + statusname;
                   await adapter.setStateAsync(idnuki, { val: status, ack: true });
                 } else {
-                  if(counter === maxcount) {
+                  if (counter === maxcount) {
                     adapter.log.error('Action on Nuki not executed, because no positive response from Nuki!');
                   } else {
-                    adapter.log.debug('Action on Nuki not executed, because no positive response from Nuki!. Will try it in 500 ms again. Try: ' + counter);
+                    adapter.log.info('Action on Nuki not executed, because no positive response from Nuki!. Will try it in 500 ms again. Try: ' + counter + ' from ' + maxcount);
                     await sleep(500);
                   }
                 }
