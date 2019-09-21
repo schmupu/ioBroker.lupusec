@@ -30,6 +30,8 @@ For only reading the status, select a user without write access. If you want to 
 ![admin_main](docs/en/img/lupusec_admin.png)
 If you have surveillance cams connected to your Lupusec alarm system you can provide them in ioBroker. The Lupusec adapter finds all Lupusec cams by it own. You have to enter a address (your ioBroker IP addrss or 0.0.0.0) and a port for later connecting to the cams.
 ![admin_webcam](docs/en/img/lupusec_admin_webcam.png)
+If you have your Nuki door opener connected to your Lupusec alarm system you can use it from ioBroker too. On the ioBroker instance admin menu, you can enter your Lupusec door sensor which is mounted to the Nuki door. If you now open the door where the Nuki is mounted you have the additional state 'door opened' instead only 'unlocked'. If you do not have a Lupusec door sensor at the Nuki door, you will only see the states 'locked' or 'locked'.
+![admin_nuki](docs/en/img/lupusec_admin_nuki.png)
 
 By default all Lupusec devices will be on the ioBroker object tab  displayed.
 Fully supported and individually adapted are following devices:
