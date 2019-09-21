@@ -90,6 +90,10 @@ Detailed view of a sensor or device. In this example you see the CO sensor. On C
 You find all connected surveillance cams under 'webcams'. You can copy the link provided in the 'image' and 'stream' state to your web browser for opening. 
 ![lupusec_obj_webcam](docs/en/img/lupusec_obj_webcam.png)
 
+### Lupusec Nuki
+You find your Nuki door opener under 'devices' like the Lupusec devices. The Nuki provides 2 states. The state nuki_state shows you the actuall state of the Nuki door opener like door is locked or unlocked. With the state nuki_action you can open, lock or unlock your door.  
+![lupusec_obj_nuki](docs/en/img/lupusec_obj_nuki.png)
+
 ## Changelog
 
 ### 1.2.0 (13.09.2019)
