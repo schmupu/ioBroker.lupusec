@@ -16,5 +16,7 @@
     "alarm system": "Alarmanlage",
     "https": "https",
     "on save adapter restarts with new config immediately": "Beim Speichern von Einstellungen wird der Adapter sofort neu gestartet.",
-    "template adapter settings": "Beispiel"
+    "template adapter settings": "Beispiel",
+    "Lupusec doorsensor for Nuki": "Lupusec Türsensor für Nui",
+    "Nuki settings": "Nuki Einstellungen"
 }
