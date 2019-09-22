@@ -31,14 +31,18 @@
     "ping": "^0.2.1",
     "request": "^2.79.0",
     "request-promise": "^4.2.4",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "socket.io": "~1.7.0",
+    "socket.io-client": "~1.7.0",
+    "cookie-parser": "^1.4.3"
   },
   "devDependencies": {
     "@iobroker/testing": "^1.2.5",
     "axios": "^0.18.1",
     "chai": "^4.1.2",
-    "gulp": "^4.0.2",
-    "mocha": "^4.1.0"
+    "mocha": "^6.0.2",
+    "@types/node": "^4.2.23",
+    "gulp": "^4.0.0"
   },
   "engines": {
     "node": ">=8.0.0"
