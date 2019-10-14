@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.2.0",
+        "version": "1.2.1",
         "news": {
+            "1.2.1": {
+                "en": "Bugfixing",
+                "de": "Bugfixing",
+                "ru": "Исправление ошибок",
+                "pt": "Corrigindo erro",
+                "nl": "bugfixing",
+                "fr": "Correction de bugs",
+                "it": "bugfixing",
+                "es": "Corrección de errores",
+                "pl": "Naprawa błędów",
+                "zh-cn": "错误修正"
+            },
             "1.2.0": {
                 "en": "Changing error handling",
                 "de": "Fehlerbehandlung ändern",
@@ -209,7 +221,8 @@
         "webcam_bind": "0.0.0.0",
         "webcam_port": 7000,
         "webcam_providing": true,
-        "nuki_doorsensor": "lupusec.0.devices.RF:XXXXXX.status_ex"
+        "nuki_doorsensor": "lupusec.0.devices.RF:XXXXXX.status_ex",
+        "keys": []
     },
     "objects": [],
     "instanceObjects": []
