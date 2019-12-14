@@ -98,7 +98,7 @@ You find your Nuki door opener under 'devices' like the Lupusec devices. The Nuk
 
 ## Changelog
 
-### 1.2.2 (06.09.2019)
+### 1.2.3 (06.09.2019)
 * (Stübi) Add device: Repeater V2
 * (Stübi) Add device: Siren inside (Battery version without Zigbee repeater)
 

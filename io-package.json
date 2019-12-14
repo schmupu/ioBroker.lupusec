@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.2.2",
+        "version": "1.2.3",
         "news": {
-            "1.2.2": {
+            "1.2.3": {
                 "en": "Add new devices",
                 "de": "Neue Geräte hinzufügen",
                 "ru": "Добавить новые устройства",
