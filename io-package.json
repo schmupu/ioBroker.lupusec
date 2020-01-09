@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.2.3",
+        "version": "1.2.4",
         "news": {
+            "1.2.4": {
+                "en": "Add new devices Temperature sensor V2",
+                "de": "Temperatursensor V2 hinzugefügt",
+                "ru": "Добавить новые устройства Датчик температуры V2",
+                "pt": "Adicionar novos dispositivos Sensor de temperatura V2",
+                "nl": "Nieuwe apparaten toevoegen Temperatuursensor V2",
+                "fr": "Ajouter de nouveaux appareils Capteur de température V2",
+                "it": "Aggiungi nuovi dispositivi Sensore di temperatura V2",
+                "es": "Agregar nuevos dispositivos Sensor de temperatura V2",
+                "pl": "Dodaj nowe urządzenia Czujnik temperatury V2",
+                "zh-cn": "添加新设备温度传感器V2"
+            },
             "1.2.3": {
                 "en": "Add new devices",
                 "de": "Neue Geräte hinzufügen",
