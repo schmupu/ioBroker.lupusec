@@ -81,7 +81,7 @@ function startAdapter(options) {
               pd: pdstatus,
               switch: status
             };
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), { key: id, prio: 1, loop: false });
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), { key: id, prio: 1, loop: false }, 'deviceList');
           }
           if (statusname === 'level') {
             // erst nach 500 ms ausführen, falls sich wert noch ändert!
@@ -90,8 +90,8 @@ function startAdapter(options) {
                 id: key,
                 level: status
               };
-              await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), { key: id, prio: 1, loop: false });
-            }, key, statusname), { prio: 1, loop: false });
+              await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchDimmerPost(form), { key: id, prio: 1, loop: false }, 'deviceList');
+            }, key, statusname), { prio: 1, loop: false }, 'callByDelay');
           }
           if (statusname === 'nuki_action') {
             let statusreq;
@@ -134,7 +134,7 @@ function startAdapter(options) {
                   }
                 }
               } while (counter <= maxcount && result === 0);
-            }, { key: id, prio: 1, loop: false });
+            }, { key: id, prio: 1, loop: false }, 'nuki');
           }
           if (statusname === 'hue' || statusname === 'sat') {
             // erst nach 500 ms ausführen, falls sich wert noch ändert!
@@ -157,8 +157,8 @@ function startAdapter(options) {
                 saturation: saturation || 0,
                 mod: 2
               };
-              await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceHueColorControl(form), { key: id, prio: 1, loop: false });
-            }, key, statusname), { prio: 1, loop: false });
+              await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceHueColorControl(form), { key: id, prio: 1, loop: false }, 'deviceList');
+            }, key, statusname), { prio: 1, loop: false }, 'callByDelay' + key);
           }
           if (statusname === 'switch') {
             // (0: runterfahren/zu, 1: hochfahren/auf, 2: stop)
@@ -166,7 +166,7 @@ function startAdapter(options) {
               id: key,
               switch: status
             };
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), { key: id, prio: 1, loop: false });
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceSwitchPSSPost(form), { key: id, prio: 1, loop: false }, 'deviceList');
           }
           if (statusname === 'on_time' || statusname === 'off_time') { // Thermostat (Type 76) Shutter
             let on_time, off_time;
@@ -183,7 +183,7 @@ function startAdapter(options) {
               on_time: Math.round(on_time * 10),
               off_time: Math.round(off_time * 10)
             };
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditShutterPost(form), { key: id, prio: 1, loop: false });
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditShutterPost(form), { key: id, prio: 1, loop: false }, 'deviceEdit');
           }
           if (statusname === 'thermo_offset') { // Thermostat (Type 79)
             form = {
@@ -191,7 +191,7 @@ function startAdapter(options) {
               act: 't_offset',
               thermo_offset: Math.round(status * 10)
             };
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), { key: id, prio: 1, loop: false });
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), { key: id, prio: 1, loop: false }, 'deviceEdit');
           }
           if (statusname === 'mode') { // Thermostat (Type 79)
             form = {
@@ -199,7 +199,7 @@ function startAdapter(options) {
               act: 't_schd_setting',
               thermo_schd_setting: status == 0 ? 0 : 1
             };
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), { key: id, prio: 1, loop: false });
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), { key: id, prio: 1, loop: false }, 'deviceEdit');
           }
           if (statusname === 'off') { // Thermostat (Type 79)
             form = {
@@ -207,7 +207,7 @@ function startAdapter(options) {
               act: 't_mode',
               thermo_mode: status == true ? 0 : 4
             };
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), { key: id, prio: 1, loop: false });
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), { key: id, prio: 1, loop: false }, 'deviceEdit');
           }
           if (statusname === 'set_temperature') { // Thermostat (Type 79)
             // erst nach 500 ms ausführen, falls sich wert noch ändert!
@@ -217,8 +217,8 @@ function startAdapter(options) {
                 act: 't_setpoint',
                 thermo_setpoint: Math.trunc(100 * Math.round(2 * status) / 2)
               };
-              await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), { key: id, prio: 1, loop: false });
-            }, key, 'status'), { prio: 1, loop: false });
+              await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditThermoPost(form), { key: id, prio: 1, loop: false }, 'deviceEdit');
+            }, key, 'status'), { prio: 1, loop: false }, 'callByDelay' + key);
           }
           if (statusname && (statusname.startsWith('sresp_button_') || statusname === 'sresp_emergency') ||
             statusname === 'name' || statusname === 'send_notify' || statusname === 'bypass' ||
@@ -234,7 +234,7 @@ function startAdapter(options) {
               szone: await getStateValue(idparent + '.zone'),
             };
             form[statusname] = status;
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), { key: id, prio: 1, loop: false });
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditPost(form), { key: id, prio: 1, loop: false }, 'deviceEdit');
           }
           // Powermeter
           if (statusname === 'factor') {
@@ -242,7 +242,7 @@ function startAdapter(options) {
               id: key,
               factor: status
             };
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditMeterPost(form), { key: id, prio: 1, loop: false });
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditMeterPost(form), { key: id, prio: 1, loop: false }, 'deviceEdit');
           }
 
         }
@@ -250,24 +250,24 @@ function startAdapter(options) {
       if (id.startsWith(adapter.namespace + '.status.')) {
         // Area 1 alarm modus
         if (id === adapter.namespace + '.status.mode_pc_a1') {
-          await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 1, mode: state.val }), { key: id, prio: 1, loop: false });
+          await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 1, mode: state.val }), { key: id, prio: 1, loop: false }, 'panelCond');
         }
         // Area 2 alarm modus
         if (id === adapter.namespace + '.status.mode_pc_a2') {
-          await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 2, mode: state.val }), { key: id, prio: 1, loop: false });
+          await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 2, mode: state.val }), { key: id, prio: 1, loop: false }, 'panelCond');
         }
         // Area 1 alarm modus
         if (id === adapter.namespace + '.status.apple_home_a1') {
           let mode_pc_a1 = lupusecAsync.getLupusecFromAppleStautus(state.val);
           if (mode_pc_a1 >= 0 && mode_pc_a1 <= 4) {
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 1, mode: mode_pc_a1 }), { key: id, prio: 1, loop: false });
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 1, mode: mode_pc_a1 }), { key: id, prio: 1, loop: false }, 'panelCond');
           }
         }
         // Area 2 alarm modus
         if (id === adapter.namespace + '.status.apple_home_a2') {
           let mode_pc_a2 = lupusecAsync.getLupusecFromAppleStautus(state.val);
           if (mode_pc_a2 >= 0 && mode_pc_a2 <= 4) {
-            await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 2, mode: mode_pc_a2 }), { key: id, prio: 1, loop: false });
+            await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondPost({ area: 2, mode: mode_pc_a2 }), { key: id, prio: 1, loop: false }, 'panelCond');
           }
         }
       }
@@ -393,15 +393,14 @@ async function mainAsync() {
       adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
     }
     adapter.log.info('Polltime ' + adapter.config.alarm_polltime + ' sec.');
-    await lupusecAsync.startProcess();
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListGet(), { loop: true });
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), { loop: true });
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), { loop: true });
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), { loop: true });
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceAllGet(), { loop: true });
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListGet(), { loop: true }, 'deviceList');
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), { loop: true }, 'deviceList');
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), { loop: true }, 'panelCond');
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), { loop: true }, 'deviceEdit');
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceAllGet(), { loop: true }, 'deviceEdit');
     if (adapter.config.webcam_providing) {
       // Starting Webcam 
-      await lupusecAsync.addToProcess(async () => await lupusecAsync.getWebcamSnapshots(), { loop: true, wait: 60 });
+      await lupusecAsync.addToProcess(async () => await lupusecAsync.getWebcamSnapshots(), { loop: true, wait: 60 }, 'webcam');
     } else {
       // Delete Webcams
       let deviceid = 'webcams';

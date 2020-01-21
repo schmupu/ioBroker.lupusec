@@ -99,6 +99,9 @@ You find your Nuki door opener under 'devices' like the Lupusec devices. The Nuk
 
 ## Changelog
 
+### 1.2.5 (21.01.2019)
+* (Stübi) Change logic to get faster sensor states
+
 ### 1.2.4 (09.01.2019)
 * (Stübi) Add device: temperature sensor v2
 
