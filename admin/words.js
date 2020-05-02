@@ -87,7 +87,16 @@
         "zh-cn": "密码"
     },
     "Polltime in sec.": {
-        "de": "Polltime in Sek."
+        "en": "Polltime in sec.",
+        "de": "Polltime in sek.",
+        "ru": "Время опроса в сек.",
+        "pt": "Tempo de votação em seg.",
+        "nl": "Polltime in sec.",
+        "fr": "Temps de scrutin en sec.",
+        "it": "Polltime in sec.",
+        "es": "Polltime en seg.",
+        "pl": "Ankieta w sek.",
+        "zh-cn": "轮询时间（以秒为单位）"
     },
     "Port": {
         "en": "Port",
@@ -211,11 +220,27 @@
     },
     "Lupusec doorsensor for Nuki": {
         "en": "Lupusec doorsensor for Nuki",
-        "de": "Lupusec Türsensor für Nuki"
+        "de": "Lupusec Türsensor für Nuki",
+        "ru": "Lupusec дверной датчик для Nuki",
+        "pt": "Sensor de porta Lupusec para Nuki",
+        "nl": "Lupusec deursensor voor Nuki",
+        "fr": "Capteur de porte Lupusec pour Nuki",
+        "it": "Sensore per porte Lupusec per Nuki",
+        "es": "Sensor de puerta Lupusec para Nuki",
+        "pl": "Czujnik drzwi Lupusec dla Nuki",
+        "zh-cn": "适用于Nuki的Lupusec门磁"
     },
     "Nuki settings": {
         "en": "Nuki settings",
-        "de": "Nuki Einstellungen"
+        "de": "Nuki Einstellungen",
+        "ru": "Настройки нуки",
+        "pt": "Configurações de Nuki",
+        "nl": "Nuki-instellingen",
+        "fr": "Paramètres Nuki",
+        "it": "Impostazioni di Nuki",
+        "es": "Ajustes de Nuki",
+        "pl": "Ustawienia Nuki",
+        "zh-cn": "Nuki设置"
     },
     "Allow to transfer error logs to the external ioBroker Sentry system. Usernames, Passwords, Tokens, ... will be NOT be transferd.": {
         "en": "Allow to transfer error logs to the external ioBroker Sentry system. Usernames, Passwords, Tokens, ... will be NOT be transferd.",
