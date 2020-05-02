@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.2.5",
+        "version": "1.2.6",
         "news": {
+            "1.2.6": {
+                "en": "Change logic to get faster sensor states",
+                "de": "Logik geändert um schnellere Sensorzustände zu erhalten",
+                "ru": "Измените логику, чтобы ускорить состояние датчиков",
+                "pt": "Mude a lógica para obter estados mais rápidos do sensor",
+                "nl": "Verander de logica om snellere sensortoestanden te krijgen",
+                "fr": "Changer la logique pour obtenir des états de capteur plus rapides",
+                "it": "Cambia logica per ottenere stati del sensore più veloci",
+                "es": "Cambiar la lógica para obtener estados de sensor más rápidos",
+                "pl": "Zmień logikę, aby uzyskać szybsze stany czujników",
+                "zh-cn": "更改逻辑以获得更快的传感器状态"
+            },
             "1.2.5": {
                 "en": "Change logic to get faster sensor states",
                 "de": "Logik geändert um schnellere Sensorzustände zu erhalten",
