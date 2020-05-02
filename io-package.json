@@ -4,16 +4,16 @@
         "version": "1.2.6",
         "news": {
             "1.2.6": {
-                "en": "Change logic to get faster sensor states",
-                "de": "Logik geändert um schnellere Sensorzustände zu erhalten",
-                "ru": "Измените логику, чтобы ускорить состояние датчиков",
-                "pt": "Mude a lógica para obter estados mais rápidos do sensor",
-                "nl": "Verander de logica om snellere sensortoestanden te krijgen",
-                "fr": "Changer la logique pour obtenir des états de capteur plus rapides",
-                "it": "Cambia logica per ottenere stati del sensore più veloci",
-                "es": "Cambiar la lógica para obtener estados de sensor más rápidos",
-                "pl": "Zmień logikę, aby uzyskać szybsze stany czujników",
-                "zh-cn": "更改逻辑以获得更快的传感器状态"
+                "en": "Bugfixing, add Sentry logging, changed process logic ",
+                "de": "Bugfixing, Sentry-Protokollierung hinzufügen, Prozesslogik geändert",
+                "ru": "Исправление ошибок, добавление ведения журнала Sentry, изменение логики процесса",
+                "pt": "Correção de erros, adicionar log de sentinela, lógica de processo alterada",
+                "nl": "Bugfixing, Sentry-logging toevoegen, proceslogica gewijzigd",
+                "fr": "Correction de bugs, ajout de la journalisation Sentry, modification de la logique du processus",
+                "it": "Correzione di errori, aggiunta della registrazione Sentry, modifica della logica di processo",
+                "es": "Corrección de errores, agregar registro de Centinela, lógica de proceso modificada",
+                "pl": "Naprawianie błędów, dodawanie logowania Sentry, zmieniona logika procesu",
+                "zh-cn": "错误修正，添加Sentry日志记录，更改了流程逻辑"
             },
             "1.2.5": {
                 "en": "Change logic to get faster sensor states",
@@ -254,7 +254,13 @@
         "readme": "https://github.com/schmupu/ioBroker.lupusec/blob/master/README.md",
         "loglevel": "info",
         "type": "alarm",
-        "restartAdapters": []
+        "restartAdapters": [],
+        "plugins": {
+            "sentry": {
+                "dsn": "https://345fa9990a0e4e4d95297341d0d0ee9a@sentry.iobroker.net/61",
+                "pathWhitelist": []
+            }
+        }
     },
     "native": {
         "alarm_host": "",
@@ -270,6 +276,7 @@
         "webcam_port": 7000,
         "webcam_providing": true,
         "nuki_doorsensor": "lupusec.0.devices.RF:XXXXXX.status_ex",
+        "sentry_enable": true,
         "keys": []
     },
     "objects": [],

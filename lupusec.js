@@ -19,6 +19,28 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/**
+ * Change the external Sentry Logging. After changing the Logging
+ * the adapter restarts once
+ * @param {*} id : adapter.config.sentry_enable for example
+ */
+async function setSentryLogging(value) {
+  try {
+    value = value === true;
+    let idSentry = 'system.adapter.' + adapter.namespace + '.plugins.sentry.enabled';
+    let stateSentry = await adapter.getForeignStateAsync(idSentry);
+    if (stateSentry && stateSentry.val !== value) {
+      await adapter.setForeignStateAsync(idSentry, value);
+      adapter.log.info('Restarting Adapter because of changeing Sentry settings');
+      adapter.restart();
+      return true;
+    }
+  } catch (error) {
+    return false;
+  }
+  return false;
+}
+
 async function getStateValue(id) {
   try {
     let state = await adapter.getStateAsync(id);
@@ -300,7 +322,7 @@ function startAdapter(options) {
         }
       }
       if (obj && obj.common && obj.common.language) systemLanguage = (obj.common.language).toUpperCase();
-      await mainAsync();
+      await main();
     } catch (error) {
       adapter.log.error('Error reading system.config: ' + error);
     }
@@ -382,7 +404,8 @@ async function changeAdapterConfigAsync(polltime, changedate) {
   } catch (error) { /* */ }
 }
 
-async function mainAsync() {
+async function main() {
+  if (await setSentryLogging(adapter.config.sentry_enable)) return;
   let pollsec = 0.10; // not faster allowed as every 200 ms
   if (adapter.config.alarm_polltime < pollsec) await changeAdapterConfigAsync(pollsec);
   lupusecAsync = new LupusAync.Lupus(adapter, systemLanguage);
