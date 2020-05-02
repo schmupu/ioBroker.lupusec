@@ -255,7 +255,7 @@
         "loglevel": "info",
         "type": "alarm",
         "restartAdapters": [],
-        "plugins": {
+        "Xplugins": {
             "sentry": {
                 "dsn": "",
                 "pathWhitelist": []
