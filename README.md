@@ -99,7 +99,7 @@ You find your Nuki door opener under 'devices' like the Lupusec devices. The Nuk
 
 ## Changelog
 
-### 1.2.6 (02.05.2019)
+### 1.2.6 (02.05.2020)
 * (Stübi) Change logic to get faster sensor states
 * (Stübi) Node 10 recommended 
 * (Stübi) Add sentry logging
