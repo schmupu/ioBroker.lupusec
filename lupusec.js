@@ -302,6 +302,8 @@ function startAdapter(options) {
 
   adapter.on('ready', async () => {
     try {
+      adapter.log.info('Starting Adapter ' + adapter.namespace + ' in version ' + adapter.version);
+      if (await setSentryLogging(adapter.config.sentry_enable)) return;
       let obj = await adapter.getForeignObjectAsync('system.config');
       if (adapter.config.alarm_password) {
         if (obj && obj.native && obj.native.secret) {
@@ -405,7 +407,6 @@ async function changeAdapterConfigAsync(polltime, changedate) {
 }
 
 async function main() {
-  if (await setSentryLogging(adapter.config.sentry_enable)) return;
   let pollsec = 0.10; // not faster allowed as every 200 ms
   if (adapter.config.alarm_polltime < pollsec) await changeAdapterConfigAsync(pollsec);
   lupusecAsync = new LupusAync.Lupus(adapter, systemLanguage);
