@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.2.6",
+        "version": "1.2.7",
         "news": {
+            "1.2.7": {
+                "en": "Add token renew time to expert mode",
+                "de": "Fügen Sie dem Expertenmodus eine Token-Erneuerungszeit hinzu",
+                "ru": "Добавить время обновления токена в экспертный режим",
+                "pt": "Adicione tempo de renovação do token ao modo especialista",
+                "nl": "Voeg token vernieuwingstijd toe aan expertmodus",
+                "fr": "Ajouter du temps de renouvellement de jeton au mode expert",
+                "it": "Aggiungi il tempo di rinnovo del token alla modalità esperto",
+                "es": "Agregar tiempo de renovación de token al modo experto",
+                "pl": "Dodaj czas odnowienia tokena do trybu eksperckiego",
+                "zh-cn": "将令牌续订时间添加到专家模式"
+            },
             "1.2.6": {
                 "en": "Bugfixing, add Sentry logging, changed process logic ",
                 "de": "Bugfixing, Sentry-Protokollierung hinzufügen, Prozesslogik geändert",
@@ -272,6 +284,7 @@
         "alarm_password_confirm": "",
         "alarm_polltime": 1,
         "alarm_allstates": false,
+        "alarm_tokentimeout": 60,
         "webcam_bind": "0.0.0.0",
         "webcam_port": 7000,
         "webcam_providing": true,

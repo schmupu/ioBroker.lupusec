@@ -234,5 +234,17 @@ systemDictionary = {
     "es": "Permita transferir errores si el adaptador falla. NO se transferirán datos privados como nombres de usuario, contraseñas, tokens, ...",
     "pl": "Zezwól na przesyłanie błędów w przypadku awarii adaptera. Prywatne dane, takie jak nazwy użytkowników, hasła, tokeny, ... NIE zostaną przeniesione.",
     "zh-cn": "如果适配器崩溃，则允许传输错误。用户名，密码，令牌等私密数据将不会被传输。"
+  },
+  "Time in seconds when token is renewed": {
+    "en": "Time in seconds when token is renewed",
+    "de": "Zeit in Sekunden, wenn der Token erneuert wird",
+    "ru": "Время в секундах при обновлении токена",
+    "pt": "Tempo em segundos quando o token é renovado",
+    "nl": "Tijd in seconden wanneer het token wordt vernieuwd",
+    "fr": "Temps en secondes lorsque le jeton est renouvelé",
+    "it": "Tempo in secondi quando il token viene rinnovato",
+    "es": "Tiempo en segundos cuando se renueva el token",
+    "pl": "Czas w sekundach, kiedy odnawia się token",
+    "zh-cn": "令牌更新的时间（以秒为单位）"
   }
 };
