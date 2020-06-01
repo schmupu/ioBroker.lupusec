@@ -367,19 +367,27 @@ function checkparameter() {
   return true;
 }
 
-function pingalarmAsync(host) {
+function pingalarmAsync(host, out) {
   return new Promise((resolve, reject) => {
     ping.sys.probe(host, (isAlive) => {
       let msg = isAlive ? 'Lupusec Alarmsystem ' + host + ' is alive' : 'Lupusec Alarmsystem ' + host + ' is not reachable';
       if (isAlive) {
-        adapter.log.info(msg);
+        if (out) adapter.log.info(msg);
         resolve(true);
       } else {
-        adapter.log.error(msg);
+        if (out) adapter.log.error(msg);
         resolve(false);
       }
     });
   });
+}
+
+async function pingalarmIntervall(host, intervall) {
+  setTimeout(async () => {
+    let reacahble = await pingalarmAsync(adapter.config.alarm_host);
+    if (!reacahble) adapter.log.error('Lupusec Alarmsystem ' + host + ' is not reachable');
+    await pingalarmIntervall(host, intervall);
+  }, 1000 * intervall);
 }
 
 async function changeAdapterConfigAsync(polltime, changedate) {
@@ -410,58 +418,63 @@ async function main() {
   let pollsec = 0.10; // not faster allowed as every 200 ms
   if (adapter.config.alarm_polltime < pollsec) await changeAdapterConfigAsync(pollsec);
   lupusecAsync = new LupusAync.Lupus(adapter, systemLanguage);
-  let ping = await pingalarmAsync(adapter.config.alarm_host);
+  let ping = await pingalarmAsync(adapter.config.alarm_host, true);
+  if (!ping) {
+    adapter.terminate(0);
+  }
+  // await pingalarmIntervall(adapter.config.alarm_host, 60);
   let check = checkparameter();
   // wenn alles okay ist, gehts los
-  if (ping && check) {
-    await lupusecAsync.deleteOldSates();
-    if (adapter.config.alarm_https) {
-      adapter.log.info('Connecting to Lupusec with https://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
-    } else {
-      adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
-    }
-    adapter.log.info('Polltime ' + adapter.config.alarm_polltime + ' sec.');
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListGet(), { loop: true }, 'deviceList');
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), { loop: true }, 'deviceListPSS');
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), { loop: true }, 'panelCond');
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), { loop: true }, 'deviceEdit');
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceAllGet(), { loop: true }, 'deviceEdit');
-    if (adapter.config.webcam_providing) {
-      // Starting Webcam 
-      await lupusecAsync.addToProcess(async () => await lupusecAsync.getWebcamSnapshots(), { loop: true, wait: 60 }, 'webcam');
-    } else {
-      // Delete Webcams
-      let deviceid = 'webcams';
-      adapter.deleteDevice(deviceid);
-    }
-    adapter.subscribeStates(adapter.namespace + '.devices.*.status_ex');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.hue');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.sat');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.level');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.off');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.mode');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.name');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.sresp_button_*');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.sresp_emergency');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.send_notify');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.always_off');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.bypass');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.bypass_tamper');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.schar_latch_rpt');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.thermo_offset');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.factor');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.on_time');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.off_time');
-    // adapter.subscribeStates(adapter.namespace + '.devices.*.mod');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.set_temperature');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.switch');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.pd');
-    adapter.subscribeStates(adapter.namespace + '.status.mode_pc_a1');
-    adapter.subscribeStates(adapter.namespace + '.status.mode_pc_a2');
-    adapter.subscribeStates(adapter.namespace + '.status.apple_home_a1');
-    adapter.subscribeStates(adapter.namespace + '.status.apple_home_a2');
-    adapter.subscribeStates(adapter.namespace + '.devices.*.nuki_action');
+  if (!check) {
+    adapter.terminate(0);
   }
+  await lupusecAsync.deleteOldSates();
+  if (adapter.config.alarm_https) {
+    adapter.log.info('Connecting to Lupusec with https://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
+  } else {
+    adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
+  }
+  adapter.log.info('Polltime ' + adapter.config.alarm_polltime + ' sec.');
+  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListGet(), { loop: true }, 'deviceList');
+  await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), { loop: true }, 'deviceListPSS');
+  await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), { loop: true }, 'panelCond');
+  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), { loop: true }, 'deviceEdit');
+  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceAllGet(), { loop: true }, 'deviceEdit');
+  if (adapter.config.webcam_providing) {
+    // Starting Webcam 
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.getWebcamSnapshots(), { loop: true, wait: 60 }, 'webcam');
+  } else {
+    // Delete Webcams
+    let deviceid = 'webcams';
+    adapter.deleteDevice(deviceid);
+  }
+  adapter.subscribeStates(adapter.namespace + '.devices.*.status_ex');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.hue');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.sat');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.level');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.off');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.mode');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.name');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.sresp_button_*');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.sresp_emergency');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.send_notify');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.always_off');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.bypass');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.bypass_tamper');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.schar_latch_rpt');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.thermo_offset');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.factor');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.on_time');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.off_time');
+  // adapter.subscribeStates(adapter.namespace + '.devices.*.mod');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.set_temperature');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.switch');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.pd');
+  adapter.subscribeStates(adapter.namespace + '.status.mode_pc_a1');
+  adapter.subscribeStates(adapter.namespace + '.status.mode_pc_a2');
+  adapter.subscribeStates(adapter.namespace + '.status.apple_home_a1');
+  adapter.subscribeStates(adapter.namespace + '.status.apple_home_a2');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.nuki_action');
 }
 
 /**
