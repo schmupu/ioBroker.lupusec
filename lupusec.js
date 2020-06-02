@@ -324,7 +324,11 @@ function startAdapter(options) {
         }
       }
       if (obj && obj.common && obj.common.language) systemLanguage = (obj.common.language).toUpperCase();
-      await main();
+      // eslint-disable-next-line no-constant-condition
+      while(true) {
+        await main();
+        await sleep(60 * 1000);
+      }
     } catch (error) {
       adapter.log.error('Error reading system.config: ' + error);
     }
@@ -420,14 +424,12 @@ async function main() {
   lupusecAsync = new LupusAync.Lupus(adapter, systemLanguage);
   let ping = await pingalarmAsync(adapter.config.alarm_host, true);
   if (!ping) {
-    // adapter.terminate();
     return;
   }
   // await pingalarmIntervall(adapter.config.alarm_host, 60);
   let check = checkparameter();
   // wenn alles okay ist, gehts los
   if (!check) {
-    // adapter.terminate();
     return;
   }
   await lupusecAsync.deleteOldSates();
