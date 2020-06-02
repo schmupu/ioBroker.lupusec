@@ -27,7 +27,7 @@
     "url": "https://github.com/schmupu/ioBroker.lupusec"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.3.1",
+    "@iobroker/adapter-core": "^2.4.0",
     "ping": "^0.2.3",
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
