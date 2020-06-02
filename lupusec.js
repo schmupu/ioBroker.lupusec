@@ -420,13 +420,13 @@ async function main() {
   lupusecAsync = new LupusAync.Lupus(adapter, systemLanguage);
   let ping = await pingalarmAsync(adapter.config.alarm_host, true);
   if (!ping) {
-    adapter.terminate(0);
+    // adapter.terminate(0);
   }
   // await pingalarmIntervall(adapter.config.alarm_host, 60);
   let check = checkparameter();
   // wenn alles okay ist, gehts los
   if (!check) {
-    adapter.terminate(0);
+    // adapter.terminate(0);
   }
   await lupusecAsync.deleteOldSates();
   if (adapter.config.alarm_https) {
