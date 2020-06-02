@@ -267,9 +267,11 @@
         "loglevel": "info",
         "type": "alarm",
         "restartAdapters": [],
-        "Xplugins": {
+        "connectionType": "local",
+        "dataSource": "push",
+        "plugins": {
             "sentry": {
-                "dsn": "",
+                "dsn": "https://8a50c3e06fdb402d9e7b0ad5ae9f6400@sentry.iobroker.net/82",
                 "pathWhitelist": []
             }
         }
