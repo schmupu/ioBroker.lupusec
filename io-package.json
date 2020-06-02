@@ -291,7 +291,8 @@
         "webcam_port": 7000,
         "webcam_providing": true,
         "nuki_doorsensor": "lupusec.0.devices.RF:XXXXXX.status_ex",
-        "keys": []
+        "keys": [],
+        "sentry_enable": true
     },
     "objects": [],
     "instanceObjects": []

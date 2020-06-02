@@ -382,14 +382,6 @@ function pingalarmAsync(host, out) {
   });
 }
 
-async function pingalarmIntervall(host, intervall) {
-  setTimeout(async () => {
-    let reacahble = await pingalarmAsync(adapter.config.alarm_host);
-    if (!reacahble) adapter.log.error('Lupusec Alarmsystem ' + host + ' is not reachable');
-    await pingalarmIntervall(host, intervall);
-  }, 1000 * intervall);
-}
-
 async function changeAdapterConfigAsync(polltime, changedate) {
   let id = 'system.adapter.' + adapter.namespace;
   if (!changedate) {
