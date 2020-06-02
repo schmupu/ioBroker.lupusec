@@ -303,7 +303,7 @@ function startAdapter(options) {
   adapter.on('ready', async () => {
     try {
       adapter.log.info('Starting Adapter ' + adapter.namespace + ' in version ' + adapter.version);
-      // if (await setSentryLogging(adapter.config.sentry_enable)) return;
+      if (await setSentryLogging(adapter.config.sentry_enable)) return;
       let obj = await adapter.getForeignObjectAsync('system.config');
       if (adapter.config.alarm_password) {
         if (obj && obj.native && obj.native.secret) {
@@ -324,11 +324,7 @@ function startAdapter(options) {
         }
       }
       if (obj && obj.common && obj.common.language) systemLanguage = (obj.common.language).toUpperCase();
-      // eslint-disable-next-line no-constant-condition
-      while(true) {
-        await main();
-        await sleep(60 * 1000);
-      }
+      await main();
     } catch (error) {
       adapter.log.error('Error reading system.config: ' + error);
     }
