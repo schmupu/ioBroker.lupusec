@@ -306,7 +306,7 @@
         <div class="row">
           <div class="input-field col s12">
             <input class="value" id="sentry_enable" type="checkbox" />
-            <label for="sentry_enableAllow to transfer errors if the adapter crash. Private data like usernames, passwords, tokens, ... will be NOT be transferd." class="translate">Allow to transfer errors if the adapter crash. Private data like usernames, passwords, tokens, ... will be NOT be transferd.</label>
+            <label for="sentry_enable" class="translate">Allow to transfer errors if the adapter crash. Private data like usernames, passwords, tokens, ... will be NOT be transferd.</label>
           </div>
         </div>
 
@@ -381,6 +381,12 @@
           <div class="col s12 m4 l3">
             <input class="value number" id="alarm_tokentimeout" type="text" />
             <label class="translate" for="alarm_tokentimeout">Time in sec. when token is renewed</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input class="value" id="alarm_status" type="checkbox" />
+            <label for="alarm_status" class="translate">Leave last alarm state till alarm is disabled</label>
           </div>
         </div>
       </div>

@@ -246,5 +246,17 @@ systemDictionary = {
     "es": "Tiempo en segundos cuando se renueva el token",
     "pl": "Czas w sekundach, kiedy odnawia się token",
     "zh-cn": "令牌更新的时间（以秒为单位）"
+  },
+  "Leave last alarm state till alarm is disabled": {
+    "en": "Leave last alarm state till alarm is disabled",
+    "de": "Der Status alarm_status und alarm_status_ex wird erst zurückgesetzt wenn der der Alarm beendet ist",
+    "ru": "Оставить последнее состояние тревоги, пока тревога не будет отключена",
+    "pt": "Deixe o último estado de alarme até o alarme ser desativado",
+    "nl": "Laat de laatste alarmstatus totdat het alarm is uitgeschakeld",
+    "fr": "Laisser le dernier état d'alarme jusqu'à ce que l'alarme soit désactivée",
+    "it": "Lasciare l'ultimo stato di allarme fino a quando non viene disabilitato",
+    "es": "Deje el último estado de alarma hasta que se desactive la alarma",
+    "pl": "Pozostaw ostatni stan alarmu do momentu wyłączenia alarmu",
+    "zh-cn": "保留最后一个警报状态，直到警报被禁用"
   }
 };
