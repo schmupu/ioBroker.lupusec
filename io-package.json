@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.2.7",
+        "version": "1.2.8",
         "news": {
+            "1.2.8": {
+                "en": "Add sentry mode, hold alarm state till end of alarm",
+                "de": "Wachmodus hinzufügen, Alarmstatus bis zum Ende des Alarms halten",
+                "ru": "Добавить часовой режим, удерживать состояние тревоги до конца тревоги",
+                "pt": "Adicione o modo sentinela, mantenha o estado do alarme até o final do alarme",
+                "nl": "Voeg de wachtmodus toe, houd de alarmstatus vast tot het einde van het alarm",
+                "fr": "Ajouter le mode sentinelle, maintenir l'état d'alarme jusqu'à la fin de l'alarme",
+                "it": "Aggiungi la modalità sentinella, mantieni lo stato di allarme fino alla fine dell'allarme",
+                "es": "Agregar modo centinela, mantener el estado de alarma hasta el final de la alarma",
+                "pl": "Dodaj tryb wartownika, przytrzymaj stan alarmu do końca alarmu",
+                "zh-cn": "添加哨兵模式，保持警报状态直到警报结束"
+            },
             "1.2.7": {
                 "en": "Add token renew time to expert mode",
                 "de": "Fügen Sie dem Expertenmodus eine Token-Erneuerungszeit hinzu",

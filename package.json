@@ -1,6 +1,6 @@
 {
   "name": "iobroker.lupusec",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "Lupusec",
   "author": {
     "name": "Thorsten Stueben",
@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@iobroker/testing": "^2.2.0",
-    "@types/node": "^13.13.9",
+    "@types/node": "^13.13.12",
     "axios": "^0.19.2",
     "chai": "^4.2.0",
     "gulp": "^4.0.2",
