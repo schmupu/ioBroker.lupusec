@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.2.8",
+        "version": "1.2.9",
         "news": {
+            "1.2.9": {
+                "en": "Bugfixing",
+                "de": "Bugfixing",
+                "ru": "Исправление ошибок",
+                "pt": "Corrigindo erro",
+                "nl": "bugfixing",
+                "fr": "Correction de bugs",
+                "it": "bugfixing",
+                "es": "Corrección de errores",
+                "pl": "Naprawa błędów",
+                "zh-cn": "错误修正"
+            },
             "1.2.8": {
                 "en": "Add sentry mode, hold alarm state till end of alarm",
                 "de": "Wachmodus hinzufügen, Alarmstatus bis zum Ende des Alarms halten",
@@ -286,7 +298,17 @@
                 "dsn": "https://8a50c3e06fdb402d9e7b0ad5ae9f6400@sentry.iobroker.net/82",
                 "pathWhitelist": []
             }
-        }
+        },
+        "globalDependencies": [
+            {
+                "admin": ">=4.0.1"
+            }
+        ],
+        "dependencies": [
+            {
+                "js-controller": ">=2.0.0"
+            }
+        ]
     },
     "native": {
         "alarm_host": "",

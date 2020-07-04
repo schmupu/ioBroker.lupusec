@@ -355,7 +355,6 @@ function decrypt(key, value) {
  * Check Paerameter
  */
 function checkparameter() {
-  adapter.log.info('Checking the ioBroker Lupusec configuration');
   if (!adapter.config.alarm_host || !adapter.config.alarm_port) {
     adapter.log.error('Hostname or Port in configuration missing!');
     return false;
@@ -410,14 +409,17 @@ async function main() {
   let pollsec = 0.10; // not faster allowed as every 200 ms
   if (adapter.config.alarm_polltime < pollsec) await changeAdapterConfigAsync(pollsec);
   lupusecAsync = new LupusAync.Lupus(adapter, systemLanguage);
-  let ping = await pingalarmAsync(adapter.config.alarm_host, true);
+  let ping = await pingalarmAsync(adapter.config.alarm_host,true);
   if (!ping) {
+    adapter.terminate('Not reachable');
     return;
-  }
+  } 
   // await pingalarmIntervall(adapter.config.alarm_host, 60);
+  adapter.log.info('Checking the ioBroker Lupusec configuration');
   let check = checkparameter();
   // wenn alles okay ist, gehts los
   if (!check) {
+    adapter.terminate('Parameter missing');
     return;
   }
   await lupusecAsync.deleteOldSates();
