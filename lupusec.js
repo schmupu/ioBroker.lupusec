@@ -366,6 +366,7 @@ function checkparameter() {
   return true;
 }
 
+/*
 function pingalarmAsync(host, out) {
   return new Promise((resolve, reject) => {
     ping.sys.probe(host, (isAlive) => {
@@ -379,6 +380,26 @@ function pingalarmAsync(host, out) {
       }
     });
   });
+}
+*/
+
+async function pingalarmAsync(host, out) {
+  try {
+    let res = await ping.promise.probe(host);
+    let isAlive = res && res.alive;
+    let msg = isAlive ? 'Lupusec Alarmsystem ' + host + ' is alive' : 'Lupusec Alarmsystem ' + host + ' is not reachable';
+    if (out) {
+      if (isAlive) {
+        adapter.log.info(msg);
+      } else {
+        adapter.log.error(msg);
+      }
+    }
+    return isAlive;
+  } catch (error) {
+    adapter.log.error('Error pinging ' + host + ' (' + error + ')');
+    return false;
+  }
 }
 
 async function changeAdapterConfigAsync(polltime, changedate) {
@@ -409,11 +430,11 @@ async function main() {
   let pollsec = 0.10; // not faster allowed as every 200 ms
   if (adapter.config.alarm_polltime < pollsec) await changeAdapterConfigAsync(pollsec);
   lupusecAsync = new LupusAync.Lupus(adapter, systemLanguage);
-  let ping = await pingalarmAsync(adapter.config.alarm_host,true);
+  let ping = await pingalarmAsync(adapter.config.alarm_host, true);
   if (!ping) {
     adapter.terminate('Not reachable');
     return;
-  } 
+  }
   // await pingalarmIntervall(adapter.config.alarm_host, 60);
   adapter.log.info('Checking the ioBroker Lupusec configuration');
   let check = checkparameter();
