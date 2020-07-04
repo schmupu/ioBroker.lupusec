@@ -99,6 +99,9 @@ You find your Nuki door opener under 'devices' like the Lupusec devices. The Nuk
 
 ## Changelog
 
+### 1.2.9 (04.07.2020)
+* (Stübi) Bugfixing
+
 ### 1.2.8 (10.06.2020)
 * (Stübi) Add sentry mode
 * (Stübi) Now you can hold the reason for the alarm in alarm_status and alarm_status till the alarm ends
