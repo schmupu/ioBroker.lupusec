@@ -432,8 +432,7 @@ async function main() {
   lupusecAsync = new LupusAync.Lupus(adapter, systemLanguage);
   let ping = await pingalarmAsync(adapter.config.alarm_host, true);
   if (!ping) {
-    // adapter.terminate ? adapter.terminate('Not reachable') : adapter.log.error('Lupusec Alarmsystem is not reachable');
-    adapter.log.error('Lupusec Alarmsystem is not reachable');
+    adapter.terminate ? adapter.terminate('Not reachable') : process.exit();
     return;
   }
   // await pingalarmIntervall(adapter.config.alarm_host, 60);
@@ -441,8 +440,7 @@ async function main() {
   let check = checkparameter();
   // wenn alles okay ist, gehts los
   if (!check) {
-    // adapter.terminate ? adapter.terminate('Parameter missing') : adapter.log.error('Parameter missing');
-    adapter.log.error('Parameter missing');
+    adapter.terminate ? adapter.terminate('Parameter missing') : process.exit();
     return;
   }
   await lupusecAsync.deleteOldSates();
