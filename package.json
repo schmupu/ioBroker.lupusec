@@ -28,17 +28,17 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.4.0",
+    "cookie-parser": "^1.4.5",
     "ping": "^0.2.3",
     "request": "^2.88.2",
-    "request-promise": "^4.2.5",
-    "url": "^0.11.0",
+    "request-promise": "^4.2.6",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
-    "cookie-parser": "^1.4.5"
+    "url": "^0.11.0"
   },
   "devDependencies": {
-    "@iobroker/testing": "^2.2.0",
-    "@types/node": "^13.13.12",
+    "@iobroker/testing": "^2.3.0",
+    "@types/node": "^13.13.20",
     "axios": "^0.19.2",
     "chai": "^4.2.0",
     "gulp": "^4.0.2",
