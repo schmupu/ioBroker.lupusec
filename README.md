@@ -210,26 +210,6 @@ sudo chmod u+s `which ping`
 ### 1.1.0 (23.03.2019)
 * (Stübi) Totally redesign of the Lupusec adapter. Node 8 or higher is now required
 
-### 1.0.0 (22.12.2018)
-* (Stübi) Support js-controller compact mode
-* (Stübi) Changed core adapter
-* (Stübi) Add Light sensor (type 78)
-* (Stübi) Add Apple home alarm status
-* (Stübi) Add dimmer / relais (type 66)
-* (Stübi) Bugfixing and new status alarm_ex
-* (Stübi) Bugfixing and changing of the polling mechanism
-* (Stübi) password will be encrypted. Translation of configuration
-* (Stübi) add debug messages
-* (Stübi) Hue, room sensor, power switch added
-* (Stübi) Fixing error update function
-* (Stübi) Improvements and new add/del/update Object function
-* (Stübi) Changes of roles and icons added to devices
-* (Stübi) Wrong device description removed
-* (Stübi) RSSI Status an Device shutter (type 76) supported
-* (Stübi) Devices thermostat (type 79) and switch (type 48) supported
-* (Stübi) Directory widged deleted
-* (Stübi) Port can be added
-
 ## Planed
 Following things are planed in the future:
 * support more sensors / devices
