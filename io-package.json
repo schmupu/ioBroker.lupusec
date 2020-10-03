@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.2.9",
+        "version": "1.3.0",
         "news": {
+            "1.3.0": {
+                "en": "minimize CPU Load",
+                "de": "CPU-Auslastung minimieren",
+                "ru": "минимизировать загрузку процессора",
+                "pt": "minimizar a carga da CPU",
+                "nl": "minimaliseer de CPU-belasting",
+                "fr": "minimiser la charge du processeur",
+                "it": "ridurre al minimo il carico della CPU",
+                "es": "minimizar la carga de la CPU",
+                "pl": "zminimalizować obciążenie procesora",
+                "zh-cn": "最小化CPU负载"
+            },
             "1.2.9": {
                 "en": "Bugfixing",
                 "de": "Bugfixing",
