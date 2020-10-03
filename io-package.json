@@ -242,18 +242,6 @@
                 "es": "Rediseño ",
                 "pl": "Przeprojektowanie. ",
                 "zh-cn": "重新设计。"
-            },
-            "1.0.0": {
-                "en": "Support of compact mode",
-                "de": "Compact Mode Unterstütztung",
-                "ru": "Поддержка компактного режима",
-                "pt": "Suporte do modo compacto",
-                "nl": "Ondersteuning van de compacte modus",
-                "fr": "Prise en charge du mode compact",
-                "it": "Supporto della modalità compatta",
-                "es": "Soporte de modo compacto.",
-                "pl": "Obsługa trybu kompaktowego",
-                "zh-cn": "支持紧凑模式"
             }
         },
         "title": "Lupusec alarm system",
