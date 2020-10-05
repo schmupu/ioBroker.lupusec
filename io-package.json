@@ -280,6 +280,7 @@
         "enabled": true,
         "compact": true,
         "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
+        "localLink": "http://%alarm_host%:%alarm_port%",
         "keywords": [
             "lupusec",
             "burlgar alarm",
@@ -292,7 +293,7 @@
         "type": "alarm",
         "restartAdapters": [],
         "connectionType": "local",
-        "dataSource": "push",
+        "dataSource": "poll",
         "plugins": {
             "sentry": {
                 "dsn": "https://8a50c3e06fdb402d9e7b0ad5ae9f6400@sentry.iobroker.net/82",
