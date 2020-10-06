@@ -11,3 +11,4 @@ appveyor.yml
 package-lock.json
 .vscode
 video
+vscode-profile-*.cpuprofile

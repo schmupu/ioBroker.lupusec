@@ -14,7 +14,8 @@
                 "--debug",
                 "--force",
                 "--logs",
-                "--trace-warnings"
+                "--trace-warnings",
+                "--inspect-brk"
             ],
             "outputCapture": "std"
         },
