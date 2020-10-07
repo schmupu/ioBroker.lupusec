@@ -469,7 +469,7 @@ async function main() {
   await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceAllGet(), { loop: true }, 'deviceEdit', 10);
   if (adapter.config.webcam_providing) {
     // Starting Webcam 
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.getWebcamSnapshots(), { loop: true }, 'webcam', 60);
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.getWebcamSnapshots(), { loop: true }, 'webcam', 30);
   } else {
     // Delete Webcams
     let deviceid = 'webcams';
