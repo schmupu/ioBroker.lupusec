@@ -402,33 +402,44 @@ async function pingalarmAsync(host, out) {
   }
 }
 
+
 async function changeAdapterConfigAsync(polltime, changedate) {
+  let update = false;
+  let url = (adapter.config.alarm_https ? 'https://' : 'http://') + adapter.config.alarm_host + ':' + adapter.config.alarm_port;
   let id = 'system.adapter.' + adapter.namespace;
-  if (!changedate) {
-    changedate = new Date();
-  } else {
-    let pattern = /(\d{1,2})\.(\d{1,2})\.(\d{4})/;
-    changedate = new Date(changedate.replace(pattern, '$3-$2-$1'));
-  }
-  let unixtime = Math.round(changedate.getTime());
   try {
     let obj = await adapter.getForeignObjectAsync(id);
-    if (obj && obj.native) {
+    if (obj && obj.native && adapter.config.alarm_polltime < polltime) {
+      if (!changedate) {
+        changedate = new Date();
+      } else {
+        let pattern = /(\d{1,2})\.(\d{1,2})\.(\d{4})/;
+        changedate = new Date(changedate.replace(pattern, '$3-$2-$1'));
+      }
+      let unixtime = Math.round(changedate.getTime());
       let lastChange = new Date(obj.ts); // only for debuging Interesting
       lastChange.setHours(0, 0, 0);
       obj.ts = lastChange.getTime();
       if (obj.native.alarm_polltime != polltime && unixtime > obj.ts) {
         adapter.log.info('Changing poll time from ' + obj.native.alarm_polltime + ' sec. to ' + polltime + ' sec.');
         obj.native.alarm_polltime = polltime;
-        await adapter.setForeignObjectAsync(id, obj);
+        update = true;
       }
+    }
+    if (obj && obj.native && obj.native.alarmlink !== url) {
+      obj.native.alarmlink = url;
+      adapter.log.info('Changed LocalLink to ' + url);
+      update = true;
+    }
+    if (update) {
+      await adapter.setForeignObjectAsync(id, obj);
     }
   } catch (error) { /* */ }
 }
 
 async function main() {
   let pollsec = 0.10; // not faster allowed as every 200 ms
-  if (adapter.config.alarm_polltime < pollsec) await changeAdapterConfigAsync(pollsec);
+  await changeAdapterConfigAsync(pollsec);
   lupusecAsync = new LupusAync.Lupus(adapter, systemLanguage);
   let ping = await pingalarmAsync(adapter.config.alarm_host, true);
   if (!ping) {

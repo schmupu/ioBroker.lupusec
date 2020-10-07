@@ -280,7 +280,7 @@
         "enabled": true,
         "compact": true,
         "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
-        "localLink": "http://%alarm_host%:%alarm_port%",
+        "localLink": "%alarmlink%",
         "keywords": [
             "lupusec",
             "burlgar alarm",
@@ -328,7 +328,8 @@
         "webcam_providing": true,
         "nuki_doorsensor": "lupusec.0.devices.RF:XXXXXX.status_ex",
         "keys": [],
-        "sentry_enable": true
+        "sentry_enable": true,
+        "alarmlink": ""
     },
     "objects": [],
     "instanceObjects": []
