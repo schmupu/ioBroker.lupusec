@@ -405,7 +405,6 @@ async function pingalarmAsync(host, out) {
 
 async function changeAdapterConfigAsync(polltime, changedate) {
   let update = false;
-  let url = (adapter.config.alarm_https ? 'https://' : 'http://') + adapter.config.alarm_host + ':' + adapter.config.alarm_port;
   let id = 'system.adapter.' + adapter.namespace;
   try {
     let obj = await adapter.getForeignObjectAsync(id);
@@ -426,6 +425,8 @@ async function changeAdapterConfigAsync(polltime, changedate) {
         update = true;
       }
     }
+    let url = (adapter.config.alarm_https ? 'https://' : 'http://') + adapter.config.alarm_host;
+    url = adapter.config.alarm_port === 80 || adapter.config.alarm_port == 443 ? url : url + ':' + adapter.config.alarm_port;
     if (obj && obj.native && obj.native.alarmlink !== url) {
       obj.native.alarmlink = url;
       adapter.log.info('Changed LocalLink to ' + url);
@@ -460,6 +461,8 @@ async function main() {
   } else {
     adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
   }
+  adapter.config.alarm_tokentimeout = 60;
+  adapter.config.alarm_polltime = 0.25;
   let polltime = adapter.config.alarm_polltime;
   adapter.log.info('Polltime ' + polltime + ' sec.');
   await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListGet(), { loop: true }, 'deviceList', polltime);
