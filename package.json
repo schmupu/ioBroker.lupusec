@@ -38,9 +38,9 @@
   },
   "devDependencies": {
     "@iobroker/testing": "^2.4.2",
-    "@types/node": "^14.11.8",
-    "axios": "^0.20.0",
-    "chai": "^4.2.0",
+    "@types/node": "^14.14.25",
+    "axios": "^0.21.1",
+    "chai": "^4.3.0",
     "gulp": "^4.0.2",
     "kind-of": "^6.0.3",
     "mixin-deep": "^2.0.1",
