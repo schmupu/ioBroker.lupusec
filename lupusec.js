@@ -270,7 +270,24 @@ function startAdapter(options) {
             };
             await lupusecAsync.deviceEditMeterPost(form);
           }
-
+          // Univeral IR Controller
+          if (statusname && statusname.startsWith('mode_name_')) {
+            key = key.split('.').slice(0, -1).join('.');
+            let mode = statusname.replace('mode_name_', '');
+            form = {
+              id: key,
+              mode: mode
+            };
+            await lupusecAsync.deviceDoUPICPost(form);
+          }
+          // Univeral IR Controller
+          if (statusname === 'leds') {
+            form = {
+              id: key,
+              led: 'query'
+            };
+            await lupusecAsync.deviceDoUPICPost(form);
+          }
         }
       }
       if (id.startsWith(adapter.namespace + '.status.')) {
@@ -468,6 +485,7 @@ async function main() {
   await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListGet(), { loop: true }, 'deviceList', polltime);
   await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), { loop: true }, 'deviceListPSS', polltime);
   await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), { loop: true }, 'panelCond', polltime);
+  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListUPICGet(), { loop: true }, 'deviceListUPICGet', polltime);
   await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), { loop: true }, 'deviceEdit', 10);
   await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceAllGet(), { loop: true }, 'deviceEdit', 10);
   if (adapter.config.webcam_providing) {
@@ -505,6 +523,8 @@ async function main() {
   adapter.subscribeStates(adapter.namespace + '.status.apple_home_a1');
   adapter.subscribeStates(adapter.namespace + '.status.apple_home_a2');
   adapter.subscribeStates(adapter.namespace + '.devices.*.nuki_action');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.appliance*.mode_name*');
+  adapter.subscribeStates(adapter.namespace + '.devices.*.leds');
 }
 
 /**

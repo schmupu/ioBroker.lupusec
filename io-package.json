@@ -230,30 +230,6 @@
                 "es": "Añadir sensor de CO, luz y agua (v2)",
                 "pl": "Dodaj czujnik CO, ligth i wody (v2)",
                 "zh-cn": "添加CO，ligth和水（v2）传感器"
-            },
-            "1.1.1": {
-                "en": "Add status Lupusec online",
-                "de": "Status Lupusec online hinzufügen",
-                "ru": "Добавить статус Lupusec онлайн",
-                "pt": "Adicionar status Lupusec online",
-                "nl": "Voeg de status Lupusec online toe",
-                "fr": "Ajouter le statut Lupusec en ligne",
-                "it": "Aggiungi lo stato di Lupusec online",
-                "es": "Agregar estado Lupusec en línea",
-                "pl": "Dodaj status Lupusec online",
-                "zh-cn": "在线添加状态Lupusec"
-            },
-            "1.1.0": {
-                "en": "Redesign. Node 8 or higher is now required",
-                "de": "Neugestaltung. ",
-                "ru": "Редизайн. ",
-                "pt": "Redesenhar. ",
-                "nl": "Redesign. ",
-                "fr": "Refonte. ",
-                "it": "Riprogettare. ",
-                "es": "Rediseño ",
-                "pl": "Przeprojektowanie. ",
-                "zh-cn": "重新设计。"
             }
         },
         "title": "Lupusec alarm system",
