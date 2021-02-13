@@ -114,7 +114,7 @@ sudo chmod u+s `which ping`
 
 ## Changelog
 
-### 1.3.1-beta-1 (07.02.2021)
+### 1.3.1 (07.02.2021)
 * (Stübi) Add universal IR controller (type 52)
 
 ### 1.3.0 (03.10.2020)
