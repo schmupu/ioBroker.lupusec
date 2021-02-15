@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.3.2-beta-1",
+        "version": "1.3.2-beta-2",
         "news": {
-            "1.3.2-beta-1": {
+            "1.3.2-beta-2": {
                 "en": "Bugfixing",
                 "de": "Bugfixing",
                 "ru": "Исправление ошибок",
@@ -279,6 +279,8 @@
         "materialize": true,
         "enabled": true,
         "compact": true,
+        "messagebox": true,
+        "subscribe": "messagebox",
         "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
         "localLink": "%alarmlink%",
         "keywords": [

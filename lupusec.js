@@ -73,6 +73,32 @@ function startAdapter(options) {
     // adapter.log.info('objectChange ' + id + ' ' + JSON.stringify(obj));
   });
 
+  adapter.on('message', async (msg) => {
+    try {
+      let command = msg.command;
+      let parameter = msg.message;
+      let callback = msg.callback;
+      let valText = parameter.text;
+      let valNumber = parameter.number;
+      switch (command) {
+        case 'sms':
+          if (valText && valNumber) {
+            let form = {
+              phone: valNumber,
+              smstext: valText
+            };
+            await lupusecAsync.sendSMSPost(form);
+          }
+          break;
+        default:
+          break;
+      }
+      adapter.sendTo(msg.from, msg.command, msg.message, callback);
+    } catch (error) {
+      // 
+    }
+  });
+
   // is called if a subscribed state changes
   adapter.on('stateChange', async (id, state) => {
     if (id && state && !state.ack && lupusecAsync) {
@@ -322,10 +348,10 @@ function startAdapter(options) {
           let valNumber = await getStateValue(idNumber);
           await adapter.setStateAsync(idText, { val: valText, ack: true });
           await adapter.setStateAsync(idNumber, { val: valNumber, ack: true });
-          if (idText && idNumber) {
+          if (valText && valNumber) {
             let form = {
-              phone: await getStateValue(idNumber),
-              smstext: await getStateValue(idText),
+              phone: valNumber,
+              smstext: valText,
             };
             await lupusecAsync.sendSMSPost(form);
           }
