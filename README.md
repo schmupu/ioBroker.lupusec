@@ -114,6 +114,9 @@ sudo chmod u+s `which ping`
 
 ## Changelog
 
+### 1.3.2-beta-1 (14.02.2021)
+* (Stübi) Send SMS if you are using a sim card
+
 ### 1.3.1 (07.02.2021)
 * (Stübi) Add universal IR controller (type 52)
 

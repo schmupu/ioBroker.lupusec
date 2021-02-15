@@ -314,6 +314,23 @@ function startAdapter(options) {
           }
         }
       }
+      if (id.startsWith(adapter.namespace + '.sms.')) {
+        if (id === adapter.namespace + '.sms.dial') {
+          let idText = adapter.namespace + '.sms.text';
+          let idNumber = adapter.namespace + '.sms.number';
+          let valText = await getStateValue(idText);
+          let valNumber = await getStateValue(idNumber);
+          await adapter.setStateAsync(idText, { val: valText, ack: true });
+          await adapter.setStateAsync(idNumber, { val: valNumber, ack: true });
+          if (idText && idNumber) {
+            let form = {
+              phone: await getStateValue(idNumber),
+              smstext: await getStateValue(idText),
+            };
+            await lupusecAsync.sendSMSPost(form);
+          }
+        }
+      }
     }
   });
 
@@ -496,6 +513,8 @@ async function main() {
     let deviceid = 'webcams';
     adapter.deleteDevice(deviceid);
   }
+  await lupusecAsync.getSMSStatus();
+
   adapter.subscribeStates(adapter.namespace + '.devices.*.status_ex');
   adapter.subscribeStates(adapter.namespace + '.devices.*.hue');
   adapter.subscribeStates(adapter.namespace + '.devices.*.sat');
@@ -525,6 +544,7 @@ async function main() {
   adapter.subscribeStates(adapter.namespace + '.devices.*.nuki_action');
   adapter.subscribeStates(adapter.namespace + '.devices.*.appliance*.mode_name*');
   adapter.subscribeStates(adapter.namespace + '.devices.*.leds');
+  adapter.subscribeStates(adapter.namespace + '.sms.dial');
 }
 
 /**
