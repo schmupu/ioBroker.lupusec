@@ -122,7 +122,7 @@ sudo chmod u+s `which ping`
 
 ## Changelog
 
-### 1.3.2-beta-2 (14.02.2021)
+### 1.3.2 (14.02.2021)
 * (Stübi) Send SMS if you are using a sim card
 
 ### 1.3.1 (07.02.2021)
@@ -255,7 +255,7 @@ Following things are planed in the future:
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2019-2020 Thorsten Stueben <thorsten@stueben.de>
+Copyright (c) 2019-2021 Thorsten Stueben <thorsten@stueben.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
