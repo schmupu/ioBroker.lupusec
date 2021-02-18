@@ -463,12 +463,14 @@ async function pingalarmAsync(host, out) {
 }
 
 
-async function changeAdapterConfigAsync(polltime, changedate) {
+async function changeAdapterConfigAsync(changedate) {
+  let polltime = 0.10; // not faster allowed as every 200 ms
+  let tokentimeout = 1.00; // alarm_tokentimeout
   let update = false;
   let id = 'system.adapter.' + adapter.namespace;
   try {
     let obj = await adapter.getForeignObjectAsync(id);
-    if (obj && obj.native && adapter.config.alarm_polltime < polltime) {
+    if (obj && obj.native && (adapter.config.alarm_polltime < polltime || adapter.config.alarm_tokentimeout < tokentimeout)) {
       if (!changedate) {
         changedate = new Date();
       } else {
@@ -479,9 +481,14 @@ async function changeAdapterConfigAsync(polltime, changedate) {
       let lastChange = new Date(obj.ts); // only for debuging Interesting
       lastChange.setHours(0, 0, 0);
       obj.ts = lastChange.getTime();
-      if (obj.native.alarm_polltime != polltime && unixtime > obj.ts) {
+      if (obj.native.alarm_polltime < polltime && unixtime > obj.ts) {
         adapter.log.info('Changing poll time from ' + obj.native.alarm_polltime + ' sec. to ' + polltime + ' sec.');
         obj.native.alarm_polltime = polltime;
+        update = true;
+      }
+      if (obj.native.alarm_tokentimeout < tokentimeout && unixtime > obj.ts) {
+        adapter.log.info('Changing Tokentimeout from ' + obj.native.alarm_tokentimeout + ' sec. to ' + tokentimeout + ' sec.');
+        obj.native.alarm_tokentimeout = tokentimeout;
         update = true;
       }
     }
@@ -499,8 +506,7 @@ async function changeAdapterConfigAsync(polltime, changedate) {
 }
 
 async function main() {
-  let pollsec = 0.10; // not faster allowed as every 200 ms
-  await changeAdapterConfigAsync(pollsec);
+  await changeAdapterConfigAsync();
   lupusecAsync = new LupusAync.Lupus(adapter, systemLanguage);
   let ping = await pingalarmAsync(adapter.config.alarm_host, true);
   if (!ping) {
@@ -521,25 +527,41 @@ async function main() {
   } else {
     adapter.log.info('Connecting to Lupusec with http://' + adapter.config.alarm_host + ':' + adapter.config.alarm_port);
   }
-  adapter.config.alarm_tokentimeout = 60;
-  adapter.config.alarm_polltime = 0.25;
+  // adapter.config.alarm_tokentimeout = 60;
+  // adapter.config.alarm_polltime = 0.25;
   let polltime = adapter.config.alarm_polltime;
   adapter.log.info('Polltime ' + polltime + ' sec.');
+
+  await lupusecAsync.addToProcess(async () => {
+    await lupusecAsync.deviceListGet();
+    await lupusecAsync.devicePSSListGet();
+    await lupusecAsync.panelCondGet();
+    await lupusecAsync.deviceListUPICGet();
+    await lupusecAsync.deviceEditAllGet();
+    await lupusecAsync.deviceAllGet();
+    if (adapter.config.webcam_providing) await lupusecAsync.getWebcamSnapshots();
+  }, { loop: true }, 'all', polltime);
+  if (!adapter.config.webcam_providing) adapter.deleteDevice('webcams');
+  await lupusecAsync.getSMSStatus();
+
+  /*
   await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListGet(), { loop: true }, 'deviceList', polltime);
   await lupusecAsync.addToProcess(async () => await lupusecAsync.devicePSSListGet(), { loop: true }, 'deviceListPSS', polltime);
   await lupusecAsync.addToProcess(async () => await lupusecAsync.panelCondGet(), { loop: true }, 'panelCond', polltime);
   await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceListUPICGet(), { loop: true }, 'deviceListUPICGet', polltime);
-  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), { loop: true }, 'deviceEdit', 10);
-  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceAllGet(), { loop: true }, 'deviceEdit', 10);
+  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceEditAllGet(), { loop: true }, 'deviceEdit', 10 * polltime);
+  await lupusecAsync.addToProcess(async () => await lupusecAsync.deviceAllGet(), { loop: true }, 'deviceEdit', 10 * polltime);
   if (adapter.config.webcam_providing) {
     // Starting Webcam 
-    await lupusecAsync.addToProcess(async () => await lupusecAsync.getWebcamSnapshots(), { loop: true }, 'webcam', 30);
+    await lupusecAsync.addToProcess(async () => await lupusecAsync.getWebcamSnapshots(), { loop: true }, 'webcam', 30 * polltime);
   } else {
     // Delete Webcams
     let deviceid = 'webcams';
     adapter.deleteDevice(deviceid);
   }
   await lupusecAsync.getSMSStatus();
+  */
+
 
   adapter.subscribeStates(adapter.namespace + '.devices.*.status_ex');
   adapter.subscribeStates(adapter.namespace + '.devices.*.hue');
