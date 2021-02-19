@@ -258,5 +258,17 @@ systemDictionary = {
     "es": "Deje el último estado de alarma hasta que se desactive la alarma",
     "pl": "Pozostaw ostatni stan alarmu do momentu wyłączenia alarmu",
     "zh-cn": "保留最后一个警报状态，直到警报被禁用"
+  },
+  "Do not use function isEqual": {
+    "en": "Do not use function isEqual",
+    "de": "Verwenden Sie nicht die Funktion isEqual",
+    "ru": "Не используйте функцию isEqual",
+    "pt": "Não use a função isEqual",
+    "nl": "Gebruik de functie isGelijk niet",
+    "fr": "N'utilisez pas la fonction isEqual",
+    "it": "Non utilizzare la funzione isEqual",
+    "es": "No utilice la función isEqual",
+    "pl": "Nie używaj funkcji isEqual",
+    "zh-cn": "不要使用函数isEqual"
   }
 };
