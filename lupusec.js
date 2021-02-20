@@ -90,6 +90,15 @@ function startAdapter(options) {
             let result = await lupusecAsync.sendSMSPost(form);
           }
           break;
+        case 'smsgw':
+          if (valText && valNumber) {
+            let form = {
+              to: valNumber,
+              message: valText,
+            };
+            let result = await lupusecAsync.sendSMSgwTestPost(form);
+          }
+          break;
         default:
           break;
       }
@@ -345,18 +354,37 @@ function startAdapter(options) {
           let idText = adapter.namespace + '.sms.text';
           let idNumber = adapter.namespace + '.sms.number';
           let idResult = adapter.namespace + '.sms.result';
+          let idProvider = adapter.namespace + '.sms.provider';
           let valText = await getStateValue(idText);
           let valNumber = await getStateValue(idNumber);
+          let valProvider = await getStateValue(idProvider);
           await adapter.setStateAsync(idText, { val: valText, ack: true });
           await adapter.setStateAsync(idNumber, { val: valNumber, ack: true });
           await adapter.setStateAsync(idResult, { val: 2, ack: true });
+          await adapter.setStateAsync(idProvider, { val: valProvider, ack: true });
+          let form;
+          let result;
           if (valText && valNumber) {
-            let form = {
-              phone: valNumber,
-              smstext: valText,
-            };
-            let result = await lupusecAsync.sendSMSPost(form);
-            await adapter.setStateAsync(idResult, { val: result, ack: true });
+            switch (valProvider) {
+              case 1:
+                form = {
+                  phone: valNumber,
+                  smstext: valText,
+                };
+                result = await lupusecAsync.sendSMSPost(form);
+                await adapter.setStateAsync(idResult, { val: result, ack: true });
+                break;
+              case 2:
+                form = {
+                  to: valNumber,
+                  message: valText,
+                };
+                result = await lupusecAsync.sendSMSgwTestPost(form);
+                await adapter.setStateAsync(idResult, { val: result, ack: true });
+                break;
+              default:
+                break;
+            }
           }
         }
       }
