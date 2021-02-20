@@ -87,7 +87,7 @@ function startAdapter(options) {
               phone: valNumber,
               smstext: valText
             };
-            await lupusecAsync.sendSMSPost(form);
+            let result = await lupusecAsync.sendSMSPost(form);
           }
           break;
         default:
@@ -344,16 +344,19 @@ function startAdapter(options) {
         if (id === adapter.namespace + '.sms.dial') {
           let idText = adapter.namespace + '.sms.text';
           let idNumber = adapter.namespace + '.sms.number';
+          let idResult = adapter.namespace + '.sms.result';
           let valText = await getStateValue(idText);
           let valNumber = await getStateValue(idNumber);
           await adapter.setStateAsync(idText, { val: valText, ack: true });
           await adapter.setStateAsync(idNumber, { val: valNumber, ack: true });
+          await adapter.setStateAsync(idResult, { val: 2, ack: true });
           if (valText && valNumber) {
             let form = {
               phone: valNumber,
               smstext: valText,
             };
-            await lupusecAsync.sendSMSPost(form);
+            let result = await lupusecAsync.sendSMSPost(form);
+            await adapter.setStateAsync(idResult, { val: result, ack: true });
           }
         }
       }
