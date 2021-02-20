@@ -426,23 +426,6 @@ function checkparameter() {
   return true;
 }
 
-/*
-function pingalarmAsync(host, out) {
-  return new Promise((resolve, reject) => {
-    ping.sys.probe(host, (isAlive) => {
-      let msg = isAlive ? 'Lupusec Alarmsystem ' + host + ' is alive' : 'Lupusec Alarmsystem ' + host + ' is not reachable';
-      if (isAlive) {
-        if (out) adapter.log.info(msg);
-        resolve(true);
-      } else {
-        if (out) adapter.log.error(msg);
-        resolve(false);
-      }
-    });
-  });
-}
-*/
-
 async function pingalarmAsync(host, out) {
   try {
     let res = await ping.promise.probe(host);

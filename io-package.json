@@ -301,7 +301,7 @@
         "alarm_allstates": false,
         "alarm_tokentimeout": 60,
         "alarm_status": false,
-        "alarm_equal": false,
+        "alarm_equal": true,
         "webcam_bind": "0.0.0.0",
         "webcam_port": 7000,
         "webcam_providing": true,
