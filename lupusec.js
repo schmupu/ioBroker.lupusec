@@ -19,6 +19,25 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+async function setSystemAdapterValues(key, value) {
+  try {
+    value = value === true;
+    let id = 'system.adapter.' + adapter.namespace;
+    let state = await adapter.getForeignObjectAsync(id);
+    if (state && state.native[key] !== value) {
+      state.native[key] = value;
+      await adapter.setForeignObjectAsync(id, state);
+      adapter.log.info('Restarting Adapter because of changeing Config settings');
+      adapter.restart();
+      return true;
+    }
+  } catch (error) {
+    return false;
+  }
+  return false;
+}
+
+
 /**
  * Change the external Sentry Logging. After changing the Logging
  * the adapter restarts once
@@ -394,6 +413,7 @@ function startAdapter(options) {
   adapter.on('ready', async () => {
     try {
       adapter.log.info('Starting Adapter ' + adapter.namespace + ' in version ' + adapter.version);
+      if (await setSystemAdapterValues('alarm_equal', true)) return;
       if (await setSentryLogging(adapter.config.sentry_enable)) return;
       let obj = await adapter.getForeignObjectAsync('system.config');
       if (adapter.config.alarm_password) {
@@ -553,6 +573,7 @@ async function main() {
     await lupusecAsync.deviceListUPICGet();
     await lupusecAsync.deviceEditAllGet();
     await lupusecAsync.deviceAllGet();
+    await lupusecAsync.logsGetPost();
     if (adapter.config.webcam_providing) await lupusecAsync.getWebcamSnapshots();
   }, { loop: true }, 'all', polltime);
   if (!adapter.config.webcam_providing) adapter.deleteDevice('webcams');
