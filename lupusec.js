@@ -135,13 +135,15 @@ function startAdapter(options) {
         let m = regstatusex.exec(id);
         let idparent = id.split('.').slice(0, -1).join('.');
         let iddevice = id.split('.').slice(2, -1).join('.');
+        let area = await getStateValue(idparent + '.area');
+        let zone = await getStateValue(idparent + '.zone');
         if (m !== null) {
           let key = m[1]; // Device ID
           let statusname = m[2]; // statusname
           let status = state.val;
           let form = {};
           if (statusname === 'status_ex') {
-            status === false ? status = 0 : status = 1;
+            status = status === false ? 0 : 1;
             // PD Wert mitnehmen, falls vorhanden
             let idpd = idparent + '.pd';
             let pdstatus = 0;
@@ -310,8 +312,8 @@ function startAdapter(options) {
             if (statusname === 'bypass') statusname = 'scond_bypass';
             form = {
               id: key,
-              sarea: await getStateValue(idparent + '.area'),
-              szone: await getStateValue(idparent + '.zone'),
+              sarea: area,
+              szone: zone,
             };
             form[statusname] = status;
             await lupusecAsync.deviceEditPost(form);
