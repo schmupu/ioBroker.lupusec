@@ -138,21 +138,6 @@ function startAdapter(options) {
           let iddevice = id.split('.').slice(2, -1).join('.'); //  devices.ZS:a61d01
           let area = await getStateValue(idparent + '.area');  // 1 or 2
           let zone = await getStateValue(idparent + '.zone');  // for example 0,1,2, ...
-          let object = await adapter.getObjectAsync(id);
-          // react workaround because of wrong format
-          if (object) {
-            switch (object.common.type) {
-              case 'boolean':
-                if (typeof state.val === 'string' && state.val === 'false') state.val = false;
-                if (typeof state.val === 'string' && state.val === 'true') state.val = true;
-                break;
-              case 'number':
-                if (typeof state.val === 'string') state.val = Number(state.val);
-                break;
-              default:
-                break;
-            }
-          }
           if (m !== null) {
             let key = m[1]; // Device ID - ZS:a61d01
             let statusname = m[2]; // statusname - pd
@@ -170,12 +155,18 @@ function startAdapter(options) {
               } catch (error) {
                 // 
               }
+              /*
               form = {
                 id: key,
                 pd: pdstatus,
                 switch: status
               };
               await lupusecAsync.deviceSwitchPSSPost(form);
+              */
+              form = {
+                exec: 'a=' + area + '&z=' + zone + '&pd=' + ( pdstatus == 0 ? '' : pdstatus ) + '&sw=' + ( status > 0 ? 'on' : 'off' )
+              };
+              await lupusecAsync.haExecutePost(form);
             }
             if (statusname === 'level') {
               // erst nach 500 ms ausführen, falls sich wert noch ändert!
