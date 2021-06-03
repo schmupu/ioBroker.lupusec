@@ -230,30 +230,6 @@
                 "es": "Mejora del soporte de webcam",
                 "pl": "Ulepszenie obsługi kamery internetowej",
                 "zh-cn": "增强网络摄像头支持"
-            },
-            "1.1.6": {
-                "en": "New features. See readme",
-                "de": "Neue Eigenschaften. ",
-                "ru": "Новые возможности. ",
-                "pt": "Novas características. ",
-                "nl": "Nieuwe functies. ",
-                "fr": "Nouvelles fonctionnalités. ",
-                "it": "Nuove caratteristiche. ",
-                "es": "Nuevas características. ",
-                "pl": "Nowe funkcje. ",
-                "zh-cn": "新功能。"
-            },
-            "1.1.5": {
-                "en": "Add buttons for Scenario Switch V2 and Bugfixing",
-                "de": "Buttons für Scenario Switch V2 hinzugefügt und Bugfixing",
-                "ru": "Добавьте кнопки для Scenario Switch V2 и исправления ошибок",
-                "pt": "Adicionar botões para o Scenario Switch V2 e Bugfixing",
-                "nl": "Voeg knoppen toe voor Scenario Switch V2 en Bugfixing",
-                "fr": "Ajout de boutons pour Scenario Switch V2 et correction de bugs",
-                "it": "Aggiungi pulsanti per Scenario Switch V2 e Bugfixing",
-                "es": "Añadir botones para el cambio de escenario V2 y corrección de errores",
-                "pl": "Dodaj przyciski przełącznika scenariuszy V2 i naprawiania błędów",
-                "zh-cn": "添加Scenario Switch V2和Bugfixing的按钮"
             }
         },
         "title": "Lupusec alarm system",
