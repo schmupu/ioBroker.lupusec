@@ -270,5 +270,19 @@ systemDictionary = {
     "es": "No utilice la función isEqual",
     "pl": "Nie używaj funkcji isEqual",
     "zh-cn": "不要使用函数isEqual"
+  },
+  {
+    "Less CPU usage, but slower update of objects": {
+      "en": "Less CPU usage, but slower update of objects",
+      "de": "Geringerer CPU Verbrauch, aber langsame Aktualisierung der Objekte",
+      "ru": "Меньше загрузка ЦП, но более медленное обновление объектов",
+      "pt": "Menos uso de CPU, mas atualização mais lenta de objetos",
+      "nl": "Minder CPU-gebruik, maar langzamere update van objecten",
+      "fr": "Moins d'utilisation du processeur, mais mise à jour des objets plus lente",
+      "it": "Meno utilizzo della CPU, ma aggiornamento più lento degli oggetti",
+      "es": "Menor uso de CPU, pero actualización de objetos más lenta",
+      "pl": "Mniejsze zużycie procesora, ale wolniejsza aktualizacja obiektów",
+      "zh-cn": "CPU 使用率较低，但对象更新速度较慢"
+    }
   }
 };
