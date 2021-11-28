@@ -428,7 +428,6 @@ function startAdapter(options) {
   adapter.on('ready', async () => {
     try {
       adapter.log.info('Starting Adapter ' + adapter.namespace + ' in version ' + adapter.version);
-      if (await setSystemAdapterValues('alarm_equal', true)) return;
       if (await setSentryLogging(adapter.config.sentry_enable)) return;
       let obj = await adapter.getForeignObjectAsync('system.config');
       if (adapter.config.alarm_password) {
