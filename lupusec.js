@@ -379,13 +379,16 @@ function startAdapter(options) {
         }
         if (id.startsWith(adapter.namespace + '.sms.')) {
           if (id === adapter.namespace + '.sms.dial') {
+            let idDial = adapter.namespace + '.sms.dial';
             let idText = adapter.namespace + '.sms.text';
             let idNumber = adapter.namespace + '.sms.number';
             let idResult = adapter.namespace + '.sms.result';
             let idProvider = adapter.namespace + '.sms.provider';
+            let valDial = await getStateValue(idDial);
             let valText = await getStateValue(idText);
             let valNumber = await getStateValue(idNumber);
             let valProvider = await getStateValue(idProvider);
+            await adapter.setStateAsync(idDial, { val: valDial, ack: true });
             await adapter.setStateAsync(idText, { val: valText, ack: true });
             await adapter.setStateAsync(idNumber, { val: valNumber, ack: true });
             await adapter.setStateAsync(idResult, { val: 2, ack: true });
