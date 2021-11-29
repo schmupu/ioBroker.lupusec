@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "lupusec",
-        "version": "1.3.6-beta5",
+        "version": "1.3.6-beta6",
         "news": {
-            "1.3.6-beta5": {
+            "1.3.6-beta6": {
                 "en": "Bugfixing",
                 "de": "Bugfixing",
                 "ru": "Исправление ошибок",
@@ -312,7 +312,6 @@
         "alarm_polltime": 1,
         "alarm_allstates": false,
         "alarm_tokentimeout": 60,
-        "alarm_cpu": false,
         "webcam_bind": "0.0.0.0",
         "webcam_port": 7000,
         "webcam_providing": true,
