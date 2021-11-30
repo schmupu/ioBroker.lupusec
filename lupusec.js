@@ -155,14 +155,6 @@ function startAdapter(options) {
               } catch (error) {
                 // 
               }
-              /*
-              form = {
-                id: key,
-                pd: pdstatus,
-                switch: status
-              };
-              await lupusecAsync.deviceSwitchPSSPost(form);
-              */
               form = {
                 exec: 'a=' + area + '&z=' + zone + '&pd=' + ( pdstatus == 0 ? '' : pdstatus ) + '&sw=' + ( status > 0 ? 'on' : 'off' )
               };
@@ -581,6 +573,9 @@ async function main() {
   adapter.log.info('Polltime ' + polltime + ' sec.');
 
   await lupusecAsync.addToProcess(async () => {
+    /*
+    await lupusecAsync.deviceGet();
+    */
     await lupusecAsync.deviceListGet();
     await lupusecAsync.devicePSSListGet();
     await lupusecAsync.panelCondGet();
