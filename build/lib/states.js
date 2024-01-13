@@ -171,9 +171,6 @@ class States {
       id = id.replace(`${this.adapter.namespace}.`, "");
     if (((_a = object == null ? void 0 : object.common) == null ? void 0 : _a.name) || ((_b = object == null ? void 0 : object.common) == null ? void 0 : _b.states)) {
       const objectold = await this.getObjectAsync(id);
-      if (object.common.name === "%value%") {
-        const a = 1;
-      }
       if (!objectold || !tools.hasProperty(objectold, "common") || !tools.hasProperty(objectold.common, "name") || !tools.isEqual(objectold.common.name, object.common.name) || !tools.isEqual(objectold.common.states, object.common.states) || !tools.isEqual(objectold.common.statusStates, object.common.statusStates)) {
         return await this.setObjectAsync(id, object, options);
       }
@@ -182,9 +179,6 @@ class States {
   }
   async setObjectAsync(id, object, options) {
     if (id) {
-      if (object.common.name === "%value%") {
-        const a = 1;
-      }
       id = id.replace(`${this.adapter.namespace}.`, "");
       if (this.saveobjects)
         this.objects[id] = object;

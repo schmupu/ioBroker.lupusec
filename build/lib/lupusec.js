@@ -496,13 +496,14 @@ class Lupusec {
         }
       }
       if (type === 57) {
-        if (name === "nuki_state" && states.nuki) {
+        if (name === "nuki_state" && states.nuki !== void 0) {
           for (const i in this.adapter.config.nuki_doorsensors) {
             const nuki = this.adapter.config.nuki_doorsensors[i].nuki;
             const door = this.adapter.config.nuki_doorsensors[i].door;
             if (id === nuki && door) {
               const doorvalue = (_c = await this.states.getStateAsync(`devices.${door}.status_ex`)) == null ? void 0 : _c.val;
-              value = states.nuki === 3 && doorvalue === true ? 0 : states.nuki;
+              const valuenuki = Number(states.nuki);
+              value = valuenuki === 3 && doorvalue === true ? 0 : valuenuki;
               break;
             }
           }
