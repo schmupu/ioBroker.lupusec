@@ -2951,6 +2951,11 @@ export function getDeviceIconByDeviceType(devicetype: number): string | undefine
     return icon;
 }
 
+/**
+ *
+ * @param devicetype type of lupsec alarm system like 57
+ * @returns name of type. for example Nuki
+ */
 export function getDeviceNameByDeviceType(devicetype: number): string | undefined {
     const deviceTypes = getDeviceTypes();
     if (devicetype === undefined) return;
