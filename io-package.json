@@ -157,8 +157,8 @@
             "common": {
                 "icon": "/icons/sms.png",
                 "name": {
-                    "en": "sms",
-                    "de": "sms"
+                    "en": "SMS",
+                    "de": "SMS"
                 }
             },
             "native": {}
@@ -169,7 +169,7 @@
             "common": {
                 "icon": "/icons/webcam.png",
                 "name": {
-                    "en": "webcam alarmsystems",
+                    "en": "Webcam alarmsystems",
                     "de": "Webcam Alarmanlage"
                 }
             },

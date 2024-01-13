@@ -1329,10 +1329,10 @@ export class Lupusec {
                 const val: any = objects[dp];
                 if (this.adapter.config.option_pollfaster) {
                     promisearray.push(async () => {
-                        await this.createObjectSetStates('devices.' + id, dp, devicemappend[dp], unixtime, val, cname);
+                        await this.createObjectSetStates(idc, dp, devicemappend[dp], unixtime, val, cname);
                     });
                 } else {
-                    await this.createObjectSetStates('devices.' + id, dp, devicemappend[dp], unixtime, val, cname);
+                    await this.createObjectSetStates(idc, dp, devicemappend[dp], unixtime, val, cname);
                 }
             }
         }
@@ -1344,6 +1344,7 @@ export class Lupusec {
         const zentrale = results.zentrale;
         const unixtime = results.unixtime;
         const promisearray = [];
+        const idc = 'status';
         const objects = datapoints.getStatusTypeList(this.language);
         // Add owen (missing) datapoints
         for (const dp in objects) {
@@ -1353,16 +1354,15 @@ export class Lupusec {
         }
         // Daten erweitern
         const zentralemapped = await this.zentrale_mapping_all(zentrale);
-        const cname = (await this.states.getObjectAsync('status'))?.common?.name;
+        const cname = (await this.states.getObjectAsync(idc))?.common?.name;
         for (const dp in objects) {
             if (this.adapter.config.option_pollfaster) {
                 promisearray.push(
-                    async () =>
-                        await this.createObjectSetStates('status', dp, zentralemapped[dp], unixtime, objects[dp]),
+                    async () => await this.createObjectSetStates(idc, dp, zentralemapped[dp], unixtime, objects[dp]),
                     cname,
                 );
             } else {
-                await this.createObjectSetStates('status', dp, zentralemapped[dp], unixtime, objects[dp], cname);
+                await this.createObjectSetStates(idc, dp, zentralemapped[dp], unixtime, objects[dp], cname);
             }
         }
         if (promisearray) await Promise.all(promisearray.map(async (func) => await func()));
@@ -1380,13 +1380,14 @@ export class Lupusec {
                 sms[dp] = (await this.states.getStateAsync(`${idc}.${dp}`))?.val;
             }
         }
+        const cname = (await this.states.getObjectAsync(idc))?.common?.name;
         for (const dp in objects) {
             if (this.adapter.config.option_pollfaster) {
                 promisearray.push(
-                    async () => await this.createObjectSetStates('sms', dp, sms[dp], unixtime, objects[dp]),
+                    async () => await this.createObjectSetStates(idc, dp, sms[dp], unixtime, objects[dp], cname),
                 );
             } else {
-                await this.createObjectSetStates('sms', dp, sms[dp], unixtime, objects[dp]);
+                await this.createObjectSetStates(idc, dp, sms[dp], unixtime, objects[dp], cname);
             }
         }
         if (promisearray) await Promise.all(promisearray.map(async (func) => await func()));
