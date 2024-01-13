@@ -1,4 +1,4 @@
-![Logo](admin/lupusec.png)
+![Logo](admin/icons/lupusec.png)
 
 # ioBroker.lupusec
 

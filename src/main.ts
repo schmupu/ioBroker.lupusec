@@ -17,7 +17,7 @@ class Lupusec extends utils.Adapter {
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
             ...options,
-            name: 'lupusec', // test
+            name: 'lupusec',
         });
         this.onlineCheckAvailable = false;
         this.onlineCheckTimeout = undefined;

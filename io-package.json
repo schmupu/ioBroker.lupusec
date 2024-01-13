@@ -58,7 +58,7 @@
         "main": "build/main.js",
         "icon": "icons/lupusec.png",
         "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/main/admin/icon/lupusec.png",
+        "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/main/admin/icons/lupusec.png",
         "readme": "https://github.com/schmupu/ioBroker.lupusec/blob/main/README.md",
         "loglevel": "info",
         "messagebox": true,
