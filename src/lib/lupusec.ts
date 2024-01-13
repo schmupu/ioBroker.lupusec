@@ -156,7 +156,7 @@ export class Lupusec {
     }
 
     /**
-     * does proczess with id exist
+     * does process with id exist
      * @param id unique name  / key of the process
      * @returns exist true/false
      */
@@ -165,12 +165,25 @@ export class Lupusec {
     }
 
     /**
+     * set process with value
+     * @param id unique name  / key of the process
+     * @param val value is timmer of setTimeout
+     */
+    private setproc(id: string, val: ioBroker.Timeout): void {
+        this.run[id] = val;
+    }
+
+    /**
      * List of all processes to start
      */
     public async startallproc(): Promise<void> {
         this.adapter.log.debug(`Starting Lupsuec polling process`);
         const seconds = this.adapter.config.alarm_polltime;
-        await this.requestToken(true);
+        if (!this.exsitproc('Init')) {
+            await this.initObjects();
+            await this.requestToken(true);
+            this.setproc('Init', 1 as ioBroker.Timeout);
+        }
         if (!this.exsitproc('Status')) {
             await this.startproc('Status', seconds > 1 ? seconds : 1, async () => {
                 await this.getAllStatusLupusecEntries();
@@ -304,6 +317,25 @@ export class Lupusec {
             }
         }
         return deviceids;
+    }
+
+    private async initObjects(): Promise<void> {
+        const deviceids = await this.getDeviceIdsByType();
+        for (const i in deviceids) {
+            const type = deviceids[i].type;
+            const objects = datapoints.getDeviceTypeList(type, this.language);
+            for (const j in objects) {
+                const id = `devices.${deviceids[i].id}.${j}`;
+                const oldobject = await this.states.getObjectAsync(id);
+                if (oldobject) {
+                    const newobject = {
+                        ...oldobject,
+                        ...objects[j],
+                    };
+                    await this.states.setObjectAsync(id, newobject);
+                }
+            }
+        }
     }
 
     /**
@@ -1152,6 +1184,7 @@ export class Lupusec {
         if (typeof object.common.name === 'string' && object.common.name.indexOf('%value%') !== -1) {
             object.common.name = value !== undefined ? object.common.name.replace('%value%', value) : undefined;
         }
+        /*
         if (devicename) {
             if (typeof object.common.name === 'string') {
                 object.common.name = object.common.name ? `${devicename} (${object.common.name})` : devicename;
@@ -1163,6 +1196,7 @@ export class Lupusec {
                 }
             }
         }
+        */
         await this.states.setObjectNotExistsAsync(sid, {
             type: object.type,
             common: object.common,

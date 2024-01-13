@@ -222,7 +222,8 @@ export class States {
                 !tools.hasProperty(objectold, 'common') ||
                 !tools.hasProperty(objectold.common, 'name') ||
                 !tools.isEqual(objectold.common.name, object.common.name) ||
-                !tools.isEqual(objectold.common.states, object.common.states)
+                !tools.isEqual(objectold.common.states, object.common.states) ||
+                !tools.isEqual(objectold.common.statusStates, object.common.statusStates)
             ) {
                 return await this.setObjectAsync(id, object, options);
             }

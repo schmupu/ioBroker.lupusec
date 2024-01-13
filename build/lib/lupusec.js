@@ -146,10 +146,17 @@ class Lupusec {
   exsitproc(id) {
     return this.run[id] ? true : false;
   }
+  setproc(id, val) {
+    this.run[id] = val;
+  }
   async startallproc() {
     this.adapter.log.debug(`Starting Lupsuec polling process`);
     const seconds = this.adapter.config.alarm_polltime;
-    await this.requestToken(true);
+    if (!this.exsitproc("Init")) {
+      await this.initObjects();
+      await this.requestToken(true);
+      this.setproc("Init", 1);
+    }
     if (!this.exsitproc("Status")) {
       await this.startproc("Status", seconds > 1 ? seconds : 1, async () => {
         await this.getAllStatusLupusecEntries();
@@ -224,6 +231,24 @@ class Lupusec {
       }
     }
     return deviceids;
+  }
+  async initObjects() {
+    const deviceids = await this.getDeviceIdsByType();
+    for (const i in deviceids) {
+      const type = deviceids[i].type;
+      const objects = datapoints.getDeviceTypeList(type, this.language);
+      for (const j in objects) {
+        const id = `devices.${deviceids[i].id}.${j}`;
+        const oldobject = await this.states.getObjectAsync(id);
+        if (oldobject) {
+          const newobject = {
+            ...oldobject,
+            ...objects[j]
+          };
+          await this.states.setObjectAsync(id, newobject);
+        }
+      }
+    }
   }
   getAppleStautusFromLupusec(mode_pc_a, alarm_ex) {
     let alarm = void 0;
@@ -1016,15 +1041,6 @@ class Lupusec {
     }
     if (typeof object.common.name === "string" && object.common.name.indexOf("%value%") !== -1) {
       object.common.name = value !== void 0 ? object.common.name.replace("%value%", value) : void 0;
-    }
-    if (devicename) {
-      if (typeof object.common.name === "string") {
-        object.common.name = object.common.name ? `${devicename} (${object.common.name})` : devicename;
-      } else if (typeof object.common.name === "object") {
-        for (const language in object.common.name) {
-          object.common.name[language] = object.common.name[language] ? `${devicename} (${object.common.name[language]})` : devicename;
-        }
-      }
     }
     await this.states.setObjectNotExistsAsync(sid, {
       type: object.type,

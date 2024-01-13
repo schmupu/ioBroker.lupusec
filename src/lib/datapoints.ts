@@ -2495,8 +2495,8 @@ function getStatusDatapoints(): defStatusDatapoints {
                 type: 'number',
                 role: 'level',
                 name: {
-                    de: 'Status alarmsystem (Modus Area 1)',
-                    en: 'Status Alarmanlage (Modus Area 1)',
+                    de: 'Modus Area 1',
+                    en: 'Modus Area 1',
                 },
                 icon: '/icons/zentrale.png',
                 read: true,
@@ -2515,8 +2515,8 @@ function getStatusDatapoints(): defStatusDatapoints {
                 type: 'number',
                 role: 'level',
                 name: {
-                    en: 'Status alarmsystem (Apple Home 1)',
-                    de: 'Status Alarmanlage (Apple Home 1)',
+                    en: 'Apple Home 1',
+                    de: 'Apple Home 1',
                 },
                 icon: '/icons/zentrale.png',
                 read: true,
@@ -2535,8 +2535,8 @@ function getStatusDatapoints(): defStatusDatapoints {
                 type: 'number',
                 role: 'level',
                 name: {
-                    de: 'Status alarmsystem (Modus Area 2)',
-                    en: 'Status Alarmanlage (Modus Area 2)',
+                    de: 'Modus Area 2',
+                    en: 'Modus Area 2',
                 },
                 icon: '/icons/zentrale.png',
                 read: true,
@@ -2555,8 +2555,8 @@ function getStatusDatapoints(): defStatusDatapoints {
                 type: 'number',
                 role: 'level',
                 name: {
-                    en: 'Status alarmsystem (Apple Home 2)',
-                    de: 'Status Alarmanlage (Apple Home 2)',
+                    en: 'Apple Home 2',
+                    de: 'Apple Home 2',
                 },
                 icon: '/icons/zentrale.png',
                 read: true,
@@ -2575,8 +2575,8 @@ function getStatusDatapoints(): defStatusDatapoints {
                 type: 'number',
                 role: 'sensor.alarm',
                 name: {
-                    en: 'Status alarmsystem (Alarm Status)',
-                    de: 'Status Alarmanlage (Alarm Status)',
+                    en: 'Alarm Status',
+                    de: 'Alarm Status',
                 },
                 icon: '/icons/zentrale.png',
                 read: true,
@@ -2595,8 +2595,8 @@ function getStatusDatapoints(): defStatusDatapoints {
                 type: 'number',
                 role: 'value',
                 name: {
-                    en: 'Status alarmsystem (Door contact open)',
-                    de: 'Status Alarmanlage (Tür-/Fensterkontakte)',
+                    en: 'Door contact open',
+                    de: 'Tür-/Fensterkontakte',
                 },
                 icon: '/icons/zentrale.png',
                 read: true,
@@ -2615,8 +2615,8 @@ function getStatusDatapoints(): defStatusDatapoints {
                 type: 'number',
                 role: 'value',
                 name: {
-                    en: 'Status alarmsystem (Emergency power battery)',
-                    de: 'Status Alarmanlage (Notstrombatterie)',
+                    en: 'Emergency power battery',
+                    de: 'Notstrombatterie',
                 },
                 icon: '/icons/zentrale.png',
                 read: true,
@@ -2635,8 +2635,8 @@ function getStatusDatapoints(): defStatusDatapoints {
                 type: 'number',
                 role: 'value',
                 name: {
-                    en: 'Status alarmsystem (Sabotage)',
-                    de: 'Status Alarmanlage (Sabotage)',
+                    en: 'Sabotage',
+                    de: 'Sabotage',
                 },
                 icon: '/icons/zentrale.png',
                 read: true,
@@ -2655,8 +2655,8 @@ function getStatusDatapoints(): defStatusDatapoints {
                 type: 'number',
                 role: 'value',
                 name: {
-                    en: 'Status alarmsystem (Radio interference)',
-                    de: 'Status Alarmanlage (Funkstörungen)',
+                    en: 'Radio interference',
+                    de: 'Funkstörungen',
                 },
                 icon: '/icons/zentrale.png',
                 read: true,
@@ -2675,8 +2675,8 @@ function getStatusDatapoints(): defStatusDatapoints {
                 type: 'number',
                 role: 'value',
                 name: {
-                    en: 'Status alarmsystem (Power supply)',
-                    de: 'Status Alarmanlage (Netzteil)',
+                    en: 'Power supply',
+                    de: 'Netzteil',
                 },
                 icon: '/icons/zentrale.png',
                 read: true,
@@ -2695,8 +2695,8 @@ function getStatusDatapoints(): defStatusDatapoints {
                 type: 'number',
                 role: 'value',
                 name: {
-                    en: 'Status alarmsystem (Rssi)',
-                    de: 'Status Alarmanlage (Rssi)',
+                    en: 'Rssi',
+                    de: 'Rssi',
                 },
                 icon: '/icons/zentrale.png',
                 read: true,
@@ -2711,8 +2711,8 @@ function getStatusDatapoints(): defStatusDatapoints {
                 type: 'boolean',
                 role: 'value',
                 name: {
-                    en: 'Status alarmsystem (Device reachable)',
-                    de: 'Status Alarmanlage (Gerät erreichbar)',
+                    en: 'Device reachable',
+                    de: 'Gerät erreichbar',
                 },
                 icon: '/icons/zentrale.png',
                 states: {
@@ -2729,8 +2729,8 @@ function getStatusDatapoints(): defStatusDatapoints {
                 type: 'number',
                 role: 'value',
                 name: {
-                    en: 'Status alarmsystem (GSM Signal)',
-                    de: 'Status Alarmanlage (GSM Signal)',
+                    en: 'GSM Signal',
+                    de: 'GSM Signal',
                 },
                 icon: '/icons/zentrale.png',
                 read: true,
@@ -2755,7 +2755,7 @@ function getSmsDatapoints(): defSmsDatapoints {
                 type: 'string',
                 role: 'state',
                 name: {
-                    en: 'Status alarmsystem (Phone Number',
+                    en: 'Phone Number',
                     de: 'Telefonnumer',
                 },
                 icon: '/icons/sms.png',
@@ -2770,7 +2770,7 @@ function getSmsDatapoints(): defSmsDatapoints {
                 type: 'string',
                 role: 'state',
                 name: {
-                    en: 'Status alarmsystem (SMS Text',
+                    en: 'SMS Text',
                     de: 'SMS Text',
                 },
                 icon: '/icons/sms.png',
@@ -2785,7 +2785,7 @@ function getSmsDatapoints(): defSmsDatapoints {
                 type: 'boolean',
                 role: 'button',
                 name: {
-                    en: 'Status alarmsystem (Send SMS',
+                    en: 'Send SMS',
                     de: 'SMS senden',
                 },
                 icon: '/icons/sms.png',
@@ -2800,7 +2800,7 @@ function getSmsDatapoints(): defSmsDatapoints {
                 type: 'number',
                 role: 'value',
                 name: {
-                    en: 'Status alarmsystem (Sent Result',
+                    en: 'Sent Result',
                     de: 'Rückmeldung',
                 },
                 states: {
@@ -2819,7 +2819,7 @@ function getSmsDatapoints(): defSmsDatapoints {
                 type: 'number',
                 role: 'state',
                 name: {
-                    de: 'Status alarmsystem (Provider',
+                    de: 'Provider',
                     en: 'Provider',
                 },
                 icon: '/icons/sms.png',
