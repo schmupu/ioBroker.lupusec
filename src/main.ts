@@ -234,7 +234,7 @@ class Lupusec extends utils.Adapter {
     }
 
     /**
-     * Starts the polling of the states from the Lupusec alarm system
+     * Starts the polling of the states from the Lupusec alarm system.
      */
     async startLupuscecAdapter(): Promise<void> {
         const lupusec = await Lupus.Lupusec.getInstance(this);
