@@ -1,0 +1,21 @@
+{
+    "IP or hostname of your Lupusec alarm system (alternativ with port)": "IP або ім'я хоста вашої системи сигналізації Lupusec (альтернатива з портом)",
+    "Lupusec adapter settings": "Налаштування адаптера для Lupusec",
+    "Main Settings": "Основні налаштування",
+    "Username": "Ім'я користувача",
+    "Password": "Пароль",
+    "Polltime in seconds": "Час опитування в секундах",
+    "Read faster new Status (higher CPU workload, needs more memory)": "Читайте швидше новий статус (вище робоче навантаження на процесор, потрібно більше пам’яті)",
+    "Webcam Settings": "Налаштування веб-камери",
+    "Provide Lupusec Webcams": "Надайте веб-камери Lupusec",
+    "Webcam Listen IP": "Веб-камера Слухайте IP",
+    "Webcam Listen Port": "Порт прослуховування веб-камери",
+    "Nuki Settings": "Налаштування Nuki",
+    "Nuki connection to door/windows devices": "Підключення Nuki до дверних/віконних пристроїв",
+    "Nuki devices": "Апарати Nuki",
+    "Door devices": "Дверні пристрої",
+    "Choose your door device": "Виберіть пристрій дверей",
+    "Choose your Nuki device": "Виберіть свій пристрій Nuki",
+    "Main_Settings": "Основні налаштування",
+    "test-iob adapter settings": "Налаштування адаптера для test-iob"
+}

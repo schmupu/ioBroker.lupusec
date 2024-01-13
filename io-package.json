@@ -1,0 +1,180 @@
+{
+    "common": {
+        "name": "lupusec",
+        "version": "2.0.0",
+        "tier": 3,
+        "news": {
+            "2.0.0": {
+                "en": "Redesign ",
+                "de": "Redesign",
+                "ru": "Redesign",
+                "pt": "Rede de Rede",
+                "nl": "Herontwerp",
+                "fr": "Reconception",
+                "it": "Riprogetto",
+                "es": "Rediseño",
+                "pl": "Przeredagowanie",
+                "uk": "Редизайн",
+                "zh-cn": "重新设计"
+            }
+        },
+        "title": "Lupusec alarm system",
+        "titleLang": {
+            "en": "Lupusec alarm system",
+            "de": "Lupusec-Alarmsystem",
+            "ru": "Система сигнализации Лупусек",
+            "pt": "Sistema de alarme Lupusec",
+            "nl": "Lupusec-alarmsysteem",
+            "fr": "Système d'alarme Lupusec",
+            "it": "Sistema di allarme Lupusec",
+            "es": "sistema de alarma lupusec",
+            "pl": "System alarmowy Lupusec",
+            "uk": "Сигналізація Lupusec",
+            "zh-cn": "卢普塞克报警系统"
+        },
+        "desc": {
+            "en": "Lupusec alarm system (TS)",
+            "de": "Lupusec-Alarmsystem (TS)",
+            "ru": "Система сигнализации Lupusec (TS)",
+            "pt": "Sistema de alarme Lupusec (TS)",
+            "nl": "Lupusec alarmsysteem (TS)",
+            "fr": "Système d'alarme Lupusec (TS)",
+            "it": "Sistema di allarme Lupusec (TS)",
+            "es": "Sistema de alarma Lupusec (TS)",
+            "pl": "System alarmowy Lupusec (TS)",
+            "uk": "Сигналізація Lupusec (TS)",
+            "zh-cn": "Lupusec 报警系统 (TS)"
+        },
+        "authors": ["Thorsten Stueben <thorsten@stueben.de>"],
+        "keywords": ["lupusec", "burlgar alarm", "alarm system", "lupus", "iobroker"],
+        "localLinks": {
+            "_default": {
+                "link": "%alarmlink%",
+                "pro": true
+            }
+        },
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "build/main.js",
+        "icon": "icons/lupusec.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/main/admin/icon/lupusec.png",
+        "readme": "https://github.com/schmupu/ioBroker.lupusec/blob/main/README.md",
+        "loglevel": "info",
+        "messagebox": true,
+        "mode": "daemon",
+        "type": "alarm",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "poll",
+        "plugins": {
+            "sentry": {
+                "dsn": "https://8a50c3e06fdb402d9e7b0ad5ae9f6400@sentry.iobroker.net/82",
+                "pathWhitelist": []
+            }
+        },
+        "adminUI": {
+            "config": "json"
+        },
+        "dependencies": [
+            {
+                "js-controller": ">=3.3.22"
+            }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=5.1.13"
+            }
+        ]
+    },
+    "protectedNative": ["alarm_user", "alarm_password"],
+    "encryptedNative": ["alarm_password"],
+    "native": {
+        "alarm_hostname": "192.168.11.22",
+        "alarm_https": false,
+        "alarm_type": "lupusec_xt2",
+        "alarm_user": "admin",
+        "alarm_password": "",
+        "alarm_polltime": 1,
+        "nuki_doorsensors": [],
+        "webcam_providing": true,
+        "webcam_bind": "0.0.0.0",
+        "webcam_port": 7000,
+        "option_pollfaster": false
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Device or service connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "devices",
+            "type": "channel",
+            "common": {
+                "icon": "/icons/zentrale.png",
+                "name": {
+                    "en": "Devices alarmsystem",
+                    "de": "Geräte Alarmanlage"
+                }
+            },
+            "native": {}
+        },
+        {
+            "_id": "status",
+            "type": "channel",
+            "common": {
+                "icon": "/icons/zentrale.png",
+                "statusStates": {
+                    "onlineId": "reachable"
+                },
+                "name": {
+                    "en": "Status alarmsystem",
+                    "de": "Status Alarmanlage"
+                }
+            },
+            "native": {}
+        },
+        {
+            "_id": "sms",
+            "type": "channel",
+            "common": {
+                "icon": "/icons/sms.png",
+                "name": {
+                    "en": "sms",
+                    "de": "sms"
+                }
+            },
+            "native": {}
+        },
+        {
+            "_id": "webcams",
+            "type": "channel",
+            "common": {
+                "icon": "/icons/webcam.png",
+                "name": {
+                    "en": "webcam alarmsystems",
+                    "de": "Webcam Alarmanlage"
+                }
+            },
+            "native": {}
+        }
+    ]
+}
