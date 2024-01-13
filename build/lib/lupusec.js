@@ -233,6 +233,7 @@ class Lupusec {
     return deviceids;
   }
   async initObjects() {
+    var _a;
     const deviceids = await this.getDeviceIdsByType();
     for (const i in deviceids) {
       const type = deviceids[i].type;
@@ -240,10 +241,13 @@ class Lupusec {
       for (const j in objects) {
         const id = `devices.${deviceids[i].id}.${j}`;
         const oldobject = await this.states.getObjectAsync(id);
-        if (oldobject) {
+        const object = objects[j];
+        if (oldobject && object) {
+          if ((_a = oldobject == null ? void 0 : oldobject.common) == null ? void 0 : _a.name)
+            object.common.name = oldobject.common.name;
           const newobject = {
             ...oldobject,
-            ...objects[j]
+            ...object
           };
           await this.states.setObjectAsync(id, newobject);
         }
@@ -1033,6 +1037,32 @@ class Lupusec {
     };
     return data;
   }
+  async extendCommonName(name, extname) {
+    if (!extname || !name)
+      return name;
+    if (typeof name === "object" && typeof extname === "object") {
+      const newnames = {};
+      for (const language in name) {
+        newnames[language] = extname[language] ? `${extname[language]} (${name[language]})` : name[language];
+      }
+      return newnames;
+    }
+    if (typeof name === "object" && typeof extname === "string") {
+      const newnames = {};
+      for (const language in name) {
+        newnames[language] = `${extname} (${name[language]})`;
+      }
+      return newnames;
+    }
+    if (typeof name === "string" && typeof extname === "string") {
+      const newname = `${extname} (${name})`;
+      return newname;
+    }
+    if (typeof name === "string" && typeof extname === "object") {
+      const newname = extname[this.language] ? `${extname[this.language]} (${name})` : name;
+      return newname;
+    }
+  }
   async createObjectSetStates(id, name, value, unixtime, obj, devicename) {
     const execdelay = 0;
     const object = obj;
@@ -1042,6 +1072,9 @@ class Lupusec {
     }
     if (typeof object.common.name === "string" && object.common.name.indexOf("%value%") !== -1) {
       object.common.name = value !== void 0 ? object.common.name.replace("%value%", value) : void 0;
+    }
+    if (object.common.name) {
+      object.common.name = await this.extendCommonName(object.common.name, devicename);
     }
     await this.states.setObjectNotExistsAsync(sid, {
       type: object.type,
@@ -1158,6 +1191,7 @@ class Lupusec {
       await Promise.all(promisearray.map(async (func) => await func()));
   }
   async setAllStatusLupusecEntries(results) {
+    var _a, _b;
     const zentrale = results.zentrale;
     const unixtime = results.unixtime;
     const promisearray = [];
@@ -1168,13 +1202,15 @@ class Lupusec {
       }
     }
     const zentralemapped = await this.zentrale_mapping_all(zentrale);
+    const cname = (_b = (_a = await this.states.getObjectAsync("status")) == null ? void 0 : _a.common) == null ? void 0 : _b.name;
     for (const dp in objects) {
       if (this.adapter.config.option_pollfaster) {
         promisearray.push(
-          async () => await this.createObjectSetStates("status", dp, zentralemapped[dp], unixtime, objects[dp])
+          async () => await this.createObjectSetStates("status", dp, zentralemapped[dp], unixtime, objects[dp]),
+          cname
         );
       } else {
-        await this.createObjectSetStates("status", dp, zentralemapped[dp], unixtime, objects[dp]);
+        await this.createObjectSetStates("status", dp, zentralemapped[dp], unixtime, objects[dp], cname);
       }
     }
     if (promisearray)
