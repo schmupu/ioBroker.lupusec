@@ -46,7 +46,7 @@
             "zh-cn": "Lupusec 报警系统 (TS)"
         },
         "authors": ["Thorsten Stueben <thorsten@stueben.de>"],
-        "keywords": ["lupusec", "burlgar alarm", "alarm system", "lupus", "iobroker"],
+        "keywords": ["lupusec", "burlgar alarm", "alarm system", "lupus"],
         "localLinks": {
             "_default": {
                 "link": "%alarmlink%",
