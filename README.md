@@ -5,7 +5,7 @@
 ![Stable Version](http://iobroker.live/badges/lupusec-stable.svg)
 ![Number of Installations](http://iobroker.live/badges/lupusec-installed.svg)
 [![NPM version](http://img.shields.io/npm/v/iobroker.lupusec.svg)](https://www.npmjs.com/package/iobroker.lupusec)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.lupusec.svg)](https://www.npmjs.com/package/iobroker.lupusec)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.lupusec.svg)](https://www.npmjs.com/package/iobroker.lupusec)  
 [![NPM](https://nodei.co/npm/iobroker.lupusec.png?downloads=true)](https://nodei.co/npm/iobroker.lupusec/)
 
 **Requires node.js 10.0 or higher and Admin v3!**

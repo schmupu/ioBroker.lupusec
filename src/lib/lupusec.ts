@@ -1502,7 +1502,7 @@ export class Lupusec {
                     }
                     // Type 57
                     else if (name === 'nuki_action') {
-                        let value = undefined;
+                        let value: any = undefined;
                         switch (state.val) {
                             case 3:
                                 value = 1; // unlock
@@ -1516,10 +1516,20 @@ export class Lupusec {
                             default:
                                 break;
                         }
-                        await this.deviceNukiCmd(iddevice, {
-                            id: channel,
-                            action: value,
-                        });
+                        this.adapter.clearTimeout(this.timerhandle[iddevice]);
+                        this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+                            for (let i = 1; i <= 10; i++) {
+                                const result = await this.deviceNukiCmd(iddevice, {
+                                    id: channel,
+                                    action: value,
+                                });
+                                if (result?.data?.result === 1) break;
+                                this.adapter.log.debug(
+                                    `Action on Nuki not executed, because no positive response from Nuki!. Will try it again in a few seconds!`,
+                                );
+                                await tools.wait(1);
+                            }
+                        }, 0);
                     }
                     // Type 66
                     else if (name === 'level') {

@@ -241,15 +241,15 @@ class Lupusec {
       for (const j in objects) {
         const id = `devices.${deviceids[i].id}.${j}`;
         const oldobject = await this.states.getObjectAsync(id);
-        const object = objects[j];
-        if (oldobject && object) {
+        const newobject = objects[j];
+        if (oldobject && newobject) {
           if ((_a = oldobject == null ? void 0 : oldobject.common) == null ? void 0 : _a.name)
-            object.common.name = oldobject.common.name;
-          const newobject = {
+            newobject.common.name = oldobject.common.name;
+          const object = {
             ...oldobject,
-            ...object
+            ...newobject
           };
-          await this.states.setObjectAsync(id, newobject);
+          await this.states.setObjectAsync(id, object);
         }
       }
     }
@@ -988,11 +988,6 @@ class Lupusec {
   }
   async getAllDeviceLupusecEntries() {
     var _a, _b, _c, _d, _e, _f, _g, _h, _i;
-    const list = {
-      DeviceListGet: urlDeviceListGet,
-      DevicePSSListGet: urlDevicePSSListGet,
-      DeviceListUPICGet: urlDeviceListUPICGet
-    };
     const resultDeviceListGet = await this.requestGet(urlDeviceListGet);
     const resultDevicePSSListGet = await this.requestGet(urlDevicePSSListGet);
     const resultDeviceListUPICGet = await this.requestGet(urlDeviceListUPICGet);
@@ -1347,10 +1342,22 @@ class Lupusec {
               default:
                 break;
             }
-            await this.deviceNukiCmd(iddevice, {
-              id: channel,
-              action: value
-            });
+            this.adapter.clearTimeout(this.timerhandle[iddevice]);
+            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+              var _a2;
+              for (let i = 1; i <= 10; i++) {
+                const result = await this.deviceNukiCmd(iddevice, {
+                  id: channel,
+                  action: value
+                });
+                if (((_a2 = result == null ? void 0 : result.data) == null ? void 0 : _a2.result) === 1)
+                  break;
+                this.adapter.log.debug(
+                  `Action on Nuki not executed, because no positive response from Nuki!. Will try it again in a few seconds!`
+                );
+                await tools.wait(1);
+              }
+            }, 0);
           } else if (name === "level") {
             this.adapter.clearTimeout(this.timerhandle[iddevice]);
             this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
@@ -1544,7 +1551,6 @@ class Lupusec {
   }
   async onObjectChange(id, obj) {
     if (obj) {
-      const a = 1;
     } else {
       await this.states.delObjectAsync(id);
       this.adapter.log.info(`object ${id} deleted`);
