@@ -319,6 +319,9 @@ export class Lupusec {
         return deviceids;
     }
 
+    /**
+     * Object changes in configuration will be written in existing configuration
+     */
     private async initObjects(): Promise<void> {
         const deviceids = await this.getDeviceIdsByType();
         for (const i in deviceids) {
@@ -327,14 +330,15 @@ export class Lupusec {
             for (const j in objects) {
                 const id = `devices.${deviceids[i].id}.${j}`;
                 const oldobject = await this.states.getObjectAsync(id);
-                const object = objects[j] as any;
-                if (oldobject && object) {
-                    if (oldobject?.common?.name) object.common.name = oldobject.common.name;
-                    const newobject = {
+                const newobject = objects[j] as any;
+                if (oldobject && newobject) {
+                    // cmmmon names excluded
+                    if (oldobject?.common?.name) newobject.common.name = oldobject.common.name;
+                    const object = {
                         ...oldobject,
-                        ...object,
+                        ...newobject,
                     };
-                    await this.states.setObjectAsync(id, newobject);
+                    await this.states.setObjectAsync(id, object);
                 }
             }
         }
@@ -1114,15 +1118,6 @@ export class Lupusec {
     }
 
     private async getAllDeviceLupusecEntries(): Promise<any> {
-        const list = {
-            DeviceListGet: urlDeviceListGet,
-            DevicePSSListGet: urlDevicePSSListGet,
-            // /DeviceGet: urlDeviceGet,
-            DeviceListUPICGet: urlDeviceListUPICGet,
-        };
-        /*
-        const results = await this.requestGetAll(list);
-        */
         const resultDeviceListGet = await this.requestGet(urlDeviceListGet);
         const resultDevicePSSListGet = await this.requestGet(urlDevicePSSListGet);
         const resultDeviceListUPICGet = await this.requestGet(urlDeviceListUPICGet);
@@ -1242,6 +1237,7 @@ export class Lupusec {
             return;
         }
         if (!stateget || stateunixtime === undefined || (stateget.ack === true && stateget.val !== statevalue)) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
             this.delUnixTimestamp(sid);
             if (stateget) {
@@ -1254,6 +1250,7 @@ export class Lupusec {
             return;
         }
         if (!stateget || (stateget.ack === false && stateunixtime > 0 && stateunixtime < unixtime)) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
             this.delUnixTimestamp(sid);
             if (stateget) {
@@ -1464,6 +1461,7 @@ export class Lupusec {
                     const name = id.split('.').slice(-1).join('.'); // statusname - status_ex
                     const zone = (await this.states.getStateAsync(`${idchannel}.zone`))?.val;
                     const area = (await this.states.getStateAsync(`${idchannel}.area`))?.val;
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const type = (await this.states.getStateAsync(`${idchannel}.type`))?.val;
                     // Type 24,48,66
                     if (name === 'status_ex') {
@@ -1661,7 +1659,9 @@ export class Lupusec {
                     const regstat = /.+\.status\.(.+)/gm;
                     const m = regstat.exec(id);
                     if (!m) return;
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const icchannelabs = id.split('.').slice(0, -1).join('.'); //  lupusec.0.status
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const idchannel = id.split('.').slice(2, -1).join('.'); //  status
                     const iddevice = id.split('.').slice(2).join('.'); //  status.apple_home_a1
                     const name = m[1]; // Device ID - apple_home_a1
@@ -1686,6 +1686,7 @@ export class Lupusec {
                     const regstat = /.+\.sms\.(.+)/gm;
                     const m = regstat.exec(id);
                     if (!m) return;
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const icchannelabs = id.split('.').slice(0, -1).join('.'); //  lupusec.0.status
                     const idchannel = id.split('.').slice(2, -1).join('.'); //  status
                     const iddevice = id.split('.').slice(2).join('.'); //  status.apple_home_a1
@@ -1744,7 +1745,6 @@ export class Lupusec {
      */
     public async onObjectChange(id: string, obj: any): Promise<void> {
         if (obj) {
-            const a = 1;
             // The object was changed
             // this.adapter.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
         } else {

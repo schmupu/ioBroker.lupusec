@@ -32,17 +32,17 @@
             "zh-cn": "卢普塞克报警系统"
         },
         "desc": {
-            "en": "Lupusec alarm system (TS)",
-            "de": "Lupusec-Alarmsystem (TS)",
-            "ru": "Система сигнализации Lupusec (TS)",
-            "pt": "Sistema de alarme Lupusec (TS)",
-            "nl": "Lupusec alarmsysteem (TS)",
-            "fr": "Système d'alarme Lupusec (TS)",
-            "it": "Sistema di allarme Lupusec (TS)",
-            "es": "Sistema de alarma Lupusec (TS)",
-            "pl": "System alarmowy Lupusec (TS)",
-            "uk": "Сигналізація Lupusec (TS)",
-            "zh-cn": "Lupusec 报警系统 (TS)"
+            "en": "Lupusec alarm system",
+            "de": "Lupusec-Alarmsystem",
+            "ru": "Система сигнализации Lupusec",
+            "pt": "Sistema de alarme Lupusec",
+            "nl": "Lupusec alarmsysteem",
+            "fr": "Système d'alarme Lupusec",
+            "it": "Sistema di allarme Lupusec",
+            "es": "Sistema de alarma Lupusec",
+            "pl": "System alarmowy Lupusec",
+            "uk": "Сигналізація Lupusec",
+            "zh-cn": "Lupusec 报警系统"
         },
         "authors": ["Thorsten Stueben <thorsten@stueben.de>"],
         "keywords": ["lupusec", "burlgar alarm", "alarm system", "lupus"],
