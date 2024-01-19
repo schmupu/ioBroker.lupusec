@@ -7,8 +7,8 @@
 import * as utils from '@iobroker/adapter-core';
 
 // Load your modules here, e.g.:
-import * as Lupus from './lib/lupusec';
-import * as tools from './lib/tools';
+import { Lupus } from './lib/lupusec';
+import { Tools } from './lib/tools';
 
 class Lupusec extends utils.Adapter {
     private onlineCheckAvailable: boolean;
@@ -52,7 +52,7 @@ class Lupusec extends utils.Adapter {
             this.log.info(`Stopping Lupusec processes, please wait!`);
             await this.stopOnlineCheck();
             await this.stopLupusecAdapter();
-            await tools.wait(15);
+            await Tools.wait(15);
             callback();
         } catch (error) {
             callback();
@@ -63,7 +63,7 @@ class Lupusec extends utils.Adapter {
      * Is called if a subscribed object changes
      */
     private async onObjectChange(id: string, obj: ioBroker.Object | null | undefined): Promise<void> {
-        const lupusec = await Lupus.Lupusec.getInstance(this);
+        const lupusec = await Lupus.getInstance(this);
         await lupusec.onObjectChange(id, obj);
     }
 
@@ -71,7 +71,7 @@ class Lupusec extends utils.Adapter {
      * Is called if a subscribed state changes
      */
     private async onStateChange(id: string, state: ioBroker.State | null | undefined): Promise<void> {
-        const lupusec = await Lupus.Lupusec.getInstance(this);
+        const lupusec = await Lupus.getInstance(this);
         if (state) {
             await lupusec.onStateChange(id, state);
         }
@@ -118,7 +118,7 @@ class Lupusec extends utils.Adapter {
                 if (obj.callback) this.sendTo(obj.from, obj.command, array, obj.callback);
             }
             if (obj.command === 'sms' || obj.command === 'smsgw') {
-                const lupusec = await Lupus.Lupusec.getInstance(this);
+                const lupusec = await Lupus.getInstance(this);
                 const valText = obj?.message['text'];
                 const valNumber = obj?.message['number'];
                 const iddevice = 'sms.dial';
@@ -192,7 +192,7 @@ class Lupusec extends utils.Adapter {
      */
     async isAlarmSystemReachable(): Promise<boolean> {
         const server = await this.getHostnameAndPort();
-        const isAlive = await tools.probe(server.hostname, server.port);
+        const isAlive = await Tools.probe(server.hostname, server.port);
         return isAlive;
     }
 
@@ -237,7 +237,7 @@ class Lupusec extends utils.Adapter {
      * Starts the polling of the states from the Lupusec alarm system.
      */
     async startLupuscecAdapter(): Promise<void> {
-        const lupusec = await Lupus.Lupusec.getInstance(this);
+        const lupusec = await Lupus.getInstance(this);
         await lupusec.startallproc();
         await this.setStateAsync('info.connection', { val: true, ack: true });
     }
@@ -246,7 +246,7 @@ class Lupusec extends utils.Adapter {
      * Stops polling the states from the Lupusec alarm system
      */
     async stopLupusecAdapter(): Promise<void> {
-        const lupusec = await Lupus.Lupusec.getInstance(this);
+        const lupusec = await Lupus.getInstance(this);
         lupusec.stopallproc();
         await this.setStateAsync('info.connection', { val: false, ack: true });
     }

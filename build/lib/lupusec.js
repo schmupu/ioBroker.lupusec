@@ -24,17 +24,17 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var lupusec_exports = {};
 __export(lupusec_exports, {
-  Lupusec: () => Lupusec
+  Lupus: () => Lupus
 });
 module.exports = __toCommonJS(lupusec_exports);
 var import_axios = __toESM(require("axios"));
 var import_http = __toESM(require("http"));
 var import_https = __toESM(require("https"));
 var import_querystring = __toESM(require("querystring"));
-var datapoints = __toESM(require("./datapoints"));
-var so = __toESM(require("./states"));
-var tools = __toESM(require("./tools"));
-var wc = __toESM(require("./webcam"));
+var import_datapoints = require("./datapoints");
+var import_states = require("./states");
+var import_tools = require("./tools");
+var import_webcam = require("./webcam");
 const urlTokenGet = "/action/tokenGet";
 const urlLogoutPost = "/action/logout";
 const urlDeviceListGet = "/action/deviceListGet";
@@ -65,7 +65,7 @@ const urlSystemGet = "/action/systemGet";
 const urlLogsGet = "/action/logsGet";
 const urlrecordListGet = "/action/recordListGet";
 const urlNukiGet = "/action/nukiGet";
-class Lupusec {
+class Lupus {
   adapter;
   unixtime;
   run;
@@ -86,7 +86,7 @@ class Lupusec {
     this.unixtime = {};
     this.run = {};
     this.language = language || "en";
-    this.states = new so.States(adapter, language);
+    this.states = new import_states.States(adapter, language);
     this.timerhandle = {};
     this.auth = "Basic " + Buffer.from(this.adapter.config.alarm_user + ":" + this.adapter.config.alarm_password).toString("base64");
     this.httpsagent = new import_https.default.Agent({
@@ -108,8 +108,8 @@ class Lupusec {
     if (!this.instance) {
       const obj = await adapter.getForeignObjectAsync("system.config");
       const language = (((_a = obj == null ? void 0 : obj.common) == null ? void 0 : _a.language) || "en").toLowerCase();
-      this.uniqueid = tools.getUnixTimestampNow();
-      this.instance = new Lupusec(adapter, language);
+      this.uniqueid = import_tools.Tools.getUnixTimestampNow();
+      this.instance = new Lupus(adapter, language);
       await this.instance.states.initObjectsAllAsync();
       await this.instance.states.initStatesAllAsync();
     }
@@ -123,7 +123,7 @@ class Lupusec {
     if (callback) {
       try {
         this.adapter.log.debug(`Starting polling with process ${id}, callback ${callback}`);
-        tools.isAsync(callback) ? await callback() : callback();
+        import_tools.Tools.isAsync(callback) ? await callback() : callback();
         this.adapter.log.debug(`Stoping polling with process ${id}, callback ${callback} `);
       } catch (error) {
         const message = ((_a = error == null ? void 0 : error.response) == null ? void 0 : _a.data) || error.toString() || "not known";
@@ -180,7 +180,7 @@ class Lupusec {
     this.adapter.log.debug(`Array Timerhandle: ${Object.keys(this.timerhandle).length}`);
     this.adapter.log.debug(`Array internal States: ${Object.keys(await this.states.getStatesAllAsync()).length}`);
     this.adapter.log.debug(`Array internal Objects: ${Object.keys(await this.states.getObjectsAllAsync()).length}`);
-    this.adapter.log.debug(`Unique Id: ${Lupusec.getUniqueId()}`);
+    this.adapter.log.debug(`Unique Id: ${Lupus.getUniqueId()}`);
     const memory = process.memoryUsage();
     this.cpu = process.cpuUsage(this.cpu);
     for (const i in memory) {
@@ -193,7 +193,7 @@ class Lupusec {
     this.adapter.log.debug(`Process Meomory: ${JSON.stringify(memory)}`);
   }
   async dummyProcess() {
-    await tools.wait(4);
+    await import_tools.Tools.wait(4);
   }
   async stopallproc() {
     for (const id in this.run) {
@@ -237,7 +237,7 @@ class Lupusec {
     const deviceids = await this.getDeviceIdsByType();
     for (const i in deviceids) {
       const type = deviceids[i].type;
-      const objects = datapoints.getDeviceTypeList(type, this.language);
+      const objects = import_datapoints.Datapoints.getDeviceTypeList(type, this.language);
       for (const j in objects) {
         const id = `devices.${deviceids[i].id}.${j}`;
         const oldobject = await this.states.getObjectAsync(id);
@@ -305,7 +305,7 @@ class Lupusec {
     return alarm;
   }
   async getAbsoluteURI(path) {
-    const alarm_hostname = await tools.lookup(this.adapter.config.alarm_hostname);
+    const alarm_hostname = await import_tools.Tools.lookup(this.adapter.config.alarm_hostname);
     const aboluteURI = this.adapter.config.alarm_https === true ? "https://" + alarm_hostname + path : "http://" + alarm_hostname + path;
     return aboluteURI;
   }
@@ -336,7 +336,7 @@ class Lupusec {
     this.adapter.log.debug(`Request Token ${path}`);
     const response = await this.axiosinstance.get(await this.getAbsoluteURI(path), requestconfig);
     if (response.data)
-      response.data = tools.JsonParseDelSonderszeichen(response.data);
+      response.data = import_tools.Tools.JsonParseDelSonderszeichen(response.data);
     this.token = response.data.message;
     this.adapter.log.debug(`New Token: ${this.token}`);
     return this.token;
@@ -363,7 +363,7 @@ class Lupusec {
     this.adapter.log.debug(`Request Get ${path}`);
     const response = await this.axiosinstance.get(await this.getAbsoluteURI(path), requestconfig);
     if (response.data)
-      response.data = tools.JsonParseDelSonderszeichen(response.data);
+      response.data = import_tools.Tools.JsonParseDelSonderszeichen(response.data);
     return {
       data: response.data,
       unixtime
@@ -392,7 +392,7 @@ class Lupusec {
     this.adapter.log.debug(`Request Post ${path} with payload ${JSON.stringify(data)}`);
     const response = await this.axiosinstance.post(await this.getAbsoluteURI(path), text, requestconfig);
     if (response.data)
-      response.data = tools.JsonParseDelSonderszeichen(response.data);
+      response.data = import_tools.Tools.JsonParseDelSonderszeichen(response.data);
     return {
       data: response.data,
       unixtime
@@ -427,7 +427,7 @@ class Lupusec {
         }
       }
       if (name === "type_name") {
-        value = datapoints.getDeviceNameByDeviceType(type);
+        value = import_datapoints.Datapoints.getDeviceNameByDeviceType(type);
       }
       if (name === "alarm_status_ex") {
         if (states["alarm_status"] !== void 0)
@@ -515,7 +515,7 @@ class Lupusec {
         if (name === "nuki_action") {
           value = (_d = await this.states.getStateAsync(`${idc}.nuki_action`)) == null ? void 0 : _d.val;
         }
-        if (name == "reachable" && tools.hasProperty(states, "consumer_id")) {
+        if (name == "reachable" && import_tools.Tools.hasProperty(states, "consumer_id")) {
           value = await this.isNukiAllive(states.consumer_id);
         }
       }
@@ -525,10 +525,10 @@ class Lupusec {
           value = valuelevel !== void 0 && states.level !== void 0 && states.level > value ? 1 : 0;
         }
         if (name === "on_time" && value !== void 0) {
-          value = tools.round(value / 10, 0.1) || 0;
+          value = import_tools.Tools.round(value / 10, 0.1) || 0;
         }
         if (name === "off_time" && value !== void 0) {
-          value = tools.round(value / 10, 0.1) || 0;
+          value = import_tools.Tools.round(value / 10, 0.1) || 0;
         }
       }
       if (type === 79) {
@@ -570,7 +570,7 @@ class Lupusec {
             value = 0;
         }
         if (name === "thermo_offset" && value !== void 0) {
-          value = tools.round(value / 10, 0.5);
+          value = import_tools.Tools.round(value / 10, 0.5);
         }
       }
       statesmapped[name] = value;
@@ -626,7 +626,7 @@ class Lupusec {
       const ssform = ressultold.data.forms.ssform;
       for (const name in ssform) {
         const value = ssform[name];
-        if (!tools.hasProperty(form, name)) {
+        if (!import_tools.Tools.hasProperty(form, name)) {
           switch (typeof value) {
             case "string":
               if (value.length > 0)
@@ -752,7 +752,7 @@ class Lupusec {
         const url = nukis.url1.match(/^(http|https):\/\//gm) ? nukis.url1 : `http:\\${nukis.url1}`;
         const myURL = new URL(url);
         if (myURL) {
-          const proberesult = await tools.probe(myURL.hostname, Number(myURL.port));
+          const proberesult = await import_tools.Tools.probe(myURL.hostname, Number(myURL.port));
           return proberesult;
         }
       }
@@ -822,7 +822,7 @@ class Lupusec {
       results = await Promise.all(
         requestarray.map(async (request) => {
           let result = {};
-          const isasync = tools.isAsync(request);
+          const isasync = import_tools.Tools.isAsync(request);
           result = isasync ? await request() : request();
           return result;
         })
@@ -830,7 +830,7 @@ class Lupusec {
     } else {
       for (const request of requestarray) {
         let result = {};
-        const isasync = tools.isAsync(request);
+        const isasync = import_tools.Tools.isAsync(request);
         result = isasync ? await request() : request();
         results.push(result);
       }
@@ -942,7 +942,7 @@ class Lupusec {
       results = await Promise.all(
         requestarray.map(async (request) => {
           let result = {};
-          const isasync = tools.isAsync(request);
+          const isasync = import_tools.Tools.isAsync(request);
           result = isasync ? await request() : request();
           return result;
         })
@@ -950,7 +950,7 @@ class Lupusec {
     } else {
       for (const request of requestarray) {
         let result = {};
-        const isasync = tools.isAsync(request);
+        const isasync = import_tools.Tools.isAsync(request);
         result = isasync ? await request() : request();
         results.push(result);
       }
@@ -1078,7 +1078,7 @@ class Lupusec {
     });
     if (object.type === "channel" || object.type === "device")
       return;
-    const statevalue = tools.convertPropertyType(value, object.common.type);
+    const statevalue = import_tools.Tools.convertPropertyType(value, object.common.type);
     if (statevalue === null || statevalue === void 0) {
       return;
     }
@@ -1125,14 +1125,14 @@ class Lupusec {
       const type = device.type || device.stype || ((_a = await this.states.getStateAsync(`${idc}.type`)) == null ? void 0 : _a.val);
       if (type === void 0)
         continue;
-      let objects = datapoints.getDeviceTypeList(type, this.language);
+      let objects = import_datapoints.Datapoints.getDeviceTypeList(type, this.language);
       if (!objects) {
         this.adapter.log.warn(
           `Ger\xE4tetyp ${type} f\xFCr das Ger\xE4t ${id} mit Namen ${cname || ""} wird nicht unterst\xFCtzt!`
         );
-        objects = datapoints.getDeviceTypeList(0, this.language);
+        objects = import_datapoints.Datapoints.getDeviceTypeList(0, this.language);
       }
-      const icon = datapoints.getDeviceIconByDeviceType(type);
+      const icon = import_datapoints.Datapoints.getDeviceIconByDeviceType(type);
       const oldobject = await this.states.getObjectAsync(idc);
       if (cname !== void 0 && oldobject && oldobject.common && oldobject.common.name !== cname) {
         const result = await this.states.setObjectAsync(idc, {
@@ -1166,7 +1166,7 @@ class Lupusec {
         }
       }
       for (const dp in objects) {
-        if (!tools.hasProperty(device, dp)) {
+        if (!import_tools.Tools.hasProperty(device, dp)) {
           device[dp] = void 0;
         }
       }
@@ -1191,9 +1191,9 @@ class Lupusec {
     const unixtime = results.unixtime;
     const promisearray = [];
     const idc = "status";
-    const objects = datapoints.getStatusTypeList(this.language);
+    const objects = import_datapoints.Datapoints.getStatusTypeList(this.language);
     for (const dp in objects) {
-      if (!tools.hasProperty(zentrale, dp)) {
+      if (!import_tools.Tools.hasProperty(zentrale, dp)) {
         zentrale[dp] = void 0;
       }
     }
@@ -1216,11 +1216,11 @@ class Lupusec {
     var _a, _b, _c;
     const sms = results.sms;
     const unixtime = results.unixtime;
-    const objects = datapoints.getSMSTypeList(this.language);
+    const objects = import_datapoints.Datapoints.getSMSTypeList(this.language);
     const idc = "sms";
     const promisearray = [];
     for (const dp in objects) {
-      if (!tools.hasProperty(sms, dp)) {
+      if (!import_tools.Tools.hasProperty(sms, dp)) {
         sms[dp] = (_a = await this.states.getStateAsync(`${idc}.${dp}`)) == null ? void 0 : _a.val;
       }
     }
@@ -1241,7 +1241,7 @@ class Lupusec {
     const unixtime = results.unixtime;
     const webcams = results.webcams;
     const promisearray = [];
-    const objects = datapoints.getWebcamTypeList(this.language);
+    const objects = import_datapoints.Datapoints.getWebcamTypeList(this.language);
     for (const id in webcams) {
       const webcam = webcams[id];
       const idc = "webcams." + id;
@@ -1258,7 +1258,7 @@ class Lupusec {
         this.adapter.log.info(`Webcam ${id} mit Namen ${cname} hinzugef\xFCgt`);
       }
       for (const dp in objects) {
-        if (!tools.hasProperty(webcam, dp)) {
+        if (!import_tools.Tools.hasProperty(webcam, dp)) {
           webcam[dp] = void 0;
         }
       }
@@ -1282,7 +1282,7 @@ class Lupusec {
     if (promisearray)
       await Promise.all(promisearray.map(async (func) => await func()));
     if (this.adapter.config.webcam_providing) {
-      const caminstance = wc.Webcam.getInstance(this.adapter, webcams);
+      const caminstance = import_webcam.Webcam.getInstance(this.adapter, webcams);
       await caminstance.startServer();
     }
   }
@@ -1355,7 +1355,7 @@ class Lupusec {
                 this.adapter.log.debug(
                   `Action on Nuki not executed, because no positive response from Nuki!. Will try it again in a few seconds!`
                 );
-                await tools.wait(1);
+                await import_tools.Tools.wait(1);
               }
             }, 0);
           } else if (name === "level") {
@@ -1559,6 +1559,6 @@ class Lupusec {
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  Lupusec
+  Lupus
 });
 //# sourceMappingURL=lupusec.js.map

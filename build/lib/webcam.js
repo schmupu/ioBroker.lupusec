@@ -32,7 +32,7 @@ var import_axios = __toESM(require("axios"));
 var http = __toESM(require("http"));
 var import_http_terminator = require("http-terminator");
 var https = __toESM(require("https"));
-var tools = __toESM(require("./tools"));
+var import_tools = require("./tools");
 class MJPEGtoJPG {
   adapter;
   chunks;
@@ -83,7 +83,7 @@ class Webcam {
     return this.instance;
   }
   async getAbsoluteURI(path) {
-    const alarm_hostname = await tools.lookup(this.adapter.config.alarm_hostname);
+    const alarm_hostname = await import_tools.Tools.lookup(this.adapter.config.alarm_hostname);
     const aboluteURI = this.adapter.config.alarm_https === true ? "https://" + alarm_hostname + path : "http://" + alarm_hostname + path;
     return aboluteURI;
   }
@@ -93,7 +93,7 @@ class Webcam {
     if (port > 0 && host) {
       try {
         const bind = host ? host + ":" + port : port;
-        const running = await tools.probe(host, port);
+        const running = await import_tools.Tools.probe(host, port);
         if (running) {
           this.adapter.log.debug(`Webcam Listining Service on ${bind} running`);
           return;

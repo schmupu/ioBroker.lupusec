@@ -2,10 +2,10 @@ import axios from 'axios';
 import http from 'http';
 import https from 'https';
 import querystring from 'querystring';
-import * as datapoints from './datapoints';
-import * as so from './states';
-import * as tools from './tools';
-import * as wc from './webcam';
+import { Datapoints } from './datapoints';
+import { States, ifState } from './states';
+import { Tools } from './tools';
+import { Webcam } from './webcam';
 
 const urlTokenGet = '/action/tokenGet';
 const urlLogoutPost = '/action/logout';
@@ -50,14 +50,14 @@ interface ifDeviceId {
 /**
  * Lupsec Class (alarmsystem)
  */
-export class Lupusec {
+export class Lupus {
     private adapter: any;
     private unixtime: { [index: string]: number };
     private run: { [index: string]: ioBroker.Timeout };
     private language: string;
-    private states: so.States;
+    private states: States;
     private timerhandle: { [index: string]: ioBroker.Timeout | undefined };
-    private static instance: Lupusec;
+    private static instance: Lupus;
     private static uniqueid: number;
     private cpu: any;
     private auth: string;
@@ -76,7 +76,7 @@ export class Lupusec {
         this.unixtime = {};
         this.run = {};
         this.language = language || 'en';
-        this.states = new so.States(adapter, language);
+        this.states = new States(adapter, language);
         this.timerhandle = {};
         this.auth =
             'Basic ' +
@@ -101,12 +101,12 @@ export class Lupusec {
      * @param adapter ioBroker adapter instance
      * @returns Instane of Lupusec class
      */
-    public static async getInstance(adapter: any): Promise<Lupusec> {
+    public static async getInstance(adapter: any): Promise<Lupus> {
         if (!this.instance) {
             const obj = await adapter.getForeignObjectAsync('system.config');
             const language = (obj?.common?.language || 'en').toLowerCase();
-            this.uniqueid = tools.getUnixTimestampNow();
-            this.instance = new Lupusec(adapter, language);
+            this.uniqueid = Tools.getUnixTimestampNow();
+            this.instance = new Lupus(adapter, language);
             await this.instance.states.initObjectsAllAsync();
             await this.instance.states.initStatesAllAsync();
         }
@@ -131,7 +131,7 @@ export class Lupusec {
         if (callback) {
             try {
                 this.adapter.log.debug(`Starting polling with process ${id}, callback ${callback}`);
-                tools.isAsync(callback) ? await callback() : callback();
+                Tools.isAsync(callback) ? await callback() : callback();
                 this.adapter.log.debug(`Stoping polling with process ${id}, callback ${callback} `);
             } catch (error: any) {
                 const message = error?.response?.data || error.toString() || 'not known';
@@ -231,10 +231,10 @@ export class Lupusec {
         this.adapter.log.debug(`Array Timerhandle: ${Object.keys(this.timerhandle).length}`);
         this.adapter.log.debug(`Array internal States: ${Object.keys(await this.states.getStatesAllAsync()).length}`);
         this.adapter.log.debug(`Array internal Objects: ${Object.keys(await this.states.getObjectsAllAsync()).length}`);
-        this.adapter.log.debug(`Unique Id: ${Lupusec.getUniqueId()}`);
+        this.adapter.log.debug(`Unique Id: ${Lupus.getUniqueId()}`);
         const memory = process.memoryUsage() as any;
         this.cpu = process.cpuUsage(this.cpu);
-        // this.adapter.log.info(`Process Meomory: ${tools.delSonderzeichen(util.inspect(memory))}`);
+        // this.adapter.log.info(`Process Meomory: ${Tools.delSonderzeichen(util.inspect(memory))}`);
         for (const i in memory) {
             memory[i] = `${(((Math.round(memory[i]) / 1024 / 1024) * 100) / 100).toLocaleString(this.language)} MB`;
         }
@@ -246,7 +246,7 @@ export class Lupusec {
     }
 
     private async dummyProcess(): Promise<void> {
-        await tools.wait(4);
+        await Tools.wait(4);
     }
 
     /**
@@ -326,7 +326,7 @@ export class Lupusec {
         const deviceids = await this.getDeviceIdsByType();
         for (const i in deviceids) {
             const type = deviceids[i].type;
-            const objects = datapoints.getDeviceTypeList(type, this.language);
+            const objects = Datapoints.getDeviceTypeList(type, this.language);
             for (const j in objects) {
                 const id = `devices.${deviceids[i].id}.${j}`;
                 const oldobject = await this.states.getObjectAsync(id);
@@ -413,7 +413,7 @@ export class Lupusec {
      * @returns full abaolute URI like https://foo.com/action/logout
      */
     private async getAbsoluteURI(path: string): Promise<string> {
-        const alarm_hostname = await tools.lookup(this.adapter.config.alarm_hostname);
+        const alarm_hostname = await Tools.lookup(this.adapter.config.alarm_hostname);
         const aboluteURI =
             this.adapter.config.alarm_https === true
                 ? 'https://' + alarm_hostname + path
@@ -451,7 +451,7 @@ export class Lupusec {
         };
         this.adapter.log.debug(`Request Token ${path}`);
         const response = await this.axiosinstance.get(await this.getAbsoluteURI(path), requestconfig);
-        if (response.data) response.data = tools.JsonParseDelSonderszeichen(response.data);
+        if (response.data) response.data = Tools.JsonParseDelSonderszeichen(response.data);
         this.token = response.data.message;
         this.adapter.log.debug(`New Token: ${this.token}`);
         return this.token;
@@ -484,7 +484,7 @@ export class Lupusec {
         };
         this.adapter.log.debug(`Request Get ${path}`);
         const response = await this.axiosinstance.get(await this.getAbsoluteURI(path), requestconfig);
-        if (response.data) response.data = tools.JsonParseDelSonderszeichen(response.data);
+        if (response.data) response.data = Tools.JsonParseDelSonderszeichen(response.data);
         return {
             data: response.data,
             unixtime: unixtime,
@@ -520,7 +520,7 @@ export class Lupusec {
         const text = querystring.stringify(data as querystring.ParsedUrlQueryInput);
         this.adapter.log.debug(`Request Post ${path} with payload ${JSON.stringify(data)}`);
         const response = await this.axiosinstance.post(await this.getAbsoluteURI(path), text, requestconfig);
-        if (response.data) response.data = tools.JsonParseDelSonderszeichen(response.data);
+        if (response.data) response.data = Tools.JsonParseDelSonderszeichen(response.data);
         return {
             data: response.data,
             unixtime: unixtime,
@@ -556,7 +556,7 @@ export class Lupusec {
             }
             // type_name : name of the sensor, like NUKI
             if (name === 'type_name') {
-                value = datapoints.getDeviceNameByDeviceType(type);
+                value = Datapoints.getDeviceNameByDeviceType(type);
             }
             // alarm_status_ex: value of alarm_status as booelean
             if (name === 'alarm_status_ex') {
@@ -642,7 +642,7 @@ export class Lupusec {
                 if (name === 'nuki_action') {
                     value = (await this.states.getStateAsync(`${idc}.nuki_action`))?.val;
                 }
-                if (name == 'reachable' && tools.hasProperty(states, 'consumer_id')) {
+                if (name == 'reachable' && Tools.hasProperty(states, 'consumer_id')) {
                     value = await this.isNukiAllive(states.consumer_id);
                 }
             }
@@ -653,10 +653,10 @@ export class Lupusec {
                     value = valuelevel !== undefined && states.level !== undefined && states.level > value ? 1 : 0;
                 }
                 if (name === 'on_time' && value !== undefined) {
-                    value = tools.round(value / 10, 0.1) || 0;
+                    value = Tools.round(value / 10, 0.1) || 0;
                 }
                 if (name === 'off_time' && value !== undefined) {
-                    value = tools.round(value / 10, 0.1) || 0;
+                    value = Tools.round(value / 10, 0.1) || 0;
                 }
             }
             if (type === 79) {
@@ -694,7 +694,7 @@ export class Lupusec {
                     if (m && m[1] === 'MANUAL') value = 0;
                 }
                 if (name === 'thermo_offset' && value !== undefined) {
-                    value = tools.round(value / 10, 0.5);
+                    value = Tools.round(value / 10, 0.5);
                 }
             }
             statesmapped[name] = value;
@@ -752,7 +752,7 @@ export class Lupusec {
             const ssform = ressultold.data.forms.ssform;
             for (const name in ssform) {
                 const value = ssform[name];
-                if (!tools.hasProperty(form, name)) {
+                if (!Tools.hasProperty(form, name)) {
                     switch (typeof value) {
                         case 'string':
                             if (value.length > 0) form[name] = value;
@@ -879,7 +879,7 @@ export class Lupusec {
                 const url = nukis.url1.match(/^(http|https):\/\//gm) ? nukis.url1 : `http:\\${nukis.url1}`;
                 const myURL = new URL(url);
                 if (myURL) {
-                    const proberesult = await tools.probe(myURL.hostname, Number(myURL.port));
+                    const proberesult = await Tools.probe(myURL.hostname, Number(myURL.port));
                     return proberesult;
                 }
             }
@@ -951,7 +951,7 @@ export class Lupusec {
             results = await Promise.all(
                 requestarray.map(async (request) => {
                     let result = {} || undefined;
-                    const isasync = tools.isAsync(request);
+                    const isasync = Tools.isAsync(request);
                     result = isasync ? await request() : request();
                     return result;
                 }),
@@ -959,7 +959,7 @@ export class Lupusec {
         } else {
             for (const request of requestarray) {
                 let result = {} || undefined;
-                const isasync = tools.isAsync(request);
+                const isasync = Tools.isAsync(request);
                 result = isasync ? await request() : request();
                 results.push(result);
             }
@@ -1077,7 +1077,7 @@ export class Lupusec {
             results = await Promise.all(
                 requestarray.map(async (request) => {
                     let result = {} || undefined;
-                    const isasync = tools.isAsync(request);
+                    const isasync = Tools.isAsync(request);
                     result = isasync ? await request() : request();
                     return result;
                 }),
@@ -1085,7 +1085,7 @@ export class Lupusec {
         } else {
             for (const request of requestarray) {
                 let result = {} || undefined;
-                const isasync = tools.isAsync(request);
+                const isasync = Tools.isAsync(request);
                 result = isasync ? await request() : request();
                 results.push(result);
             }
@@ -1204,7 +1204,7 @@ export class Lupusec {
         obj: any,
         devicename?: any,
     ): Promise<void> {
-        // const object = tools.copyObject(obj);  // copy of the object
+        // const object = Tools.copyObject(obj);  // copy of the object
         const execdelay = 0; // 100; // this.adapter.config.alarm_polltime * 1000;
         const object = obj;
         const sid = id + '.' + name;
@@ -1223,7 +1223,7 @@ export class Lupusec {
             native: {},
         });
         if (object.type === 'channel' || object.type === 'device') return;
-        const statevalue = tools.convertPropertyType(value, object.common.type);
+        const statevalue = Tools.convertPropertyType(value, object.common.type);
         if (statevalue === null || statevalue === undefined) {
             return;
         }
@@ -1274,14 +1274,14 @@ export class Lupusec {
             const cname = device.name || device.sname;
             const type = device.type || device.stype || (await this.states.getStateAsync(`${idc}.type`))?.val;
             if (type === undefined) continue;
-            let objects = datapoints.getDeviceTypeList(type, this.language);
+            let objects = Datapoints.getDeviceTypeList(type, this.language);
             if (!objects) {
                 this.adapter.log.warn(
                     `Gerätetyp ${type} für das Gerät ${id} mit Namen ${cname || ''} wird nicht unterstützt!`,
                 );
-                objects = datapoints.getDeviceTypeList(0, this.language);
+                objects = Datapoints.getDeviceTypeList(0, this.language);
             }
-            const icon = datapoints.getDeviceIconByDeviceType(type);
+            const icon = Datapoints.getDeviceIconByDeviceType(type);
             const oldobject = await this.states.getObjectAsync(idc);
             if (cname !== undefined && oldobject && oldobject.common && oldobject.common.name !== cname) {
                 const result = await this.states.setObjectAsync(idc, {
@@ -1316,7 +1316,7 @@ export class Lupusec {
             }
             // Add owen (missing) datapoints
             for (const dp in objects) {
-                if (!tools.hasProperty(device, dp)) {
+                if (!Tools.hasProperty(device, dp)) {
                     device[dp] = undefined;
                 }
             }
@@ -1342,10 +1342,10 @@ export class Lupusec {
         const unixtime = results.unixtime;
         const promisearray = [];
         const idc = 'status';
-        const objects = datapoints.getStatusTypeList(this.language);
+        const objects = Datapoints.getStatusTypeList(this.language);
         // Add owen (missing) datapoints
         for (const dp in objects) {
-            if (!tools.hasProperty(zentrale, dp)) {
+            if (!Tools.hasProperty(zentrale, dp)) {
                 zentrale[dp] = undefined;
             }
         }
@@ -1368,12 +1368,12 @@ export class Lupusec {
     private async setAllSMSLupusecEntries(results: any): Promise<void> {
         const sms = results.sms;
         const unixtime = results.unixtime;
-        const objects = datapoints.getSMSTypeList(this.language);
+        const objects = Datapoints.getSMSTypeList(this.language);
         const idc = 'sms';
         const promisearray = [];
         // Add owen (missing) datapoints
         for (const dp in objects) {
-            if (!tools.hasProperty(sms, dp)) {
+            if (!Tools.hasProperty(sms, dp)) {
                 sms[dp] = (await this.states.getStateAsync(`${idc}.${dp}`))?.val;
             }
         }
@@ -1394,7 +1394,7 @@ export class Lupusec {
         const unixtime = results.unixtime;
         const webcams = results.webcams;
         const promisearray = [];
-        const objects = datapoints.getWebcamTypeList(this.language);
+        const objects = Datapoints.getWebcamTypeList(this.language);
         for (const id in webcams) {
             const webcam = webcams[id];
             const idc = 'webcams.' + id;
@@ -1412,7 +1412,7 @@ export class Lupusec {
             }
             // Add owen (missing) datapoints
             for (const dp in objects) {
-                if (!tools.hasProperty(webcam, dp)) {
+                if (!Tools.hasProperty(webcam, dp)) {
                     webcam[dp] = undefined;
                 }
             }
@@ -1437,7 +1437,7 @@ export class Lupusec {
         }
         if (promisearray) await Promise.all(promisearray.map(async (func) => await func()));
         if (this.adapter.config.webcam_providing) {
-            const caminstance = wc.Webcam.getInstance(this.adapter, webcams);
+            const caminstance = Webcam.getInstance(this.adapter, webcams);
             await caminstance.startServer();
         }
     }
@@ -1447,7 +1447,7 @@ export class Lupusec {
      * @param {string} id
      * @param {ioBroker.State | null | undefined} state
      */
-    public async onStateChange(id: string, state: so.ifState): Promise<void> {
+    public async onStateChange(id: string, state: ifState): Promise<void> {
         try {
             if (state && state.ack === false) {
                 await this.states.setStateNotExistsAsync(id, { val: state.val, ack: state.ack });
@@ -1527,7 +1527,7 @@ export class Lupusec {
                                 this.adapter.log.debug(
                                     `Action on Nuki not executed, because no positive response from Nuki!. Will try it again in a few seconds!`,
                                 );
-                                await tools.wait(1);
+                                await Tools.wait(1);
                             }
                         }, 0);
                     }

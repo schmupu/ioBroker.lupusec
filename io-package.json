@@ -55,7 +55,7 @@
         "license": "MIT",
         "platform": "Javascript/Node.js",
         "main": "build/main.js",
-        "icon": "admin/icons/lupusec.png",
+        "icon": "icons/lupusec.png",
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/icons/lupusec.png",
         "readme": "https://github.com/schmupu/ioBroker.lupusec/blob/master/README.md",

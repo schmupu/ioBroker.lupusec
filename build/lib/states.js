@@ -1,9 +1,7 @@
 "use strict";
-var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -17,17 +15,13 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var states_exports = {};
 __export(states_exports, {
   States: () => States
 });
 module.exports = __toCommonJS(states_exports);
-var tools = __toESM(require("./tools"));
+var import_tools = require("./tools");
 class States {
   adapter;
   states;
@@ -50,8 +44,8 @@ class States {
     const states = await this.adapter.getStatesAsync(`${this.adapter.namespace}.*`);
     for (const id in states) {
       const idnew = id.replace(`${this.adapter.namespace}.`, "");
-      const val = tools.hasProperty(states[id], "val") ? states[id].val : null;
-      const ack = tools.hasProperty(states[id], "ack") ? states[id].ack : false;
+      const val = import_tools.Tools.hasProperty(states[id], "val") ? states[id].val : null;
+      const ack = import_tools.Tools.hasProperty(states[id], "ack") ? states[id].ack : false;
       delete states[id];
       states[idnew] = {
         val,
@@ -82,8 +76,8 @@ class States {
       const states = await this.adapter.getStatesAsync(`${this.adapter.namespace}.${pattern}`);
       for (const id in states) {
         const idnew = id.replace(`${this.adapter.namespace}.`, "");
-        const val = tools.hasProperty(states[id], "val") ? states[id].val : null;
-        const ack = tools.hasProperty(states[id], "ack") ? states[id].ack : false;
+        const val = import_tools.Tools.hasProperty(states[id], "val") ? states[id].val : null;
+        const ack = import_tools.Tools.hasProperty(states[id], "ack") ? states[id].ack : false;
         delete states[id];
         states[idnew] = {
           val,
@@ -106,8 +100,8 @@ class States {
   }
   async setStateAsync(id, object) {
     if (id) {
-      const val = tools.hasProperty(object, "val") ? object.val : null;
-      const ack = tools.hasProperty(object, "ack") ? object.ack : false;
+      const val = import_tools.Tools.hasProperty(object, "val") ? object.val : null;
+      const ack = import_tools.Tools.hasProperty(object, "ack") ? object.ack : false;
       id = id.replace(`${this.adapter.namespace}.`, "");
       if (this.savestates)
         this.states[id] = { val, ack };
@@ -171,7 +165,7 @@ class States {
       id = id.replace(`${this.adapter.namespace}.`, "");
     if (((_a = object == null ? void 0 : object.common) == null ? void 0 : _a.name) || ((_b = object == null ? void 0 : object.common) == null ? void 0 : _b.states)) {
       const objectold = await this.getObjectAsync(id);
-      if (!objectold || !tools.hasProperty(objectold, "common") || !tools.hasProperty(objectold.common, "name") || !tools.isEqual(objectold.common.name, object.common.name) || !tools.isEqual(objectold.common.states, object.common.states) || !tools.isEqual(objectold.common.statusStates, object.common.statusStates)) {
+      if (!objectold || !import_tools.Tools.hasProperty(objectold, "common") || !import_tools.Tools.hasProperty(objectold.common, "name") || !import_tools.Tools.isEqual(objectold.common.name, object.common.name) || !import_tools.Tools.isEqual(objectold.common.states, object.common.states) || !import_tools.Tools.isEqual(objectold.common.statusStates, object.common.statusStates)) {
         return await this.setObjectAsync(id, object, options);
       }
     }

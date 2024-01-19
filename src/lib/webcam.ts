@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as http from 'http';
 import { createHttpTerminator } from 'http-terminator';
 import * as https from 'https';
-import * as tools from './tools';
+import { Tools } from './tools';
 
 export class MJPEGtoJPG {
     private adapter: any;
@@ -88,7 +88,7 @@ export class Webcam {
      * @returns full abaolute URI like https://foo.com/action/logout
      */
     private async getAbsoluteURI(path: string): Promise<string> {
-        const alarm_hostname = await tools.lookup(this.adapter.config.alarm_hostname);
+        const alarm_hostname = await Tools.lookup(this.adapter.config.alarm_hostname);
         const aboluteURI =
             this.adapter.config.alarm_https === true
                 ? 'https://' + alarm_hostname + path
@@ -106,7 +106,7 @@ export class Webcam {
         if (port > 0 && host) {
             try {
                 const bind = host ? host + ':' + port : port;
-                const running = await tools.probe(host, port);
+                const running = await Tools.probe(host, port);
                 if (running) {
                     this.adapter.log.debug(`Webcam Listining Service on ${bind} running`);
                     return;

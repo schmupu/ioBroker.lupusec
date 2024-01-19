@@ -1,4 +1,4 @@
-import * as tools from './tools';
+import { Tools } from './tools';
 
 export interface ifState {
     val: any;
@@ -48,8 +48,8 @@ export class States {
         const states = await this.adapter.getStatesAsync(`${this.adapter.namespace}.*`);
         for (const id in states) {
             const idnew = id.replace(`${this.adapter.namespace}.`, '');
-            const val = tools.hasProperty(states[id], 'val') ? states[id].val : null;
-            const ack = tools.hasProperty(states[id], 'ack') ? states[id].ack : false;
+            const val = Tools.hasProperty(states[id], 'val') ? states[id].val : null;
+            const ack = Tools.hasProperty(states[id], 'ack') ? states[id].ack : false;
             delete states[id];
             states[idnew] = {
                 val: val,
@@ -90,8 +90,8 @@ export class States {
             const states = await this.adapter.getStatesAsync(`${this.adapter.namespace}.${pattern}`);
             for (const id in states) {
                 const idnew = id.replace(`${this.adapter.namespace}.`, '');
-                const val = tools.hasProperty(states[id], 'val') ? states[id].val : null;
-                const ack = tools.hasProperty(states[id], 'ack') ? states[id].ack : false;
+                const val = Tools.hasProperty(states[id], 'val') ? states[id].val : null;
+                const ack = Tools.hasProperty(states[id], 'ack') ? states[id].ack : false;
                 delete states[id];
                 states[idnew] = {
                     val: val,
@@ -127,8 +127,8 @@ export class States {
      */
     public async setStateAsync(id: string, object: any): Promise<any> {
         if (id) {
-            const val = tools.hasProperty(object, 'val') ? object.val : null;
-            const ack = tools.hasProperty(object, 'ack') ? object.ack : false;
+            const val = Tools.hasProperty(object, 'val') ? object.val : null;
+            const ack = Tools.hasProperty(object, 'ack') ? object.ack : false;
             id = id.replace(`${this.adapter.namespace}.`, '');
             if (this.savestates) this.states[id] = { val: val, ack: ack };
             return await this.adapter.setStateAsync(id, { val: val, ack: ack });
@@ -219,11 +219,11 @@ export class States {
             const objectold = await this.getObjectAsync(id);
             if (
                 !objectold ||
-                !tools.hasProperty(objectold, 'common') ||
-                !tools.hasProperty(objectold.common, 'name') ||
-                !tools.isEqual(objectold.common.name, object.common.name) ||
-                !tools.isEqual(objectold.common.states, object.common.states) ||
-                !tools.isEqual(objectold.common.statusStates, object.common.statusStates)
+                !Tools.hasProperty(objectold, 'common') ||
+                !Tools.hasProperty(objectold.common, 'name') ||
+                !Tools.isEqual(objectold.common.name, object.common.name) ||
+                !Tools.isEqual(objectold.common.states, object.common.states) ||
+                !Tools.isEqual(objectold.common.statusStates, object.common.statusStates)
             ) {
                 return await this.setObjectAsync(id, object, options);
             }

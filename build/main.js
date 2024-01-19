@@ -18,8 +18,8 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var utils = __toESM(require("@iobroker/adapter-core"));
-var Lupus = __toESM(require("./lib/lupusec"));
-var tools = __toESM(require("./lib/tools"));
+var import_lupusec = require("./lib/lupusec");
+var import_tools = require("./lib/tools");
 class Lupusec extends utils.Adapter {
   onlineCheckAvailable;
   onlineCheckTimeout;
@@ -53,18 +53,18 @@ class Lupusec extends utils.Adapter {
       this.log.info(`Stopping Lupusec processes, please wait!`);
       await this.stopOnlineCheck();
       await this.stopLupusecAdapter();
-      await tools.wait(15);
+      await import_tools.Tools.wait(15);
       callback();
     } catch (error) {
       callback();
     }
   }
   async onObjectChange(id, obj) {
-    const lupusec = await Lupus.Lupusec.getInstance(this);
+    const lupusec = await import_lupusec.Lupus.getInstance(this);
     await lupusec.onObjectChange(id, obj);
   }
   async onStateChange(id, state) {
-    const lupusec = await Lupus.Lupusec.getInstance(this);
+    const lupusec = await import_lupusec.Lupus.getInstance(this);
     if (state) {
       await lupusec.onStateChange(id, state);
     }
@@ -103,7 +103,7 @@ class Lupusec extends utils.Adapter {
           this.sendTo(obj.from, obj.command, array, obj.callback);
       }
       if (obj.command === "sms" || obj.command === "smsgw") {
-        const lupusec = await Lupus.Lupusec.getInstance(this);
+        const lupusec = await import_lupusec.Lupus.getInstance(this);
         const valText = obj == null ? void 0 : obj.message["text"];
         const valNumber = obj == null ? void 0 : obj.message["number"];
         const iddevice = "sms.dial";
@@ -158,7 +158,7 @@ class Lupusec extends utils.Adapter {
   }
   async isAlarmSystemReachable() {
     const server = await this.getHostnameAndPort();
-    const isAlive = await tools.probe(server.hostname, server.port);
+    const isAlive = await import_tools.Tools.probe(server.hostname, server.port);
     return isAlive;
   }
   async startOnlineCheck() {
@@ -189,12 +189,12 @@ class Lupusec extends utils.Adapter {
     }
   }
   async startLupuscecAdapter() {
-    const lupusec = await Lupus.Lupusec.getInstance(this);
+    const lupusec = await import_lupusec.Lupus.getInstance(this);
     await lupusec.startallproc();
     await this.setStateAsync("info.connection", { val: true, ack: true });
   }
   async stopLupusecAdapter() {
-    const lupusec = await Lupus.Lupusec.getInstance(this);
+    const lupusec = await import_lupusec.Lupus.getInstance(this);
     lupusec.stopallproc();
     await this.setStateAsync("info.connection", { val: false, ack: true });
   }
