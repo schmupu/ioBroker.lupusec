@@ -29,14 +29,15 @@ export class States {
      *
      * @param adapter ioBroker Adapter
      * @param language Language like de, en
+     * @param save state an objects changes saved in internal table
      */
-    constructor(adapter: any, language?: string) {
+    constructor(adapter: any, language?: string, save: boolean = false) {
         this.adapter = adapter;
         this.language = language || 'en';
         this.states = {};
         this.objects = {};
-        this.saveobjects = false;
-        this.savestates = false;
+        this.saveobjects = save;
+        this.savestates = save;
         this.abort = (adapter.config.alarm_polltime * 1000) / 2;
     }
 

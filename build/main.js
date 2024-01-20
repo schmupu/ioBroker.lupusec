@@ -128,7 +128,7 @@ class Lupusec extends utils.Adapter {
   }
   async changeDefaultParamter() {
     let update = false;
-    const id = "system.adapter." + this.namespace;
+    const id = `system.adapter.${this.namespace}`;
     const obj = await this.getForeignObjectAsync(id);
     if (obj && obj.native) {
       if (obj.native.option_pollfaster === true) {

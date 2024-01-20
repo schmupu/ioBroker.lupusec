@@ -78,26 +78,24 @@ class Lupus {
   auth;
   token;
   axiostimeout;
-  httpsagent;
-  httpagent;
   axiosinstance;
+  httpsagent = new import_https.default.Agent({
+    rejectUnauthorized: false,
+    keepAlive: true,
+    maxSockets: 1
+  });
+  httpagent = new import_http.default.Agent({
+    keepAlive: true,
+    maxSockets: 1
+  });
   constructor(adapter, language) {
     this.adapter = adapter;
     this.unixtime = {};
     this.run = {};
     this.language = language || "en";
-    this.states = new import_states.States(adapter, language);
+    this.states = new import_states.States(adapter, language, false);
     this.timerhandle = {};
     this.auth = "Basic " + Buffer.from(this.adapter.config.alarm_user + ":" + this.adapter.config.alarm_password).toString("base64");
-    this.httpsagent = new import_https.default.Agent({
-      rejectUnauthorized: false,
-      keepAlive: true,
-      maxSockets: 1
-    });
-    this.httpagent = new import_http.default.Agent({
-      keepAlive: true,
-      maxSockets: 1
-    });
     this.token = "";
     this.axiostimeout = 15 * 1e3;
     this.axiosinstance = import_axios.default.create();
@@ -150,6 +148,7 @@ class Lupus {
     this.run[id] = val;
   }
   async startallproc() {
+    var _a;
     this.adapter.log.debug(`Starting Lupsuec polling process`);
     const seconds = this.adapter.config.alarm_polltime;
     if (!this.exsitproc("Init")) {
@@ -172,6 +171,16 @@ class Lupus {
         await this.getAllWebcamLupusecEntries();
         await this.getAllSMSLupusecEntries();
       });
+    }
+    const id = `system.adapter.${this.adapter.namespace}.logLevel`;
+    const stateLogLevel = (_a = await this.adapter.getForeignStateAsync(id)) == null ? void 0 : _a.val;
+    if (!this.exsitproc("DebugInfos") && stateLogLevel === "debug") {
+      await this.startproc("DebugInfos", 15, async () => {
+        await this.debugInfos();
+      });
+    }
+    if (this.exsitproc("DebugInfos") && stateLogLevel !== "debug") {
+      await this.stopproc("DebugInfos");
     }
   }
   async debugInfos() {
@@ -1287,12 +1296,12 @@ class Lupus {
     }
   }
   async onStateChange(id, state) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n;
     try {
       if (state && state.ack === false) {
         await this.states.setStateNotExistsAsync(id, { val: state.val, ack: state.ack });
         if (id.startsWith(this.adapter.namespace + ".devices.")) {
-          const execdelay = 1e3;
+          const execdelay = 0;
           const icchannelabs = id.split(".").slice(0, 4).join(".");
           const idchannel = id.split(".").slice(2, 4).join(".");
           const iddevice = id.split(".").slice(2).join(".");
@@ -1342,30 +1351,23 @@ class Lupus {
               default:
                 break;
             }
-            this.adapter.clearTimeout(this.timerhandle[iddevice]);
-            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-              var _a2;
-              for (let i = 1; i <= 10; i++) {
-                const result = await this.deviceNukiCmd(iddevice, {
-                  id: channel,
-                  action: value
-                });
-                if (((_a2 = result == null ? void 0 : result.data) == null ? void 0 : _a2.result) === 1)
-                  break;
-                this.adapter.log.debug(
-                  `Action on Nuki not executed, because no positive response from Nuki!. Will try it again in a few seconds!`
-                );
-                await import_tools.Tools.wait(1);
-              }
-            }, 0);
-          } else if (name === "level") {
-            this.adapter.clearTimeout(this.timerhandle[iddevice]);
-            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-              await this.deviceSwitchDimmerPost(iddevice, {
+            for (let i = 1; i <= 10; i++) {
+              const result = await this.deviceNukiCmd(iddevice, {
                 id: channel,
-                level: state.val
+                action: value
               });
-            }, execdelay);
+              if (((_e = result == null ? void 0 : result.data) == null ? void 0 : _e.result) === 1)
+                break;
+              this.adapter.log.debug(
+                `Action on Nuki not executed, because no positive response from Nuki!. Will try it again in a few seconds!`
+              );
+              await import_tools.Tools.wait(1);
+            }
+          } else if (name === "level") {
+            await this.deviceSwitchDimmerPost(iddevice, {
+              id: channel,
+              level: state.val
+            });
           } else if (name === "switch") {
             const shutterstates = {
               0: "on",
@@ -1378,14 +1380,14 @@ class Lupus {
             });
           } else if (name === "on_time") {
             const on_time = Number(state.val);
-            const off_time = Number(((_e = await this.states.getStateAsync(`${idchannel}.off_time`)) == null ? void 0 : _e.val) || 0);
+            const off_time = Number(((_f = await this.states.getStateAsync(`${idchannel}.off_time`)) == null ? void 0 : _f.val) || 0);
             await this.deviceEditShutterPost(iddevice, {
               id: channel,
               on_time: Math.round(on_time * 10),
               off_time: Math.round(off_time * 10)
             });
           } else if (name === "off_time") {
-            const on_time = Number(((_f = await this.states.getStateAsync(`${idchannel}.on_time`)) == null ? void 0 : _f.val) || 0);
+            const on_time = Number(((_g = await this.states.getStateAsync(`${idchannel}.on_time`)) == null ? void 0 : _g.val) || 0);
             const off_time = Number(state.val);
             await this.deviceEditShutterPost(iddevice, {
               id: channel,
@@ -1411,14 +1413,11 @@ class Lupus {
               thermo_mode: state.val == true ? 0 : 4
             });
           } else if (name === "set_temperature") {
-            this.adapter.clearTimeout(this.timerhandle[iddevice]);
-            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-              await this.deviceEditThermoPost(iddevice, {
-                id: channel,
-                act: "t_setpoint",
-                thermo_setpoint: Math.trunc(100 * Math.round(2 * Number(state.val)) / 2)
-              });
-            }, execdelay);
+            await this.deviceEditThermoPost(iddevice, {
+              id: channel,
+              act: "t_setpoint",
+              thermo_setpoint: Math.trunc(100 * Math.round(2 * Number(state.val)) / 2)
+            });
           } else if (name.startsWith("sresp_button_") || name === "sresp_emergency" || name === "name" || name === "send_notify" || name === "bypass" || name === "bypass_tamper" || name === "schar_latch_rpt" || name === "always_off") {
             let parameter = name;
             const form = {
@@ -1439,31 +1438,23 @@ class Lupus {
             form[parameter] = state.val;
             await this.deviceEditPost(iddevice, form);
           } else if (name === "hue") {
-            this.adapter.clearTimeout(this.timerhandle[iddevice]);
-            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-              var _a2;
-              const valuesat = Number(((_a2 = await this.states.getStateAsync(`${idchannel}.sat`)) == null ? void 0 : _a2.val) || 0);
-              await this.deviceHueColorControl(iddevice, {
-                id: channel,
-                act: "t_setpoint",
-                hue: state.val || 0,
-                saturation: valuesat,
-                mod: 2
-              });
-            }, execdelay);
+            const valuesat = Number(((_h = await this.states.getStateAsync(`${idchannel}.sat`)) == null ? void 0 : _h.val) || 0);
+            await this.deviceHueColorControl(iddevice, {
+              id: channel,
+              act: "t_setpoint",
+              hue: state.val || 0,
+              saturation: valuesat,
+              mod: 2
+            });
           } else if (name === "sat") {
-            this.adapter.clearTimeout(this.timerhandle[iddevice]);
-            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-              var _a2;
-              const valuehue = Number(((_a2 = await this.states.getStateAsync(`${idchannel}.hue`)) == null ? void 0 : _a2.val) || 0);
-              await this.deviceHueColorControl(iddevice, {
-                id: channel,
-                act: "t_setpoint",
-                hue: valuehue,
-                saturation: state.val || 0,
-                mod: 2
-              });
-            }, execdelay);
+            const valuehue = Number(((_i = await this.states.getStateAsync(`${idchannel}.hue`)) == null ? void 0 : _i.val) || 0);
+            await this.deviceHueColorControl(iddevice, {
+              id: channel,
+              act: "t_setpoint",
+              hue: valuehue,
+              saturation: state.val || 0,
+              mod: 2
+            });
           } else {
             this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
             this.dummyDevicePost(iddevice);
@@ -1504,9 +1495,9 @@ class Lupus {
           const idchannel = id.split(".").slice(2, -1).join(".");
           const iddevice = id.split(".").slice(2).join(".");
           const name = m[1];
-          const valText = (_g = await this.states.getStateAsync(`${idchannel}.text`)) == null ? void 0 : _g.val;
-          const valNumber = (_h = await this.states.getStateAsync(`${idchannel}.number`)) == null ? void 0 : _h.val;
-          const valProvider = (_i = await this.states.getStateAsync(`${idchannel}.provider`)) == null ? void 0 : _i.val;
+          const valText = (_j = await this.states.getStateAsync(`${idchannel}.text`)) == null ? void 0 : _j.val;
+          const valNumber = (_k = await this.states.getStateAsync(`${idchannel}.number`)) == null ? void 0 : _k.val;
+          const valProvider = (_l = await this.states.getStateAsync(`${idchannel}.provider`)) == null ? void 0 : _l.val;
           let resultsms;
           if (name === "dial") {
             if (valText && valNumber) {
@@ -1517,7 +1508,7 @@ class Lupus {
                     smstext: valText
                   });
                   await this.states.setStateNotExistsAsync(`${idchannel}.result`, {
-                    val: (_j = resultsms == null ? void 0 : resultsms.data) == null ? void 0 : _j.result,
+                    val: (_m = resultsms == null ? void 0 : resultsms.data) == null ? void 0 : _m.result,
                     ack: true
                   });
                   break;
@@ -1527,7 +1518,7 @@ class Lupus {
                     message: valText
                   });
                   await this.states.setStateNotExistsAsync(`${idchannel}.result`, {
-                    val: (_k = resultsms == null ? void 0 : resultsms.data) == null ? void 0 : _k.result,
+                    val: (_n = resultsms == null ? void 0 : resultsms.data) == null ? void 0 : _n.result,
                     ack: true
                   });
                   break;

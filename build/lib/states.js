@@ -30,13 +30,13 @@ class States {
   abort;
   saveobjects;
   savestates;
-  constructor(adapter, language) {
+  constructor(adapter, language, save = false) {
     this.adapter = adapter;
     this.language = language || "en";
     this.states = {};
     this.objects = {};
-    this.saveobjects = false;
-    this.savestates = false;
+    this.saveobjects = save;
+    this.savestates = save;
     this.abort = adapter.config.alarm_polltime * 1e3 / 2;
   }
   async initStatesAllAsync() {

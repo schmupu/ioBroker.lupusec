@@ -144,6 +144,7 @@ sudo chmod u+s `which ping`
 
 -   (Stübi) Redesign - changed everything from JavaScript to TypeScript
 -   (Stübi) Using axios for http requests
+-   (Stübi) the configuration changed. You have to edit the configuration
 
 ## Planed
 

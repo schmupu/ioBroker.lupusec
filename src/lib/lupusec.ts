@@ -63,9 +63,17 @@ export class Lupus {
     private auth: string;
     private token: string;
     private axiostimeout: number;
-    private httpsagent: https.Agent;
-    private httpagent: http.Agent;
     private axiosinstance: axios.AxiosInstance;
+    private readonly httpsagent = new https.Agent({
+        rejectUnauthorized: false,
+        keepAlive: true,
+        maxSockets: 1,
+    });
+    private readonly httpagent = new http.Agent({
+        keepAlive: true,
+        maxSockets: 1,
+    });
+
     /**
      * Contructor - Use insteed singelton method getInstance
      * @param adapter ioBroker adapter instance
@@ -76,20 +84,11 @@ export class Lupus {
         this.unixtime = {};
         this.run = {};
         this.language = language || 'en';
-        this.states = new States(adapter, language);
+        this.states = new States(adapter, language, false);
         this.timerhandle = {};
         this.auth =
             'Basic ' +
             Buffer.from(this.adapter.config.alarm_user + ':' + this.adapter.config.alarm_password).toString('base64');
-        this.httpsagent = new https.Agent({
-            rejectUnauthorized: false,
-            keepAlive: true,
-            maxSockets: 1,
-        });
-        this.httpagent = new http.Agent({
-            keepAlive: true,
-            maxSockets: 1,
-        });
         this.token = '';
         this.axiostimeout = 15 * 1000; // this.adapter.config.alarm_polltime * 1000
         this.axiosinstance = axios.create();
@@ -194,32 +193,22 @@ export class Lupus {
                 await this.getAllDeviceLupusec();
             });
         }
-        /*
-        if (!this.exsitproc('DevicesEntries')) {
-            await this.startproc('DevicesEntries', seconds > 1 ? seconds : 1, async () => {
-                await this.getAllDeviceLupusecEntries();
-            });
-        }
-        if (!this.exsitproc('DevicesEntriesExtended')) {
-            await this.startproc('DevicesEntriesExtended', seconds > 5 ? seconds : 5, async () => {
-                await this.getAllDeviceLupusecEditEntries();
-                await this.getAllDeviceLupusecLogs();
-            });
-        }
-        */
         if (this.adapter.config.webcam_providing && !this.exsitproc('Webcamsms')) {
             await this.startproc('Webcamsms', seconds > 10 ? seconds : 10, async () => {
                 await this.getAllWebcamLupusecEntries();
                 await this.getAllSMSLupusecEntries();
             });
         }
-        /*
-        if (!this.exsitproc('DebugInfos')) {
+        const id = `system.adapter.${this.adapter.namespace}.logLevel`;
+        const stateLogLevel = (await this.adapter.getForeignStateAsync(id))?.val;
+        if (!this.exsitproc('DebugInfos') && stateLogLevel === 'debug') {
             await this.startproc('DebugInfos', 15, async () => {
                 await this.debugInfos();
             });
         }
-        */
+        if (this.exsitproc('DebugInfos') && stateLogLevel !== 'debug') {
+            await this.stopproc('DebugInfos');
+        }
     }
 
     /**
@@ -1452,7 +1441,7 @@ export class Lupus {
             if (state && state.ack === false) {
                 await this.states.setStateNotExistsAsync(id, { val: state.val, ack: state.ack });
                 if (id.startsWith(this.adapter.namespace + '.devices.')) {
-                    const execdelay = 1000; // in milliseconds - this.adapter.config.alarm_polltime * 1000
+                    const execdelay = 0; // in milliseconds - this.adapter.config.alarm_polltime * 1000
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const icchannelabs = id.split('.').slice(0, 4).join('.'); //  lupusec.0.devices.ZS:a61d01
                     const idchannel = id.split('.').slice(2, 4).join('.'); //  devices.ZS:a61d01
@@ -1516,30 +1505,30 @@ export class Lupus {
                             default:
                                 break;
                         }
-                        this.adapter.clearTimeout(this.timerhandle[iddevice]);
-                        this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                            for (let i = 1; i <= 10; i++) {
-                                const result = await this.deviceNukiCmd(iddevice, {
-                                    id: channel,
-                                    action: value,
-                                });
-                                if (result?.data?.result === 1) break;
-                                this.adapter.log.debug(
-                                    `Action on Nuki not executed, because no positive response from Nuki!. Will try it again in a few seconds!`,
-                                );
-                                await Tools.wait(1);
-                            }
-                        }, 0);
+                        // this.adapter.clearTimeout(this.timerhandle[iddevice]);
+                        // this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+                        for (let i = 1; i <= 10; i++) {
+                            const result = await this.deviceNukiCmd(iddevice, {
+                                id: channel,
+                                action: value,
+                            });
+                            if (result?.data?.result === 1) break;
+                            this.adapter.log.debug(
+                                `Action on Nuki not executed, because no positive response from Nuki!. Will try it again in a few seconds!`,
+                            );
+                            await Tools.wait(1);
+                        }
+                        // }, 0);
                     }
                     // Type 66
                     else if (name === 'level') {
-                        this.adapter.clearTimeout(this.timerhandle[iddevice]);
-                        this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                            await this.deviceSwitchDimmerPost(iddevice, {
-                                id: channel,
-                                level: state.val,
-                            });
-                        }, execdelay);
+                        // this.adapter.clearTimeout(this.timerhandle[iddevice]);
+                        // this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+                        await this.deviceSwitchDimmerPost(iddevice, {
+                            id: channel,
+                            level: state.val,
+                        });
+                        // }, execdelay);
                     }
                     // Type 76
                     else if (name === 'switch') {
@@ -1599,14 +1588,14 @@ export class Lupus {
                     }
                     // Type 79
                     else if (name === 'set_temperature') {
-                        this.adapter.clearTimeout(this.timerhandle[iddevice]);
-                        this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                            await this.deviceEditThermoPost(iddevice, {
-                                id: channel,
-                                act: 't_setpoint',
-                                thermo_setpoint: Math.trunc((100 * Math.round(2 * Number(state.val))) / 2),
-                            });
-                        }, execdelay);
+                        // this.adapter.clearTimeout(this.timerhandle[iddevice]);
+                        // this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+                        await this.deviceEditThermoPost(iddevice, {
+                            id: channel,
+                            act: 't_setpoint',
+                            thermo_setpoint: Math.trunc((100 * Math.round(2 * Number(state.val))) / 2),
+                        });
+                        // }, execdelay);
                     }
                     // Type 4,7,17,37,81
                     else if (
@@ -1635,31 +1624,31 @@ export class Lupus {
                     }
                     // Type 74
                     else if (name === 'hue') {
-                        this.adapter.clearTimeout(this.timerhandle[iddevice]);
-                        this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                            const valuesat = Number((await this.states.getStateAsync(`${idchannel}.sat`))?.val || 0);
-                            await this.deviceHueColorControl(iddevice, {
-                                id: channel,
-                                act: 't_setpoint',
-                                hue: state.val || 0,
-                                saturation: valuesat,
-                                mod: 2,
-                            });
-                        }, execdelay);
+                        // this.adapter.clearTimeout(this.timerhandle[iddevice]);
+                        // this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+                        const valuesat = Number((await this.states.getStateAsync(`${idchannel}.sat`))?.val || 0);
+                        await this.deviceHueColorControl(iddevice, {
+                            id: channel,
+                            act: 't_setpoint',
+                            hue: state.val || 0,
+                            saturation: valuesat,
+                            mod: 2,
+                        });
+                        // }, execdelay);
                     }
                     // Type 74
                     else if (name === 'sat') {
-                        this.adapter.clearTimeout(this.timerhandle[iddevice]);
-                        this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                            const valuehue = Number((await this.states.getStateAsync(`${idchannel}.hue`))?.val || 0);
-                            await this.deviceHueColorControl(iddevice, {
-                                id: channel,
-                                act: 't_setpoint',
-                                hue: valuehue,
-                                saturation: state.val || 0,
-                                mod: 2,
-                            });
-                        }, execdelay);
+                        // this.adapter.clearTimeout(this.timerhandle[iddevice]);
+                        // this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+                        const valuehue = Number((await this.states.getStateAsync(`${idchannel}.hue`))?.val || 0);
+                        await this.deviceHueColorControl(iddevice, {
+                            id: channel,
+                            act: 't_setpoint',
+                            hue: valuehue,
+                            saturation: state.val || 0,
+                            mod: 2,
+                        });
+                        // }, execdelay);
                     } else {
                         this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
                         this.dummyDevicePost(iddevice);
