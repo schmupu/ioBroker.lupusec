@@ -139,7 +139,8 @@ sudo chmod u+s `which ping`
 ```
 
 ## Changelog
-### 2.0.1 (2024-12-28)
+
+### **WORK IN PROGRESS**
 
 - (Stübi) Redesign - changed everything from JavaScript to TypeScript
 - (Stübi) Using axios for http requests
