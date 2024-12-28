@@ -38,43 +38,43 @@ You can find detailed information here: [Lupus](https://www.lupus-electronics.de
 By default all Lupusec devices will be on the ioBroker object tab displayed.
 Fully supported and individually adapted are following devices:
 
--   Door contact / window contact (Type 4)
--   Water sensor (Type 5)
--   Panic Button (Type 7)
--   Motion detector / 360 degree motion detector (Type 9)
--   CO sensor (Type 13)
--   Smoke Detector / Heat Detector (Type 14)
--   Temperature Sensor V2 (Type 20)
--   Siren inside (Type 21)
--   Status Indicator / Mini Indoor Siren (Type 22)
--   Power Switch (Type 24)
--   1 channel relay with ZigBee repeater (Type 24)
--   2 channel relay with ZigBee repeater (Type 24)
--   Repater V2 (Type 26)
--   Keypad (Type 37)
--   Glass sensor (Type 39)
--   Siren inside (Type 45)
--   Siren outside (Type 48)
--   Power Switch Meter (Type 48)
--   Electric Meter (Type 50)
--   Universal IR Controller (Type 52)
--   Room sensor V1 (Type 54)
--   LCD temperature sensor (Type 54)
--   Mini temperature (Type 54)
--   Nuki door opener (Type 57)
--   Heat detector (Type 58)
--   Dimmer (Type 66)
--   Light Switch V2 (Type 66)
--   Hue (Type 74)
--   Roller shutter relay V1 (Type 76)
--   Radiator thermostat (Type 79)
--   Radiator thermostat V2 (Type 79)
--   Light sensor (Type 78)
--   Scenario Switch V2 (Type 81)
--   Shock sensor (Type 93)
--   Smoke detector V2 (Type 14)
--   Inwall relay with dimmer V3 (Type 66)
--   Keypad Outdoor V2 (Type 17)
+- Door contact / window contact (Type 4)
+- Water sensor (Type 5)
+- Panic Button (Type 7)
+- Motion detector / 360 degree motion detector (Type 9)
+- CO sensor (Type 13)
+- Smoke Detector / Heat Detector (Type 14)
+- Temperature Sensor V2 (Type 20)
+- Siren inside (Type 21)
+- Status Indicator / Mini Indoor Siren (Type 22)
+- Power Switch (Type 24)
+- 1 channel relay with ZigBee repeater (Type 24)
+- 2 channel relay with ZigBee repeater (Type 24)
+- Repater V2 (Type 26)
+- Keypad (Type 37)
+- Glass sensor (Type 39)
+- Siren inside (Type 45)
+- Siren outside (Type 48)
+- Power Switch Meter (Type 48)
+- Electric Meter (Type 50)
+- Universal IR Controller (Type 52)
+- Room sensor V1 (Type 54)
+- LCD temperature sensor (Type 54)
+- Mini temperature (Type 54)
+- Nuki door opener (Type 57)
+- Heat detector (Type 58)
+- Dimmer (Type 66)
+- Light Switch V2 (Type 66)
+- Hue (Type 74)
+- Roller shutter relay V1 (Type 76)
+- Radiator thermostat (Type 79)
+- Radiator thermostat V2 (Type 79)
+- Light sensor (Type 78)
+- Scenario Switch V2 (Type 81)
+- Shock sensor (Type 93)
+- Smoke detector V2 (Type 14)
+- Inwall relay with dimmer V3 (Type 66)
+- Keypad Outdoor V2 (Type 17)
 
 The two states apple_home_a1 and lupusec.0.status.apple_home_a2 for the Apple Homekit adapter yahka supported. You can turn in addition to the lupusec states the alarm system for area 1 and 2 on and off.
 
@@ -142,16 +142,18 @@ sudo chmod u+s `which ping`
 
 ### 2.0.0 (06.01.2023)
 
--   (Stübi) Redesign - changed everything from JavaScript to TypeScript
--   (Stübi) Using axios for http requests
--   (Stübi) the configuration changed. You have to edit the configuration
+- (Stübi) Redesign - changed everything from JavaScript to TypeScript
+- (Stübi) Using axios for http requests
+- (Stübi) the configuration changed. You have to edit the configuration
+
+### **WORK IN PROGRESS**
 
 ## Planed
 
 Following things are planed in the future:
 
--   support more sensors / devices
--   writing a [documentation](docs/en/info.md) for every sensor / device
+- support more sensors / devices
+- writing a [documentation](docs/en/info.md) for every sensor / device
 
 ## License
 
