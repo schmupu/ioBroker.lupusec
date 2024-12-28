@@ -1,9 +1,22 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "tier": 3,
     "news": {
+      "2.0.2": {
+        "en": "Redesign - changed everything from JavaScript to TypeScript\nUsing axios for http requests\nthe configuration changed. You have to edit the configuration",
+        "de": "Redesign - hat alles von JavaScript in TypeScript geändert\nVerwendung von axios für http-Anfragen\ndie Konfiguration geändert. Sie müssen die Konfiguration bearbeiten",
+        "ru": "Redesign - все изменилось с JavaScript на TypeScript\nИспользование axios для запросов на http\nконфигурация изменилась. Вы должны редактировать конфигурацию",
+        "pt": "Redesign - mudou tudo de JavaScript para TypeScript\nUsando axios para solicitações http\na configuração mudou. Você tem que editar a configuração",
+        "nl": "Redesign - alles veranderd van JavaScript naar TypeScript\nAxios gebruiken voor http-verzoeken\nde configuratie is veranderd. U moet de configuratie bewerken",
+        "fr": "Redesign - tout a changé de JavaScript à TypeScript\nUtilisation d'axios pour les requêtes http\nla configuration a changé. Vous devez modifier la configuration",
+        "it": "Redesign - ha cambiato tutto da JavaScript a TypeScript\nUtilizzo di assios per le richieste http\nla configurazione è cambiata. Devi modificare la configurazione",
+        "es": "Rediseño - cambió todo desde JavaScript a TypeScript\nUtilizando axios para solicitudes http\nla configuración cambió. Tienes que editar la configuración",
+        "pl": "Redagowanie - zmienił wszystko z JavaScript na TypeScript\nKorzystanie z aksjow dla wniosków http\nzmiana konfiguracji. Musisz edytować konfigurację",
+        "uk": "JavaScript licenses API Веб-сайт Go1.13.8\nВикористання axios для HTTP запитів\nзміни конфігурації. Ви повинні редагувати налаштування",
+        "zh-cn": "重新设计 - 从 JavaScript 更改为类型Script\n对 http 请求使用轴\n配置改变。 您必须编辑配置"
+      },
       "2.0.1": {
         "en": "Redesign - changed everything from JavaScript to TypeScript\nUsing axios for http requests\nthe configuration changed. You have to edit the configuration",
         "de": "Redesign - hat alles von JavaScript in TypeScript geändert\nVerwendung von axios für http-Anfragen\ndie Konfiguration geändert. Sie müssen die Konfiguration bearbeiten",
