@@ -142,10 +142,6 @@ sudo chmod u+s `which ping`
 
 ### **WORK IN PROGRESS**
 
-- waiting‚
-
-### 2.0.0 (06.01.2023)
-
 - (Stübi) Redesign - changed everything from JavaScript to TypeScript
 - (Stübi) Using axios for http requests
 - (Stübi) the configuration changed. You have to edit the configuration
