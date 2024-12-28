@@ -23,6 +23,9 @@ __export(datapoints_exports, {
 module.exports = __toCommonJS(datapoints_exports);
 var import_tools = require("./tools");
 class Datapoints {
+  /**
+   * Types of Devices
+   */
   static getDeviceTypes() {
     const deviceTypes = {
       TYPE_0: {
@@ -348,6 +351,7 @@ class Datapoints {
     };
     const button_events_de = { ...noanswer_event_de, ...alarm_events_de, ...sensor_events_de, ...szene_events_de };
     const deviceDatapoints = {
+      // Sirene
       type_siren: {
         alarm_status_ex: {
           type: "state",
@@ -370,6 +374,7 @@ class Datapoints {
           }
         }
       },
+      // Steckdose
       type_switch: {
         status_ex: {
           type: "state",
@@ -388,6 +393,14 @@ class Datapoints {
             }
           }
         },
+        /*
+        status: {
+          type: 'string',
+          role: 'text',
+          read: true,
+          write: false,
+        },
+        */
         pd: {
           type: "state",
           common: {
@@ -497,6 +510,7 @@ class Datapoints {
           }
         }
       },
+      // Electric Meter / Hauptstromzähler
       type_electric_meter: {
         factor: {
           type: "state",
@@ -540,6 +554,7 @@ class Datapoints {
           }
         }
       },
+      // Lichtschalter (Bsp. 24)
       type_pswitch: {
         status_ex: {
           type: "state",
@@ -592,6 +607,7 @@ class Datapoints {
           }
         }
       },
+      // Dimmer , Unterputzrelais
       type_dimmer: {
         status_ex: {
           type: "state",
@@ -661,6 +677,7 @@ class Datapoints {
           }
         }
       },
+      // Hue Lampe
       type_hue: {
         status_ex: {
           type: "state",
@@ -679,6 +696,19 @@ class Datapoints {
             }
           }
         },
+        /*
+        mod: {
+             type: 'state',
+        common: {
+          type: 'number',
+          role: 'level',
+          name: 'Modus',
+          read: true,
+          write: true,
+          def: 2
+        }
+        },
+        */
         hue: {
           type: "state",
           common: {
@@ -721,6 +751,7 @@ class Datapoints {
           }
         }
       },
+      // Türkontakt
       type_contact: {
         status_ex: {
           type: "state",
@@ -792,6 +823,7 @@ class Datapoints {
           }
         }
       },
+      // Type shock sensor
       type_shock_sensor: {
         alarm_status_ex: {
           type: "state",
@@ -824,6 +856,7 @@ class Datapoints {
           }
         }
       },
+      // Bewegungsmelder
       type_motion: {
         alarm_status_ex: {
           type: "state",
@@ -856,6 +889,7 @@ class Datapoints {
           }
         }
       },
+      // Glasbruch
       type_sensor_glas: {
         alarm_status_ex: {
           type: "state",
@@ -888,6 +922,7 @@ class Datapoints {
           }
         }
       },
+      // Rauchmelder
       type_sensor_fire: {
         alarm_status_ex: {
           type: "state",
@@ -920,6 +955,7 @@ class Datapoints {
           }
         }
       },
+      // Hitzemelder
       type_heatdetector: {
         alarm_status_ex: {
           type: "state",
@@ -952,6 +988,7 @@ class Datapoints {
           }
         }
       },
+      // Wassermelder
       type_sensor_water: {
         alarm_status_ex: {
           type: "state",
@@ -984,6 +1021,7 @@ class Datapoints {
           }
         }
       },
+      // Panic button
       type_panic_button: {
         alarm_status_ex: {
           type: "state",
@@ -1033,6 +1071,7 @@ class Datapoints {
           }
         }
       },
+      // Rolläden
       type_shutter: {
         level: {
           type: "state",
@@ -1107,6 +1146,7 @@ class Datapoints {
           }
         }
       },
+      // Raumsensor / Thermostat Type 20
       type_raumsensor20: {
         actual_temperature: {
           type: "state",
@@ -1135,6 +1175,7 @@ class Datapoints {
           }
         }
       },
+      // Raumsensor / Thermostat Type 54
       type_raumsensor: {
         actual_temperature: {
           type: "state",
@@ -1179,6 +1220,7 @@ class Datapoints {
           }
         }
       },
+      // Lichtsensor
       type_lightsensor: {
         actual_lux: {
           type: "state",
@@ -1238,6 +1280,7 @@ class Datapoints {
           }
         }
       },
+      // Thermostat
       type_thermostat: {
         set_temperature: {
           type: "state",
@@ -1342,6 +1385,7 @@ class Datapoints {
           }
         }
       },
+      // Nichts gefunden
       type_unknown: {
         alarm_status_ex: {
           type: "state",
@@ -1384,6 +1428,7 @@ class Datapoints {
           }
         }
       },
+      // Innensirene / Statusanzeige
       type_statusanzeige: {
         alarm_status_ex: {
           type: "state",
@@ -1406,6 +1451,7 @@ class Datapoints {
           }
         }
       },
+      // Repeater
       type_repeater: {
         alarm_status_ex: {
           type: "state",
@@ -1428,6 +1474,7 @@ class Datapoints {
           }
         }
       },
+      // CO sensor
       type_sensor_co: {
         alarm_status_ex: {
           type: "state",
@@ -1450,6 +1497,7 @@ class Datapoints {
           }
         }
       },
+      // Smart Switch
       type_smart_switch: {
         alarm_status_ex: {
           type: "state",
@@ -1540,6 +1588,7 @@ class Datapoints {
           }
         }
       },
+      // Universal IR Fernbedienung
       type_ir_remotecontrol: {
         appliance_1: {
           type: "channel",
@@ -2200,7 +2249,18 @@ class Datapoints {
           }
         }
       },
+      // Gilt für alle Geräte.
       type_all: {
+        // SID löschen !!!
+        /*
+        sid: {
+          type: 'string',
+          role: 'text',
+          name: 'ID des Gerätes',
+          read: true,
+          write: false
+        },
+        */
         name: {
           type: "state",
           common: {
@@ -2296,14 +2356,30 @@ class Datapoints {
             max: 1
           }
         },
+        /*
+        type_f: {
+                        type: 'state',
+            common: {
+          type: 'string',
+          role: 'value',
+          name: 'Sensortyp',
+          read: true,
+          write: false}
+        },
+        */
         rssi: {
           type: "state",
           common: {
             type: "number",
             role: "value",
-            name: "Rssi",
+            name: {
+              en: "Rssi",
+              de: "Rssi"
+            },
             read: true,
-            write: false
+            write: false,
+            min: 0,
+            max: 9
           }
         },
         reachable: {
@@ -2619,7 +2695,7 @@ class Datapoints {
           icon: "/icons/zentrale.png",
           read: true,
           write: false,
-          min: 1,
+          min: 0,
           max: 9
         }
       },
@@ -2754,6 +2830,38 @@ class Datapoints {
   }
   static getWebcamDatapoints() {
     const webcamDatapoints = {
+      /*
+      cam9: {
+          type: 'channel',
+          common: {
+              name: '%value%'
+          }
+      },
+      'camp8.stream': {
+          type: 'state',
+          common: {
+              type: 'string',
+              role: 'text.url',
+              icon: '/icons/webcam.png',
+              name: 'Stream',
+              read: true,
+              write: false,
+              def: ''
+          }
+      },
+      'cam8.image': {
+          type: 'state',
+          common: {
+              type: 'string',
+              role: 'text.url',
+              icon: '/icons/webcam.png',
+              name: 'Image',
+              read: true,
+              write: false,
+              def: ''
+          }
+      },
+      */
       image: {
         type: "state",
         common: {
@@ -2781,6 +2889,12 @@ class Datapoints {
     };
     return webcamDatapoints;
   }
+  /**
+   * Get all information (datapoints) like name, value type, ...for a device type
+   * @param {number} devicetype : Lupusec Type like 38
+   * @param {string} language: Language like en, de, ...
+   * @returns {object | undefined}: List of state for Type
+   */
   static getDeviceTypeList(devicetype, language) {
     var _a, _b;
     const deviceTypes = Datapoints.getDeviceTypes();
@@ -2808,6 +2922,11 @@ class Datapoints {
     }
     return devicelist;
   }
+  /**
+   * Returns a icon for a devicetype
+   * @param {number} devicetype : device type like 20, 30, 21
+   * @returns {string | undefined} : icon
+   */
   static getDeviceIconByDeviceType(devicetype) {
     var _a;
     const deviceTypes = Datapoints.getDeviceTypes();
@@ -2817,6 +2936,11 @@ class Datapoints {
     const icon = (_a = deviceTypes[typename]) == null ? void 0 : _a.icon;
     return icon;
   }
+  /**
+   *
+   * @param devicetype type of lupsec alarm system like 57
+   * @returns name of type. for example Nuki
+   */
   static getDeviceNameByDeviceType(devicetype) {
     var _a;
     const deviceTypes = Datapoints.getDeviceTypes();

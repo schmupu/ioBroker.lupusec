@@ -2380,9 +2380,14 @@ export class Datapoints {
                     common: {
                         type: 'number',
                         role: 'value',
-                        name: 'Rssi',
+                        name: {
+                            en: 'Rssi',
+                            de: 'Rssi',
+                        },
                         read: true,
                         write: false,
+                        min: 0,
+                        max: 9,
                     },
                 },
                 reachable: {
@@ -2702,7 +2707,7 @@ export class Datapoints {
                     icon: '/icons/zentrale.png',
                     read: true,
                     write: false,
-                    min: 1,
+                    min: 0,
                     max: 9,
                 },
             },

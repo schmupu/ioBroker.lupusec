@@ -18,6 +18,10 @@ var __copyProps = (to, from, except, desc) => {
   return to;
 };
 var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
@@ -88,6 +92,11 @@ class Lupus {
     keepAlive: true,
     maxSockets: 1
   });
+  /**
+   * Contructor - Use insteed singelton method getInstance
+   * @param adapter ioBroker adapter instance
+   * @param language language for state names (de, en, ..)
+   */
   constructor(adapter, language) {
     this.adapter = adapter;
     this.unixtime = {};
@@ -101,6 +110,11 @@ class Lupus {
     this.axiosinstance = import_axios.default.create();
     this.adapter.log.debug(`New instance of Lupusec created!`);
   }
+  /**
+   * Singelton - get Lupusec class instance
+   * @param adapter ioBroker adapter instance
+   * @returns Instane of Lupusec class
+   */
   static async getInstance(adapter) {
     var _a;
     if (!this.instance) {
@@ -113,9 +127,19 @@ class Lupus {
     }
     return this.instance;
   }
+  /**
+   * unique identifier
+   * @returns unique identifier
+   */
   static getUniqueId() {
     return this.uniqueid;
   }
+  /**
+   * starting a prozess every x seconds
+   * @param id unique name  / key of the process
+   * @param seconds process restarting after x seconds
+   * @param callback function to start (function can be async)
+   */
   async startproc(id, seconds, callback) {
     var _a;
     if (callback) {
@@ -134,6 +158,10 @@ class Lupus {
       this.adapter.clearTimeout(this.run[id]);
     this.run[id] = this.adapter.setTimeout(async () => await this.startproc(id, seconds, callback), seconds * 1e3);
   }
+  /**
+   * stopping process by id
+   * @param id unique name  / key of the process
+   */
   async stopproc(id) {
     if (this.run[id]) {
       this.adapter.log.debug(`Canceling process with id ${id}`);
@@ -141,12 +169,25 @@ class Lupus {
       delete this.run[id];
     }
   }
+  /**
+   * does process with id exist
+   * @param id unique name  / key of the process
+   * @returns exist true/false
+   */
   exsitproc(id) {
     return this.run[id] ? true : false;
   }
+  /**
+   * set process with value
+   * @param id unique name  / key of the process
+   * @param val value is timmer of setTimeout
+   */
   setproc(id, val) {
     this.run[id] = val;
   }
+  /**
+   * List of all processes to start
+   */
   async startallproc() {
     var _a;
     this.adapter.log.debug(`Starting Lupsuec polling process`);
@@ -183,6 +224,9 @@ class Lupus {
       await this.stopproc("DebugInfos");
     }
   }
+  /**
+   * Some debug Infos
+   */
   async debugInfos() {
     this.adapter.log.debug(`Array Unixtime: ${Object.keys(this.unixtime).length}`);
     this.adapter.log.debug(`Array Run: ${Object.keys(this.run).length}`);
@@ -204,11 +248,19 @@ class Lupus {
   async dummyProcess() {
     await import_tools.Tools.wait(4);
   }
+  /**
+   * stop all process
+   */
   async stopallproc() {
     for (const id in this.run) {
       await this.stopproc(id);
     }
   }
+  /**
+   * set actual time as unix time for an unique id
+   * @param id unique name  / key of the process
+   * @param unixtimestamp unixtime to set (optional)
+   */
   setUnixTimestamp(id, unixtimestamp) {
     if (unixtimestamp === void 0) {
       this.unixtime[id] = this.getUnixTimestampNow();
@@ -216,15 +268,33 @@ class Lupus {
       this.unixtime[id] = unixtimestamp;
     }
   }
+  /**
+   * gets acutal time
+   */
   getUnixTimestampNow() {
-    return Math.ceil(new Date().getTime());
+    return Math.ceil((/* @__PURE__ */ new Date()).getTime());
   }
+  /**
+   * gets unixtime for id
+   * @param id unique name  / key of the process
+   * @returns unixtime
+   */
   getUnixTimestamp(id) {
     return this.unixtime[id];
   }
+  /**
+   * deletes unixtime für id
+   * @param id {string}
+   */
   delUnixTimestamp(id) {
     this.unixtime[id] = 0;
   }
+  /**
+   * Get all device ids for a devicetype. Example for devicetype 42 you get back [{ id: 'Z:34324, type:42 }, { id: 'Z:4721', type: 42}]
+   * If you set devicetype to undefined. You get back all devices ids
+   * @param devicetype devicetype like 42 oder undefindes
+   * @returns return an array with all device ids for a device type
+   */
   async getDeviceIdsByType(devicetype) {
     const deviceids = [];
     const states = await this.states.getStatesAllAsync("devices.*.type");
@@ -241,6 +311,9 @@ class Lupus {
     }
     return deviceids;
   }
+  /**
+   * Object changes in configuration will be written in existing configuration
+   */
   async initObjects() {
     var _a;
     const deviceids = await this.getDeviceIdsByType();
@@ -263,6 +336,12 @@ class Lupus {
       }
     }
   }
+  /**
+   * Lupusec Status to Apple Home Status
+   * @param mode_pc_a Area 1 or 2 (1,2)
+   * @param alarm_ex 0 = Disarm, 1 = Arm, 2 = Home1, 3 = Home2, 4 = Home3
+   * @returns status for Apple home as number if set. If not set the return valus is undefined
+   */
   getAppleStautusFromLupusec(mode_pc_a, alarm_ex) {
     let alarm = void 0;
     const vmode_pc_a = Number(mode_pc_a);
@@ -291,6 +370,11 @@ class Lupus {
     }
     return alarm;
   }
+  /**
+   * Apple Home Status to Lupusec Status
+   * @param applestatus Apple Status from 0 to 4
+   * @returns Lupsusec Status from 0 to 3
+   */
   getLupusecFromAppleStautus(applestatus) {
     let alarm = void 0;
     switch (applestatus) {
@@ -313,11 +397,21 @@ class Lupus {
     }
     return alarm;
   }
+  /**
+   * Gets from path the abssolute Url
+   * @param path path of the Url like /action/logout
+   * @returns full abaolute URI like https://foo.com/action/logout
+   */
   async getAbsoluteURI(path) {
     const alarm_hostname = await import_tools.Tools.lookup(this.adapter.config.alarm_hostname);
     const aboluteURI = this.adapter.config.alarm_https === true ? "https://" + alarm_hostname + path : "http://" + alarm_hostname + path;
     return aboluteURI;
   }
+  /**
+   * Gets Token from alarm system
+   * @param renew : optinal parameter, to get new Token
+   * @returns returns token
+   */
   async requestToken(renew) {
     if (renew === void 0)
       renew = false;
@@ -350,6 +444,12 @@ class Lupus {
     this.adapter.log.debug(`New Token: ${this.token}`);
     return this.token;
   }
+  /**
+   * make a http request get
+   * @param path path of the request like /action/logout
+   * @param config optional parameter, list of configuraion
+   * @returns Response of the request
+   */
   async requestGet(path, config = {}) {
     const unixtime = this.getUnixTimestampNow();
     const token = await this.requestToken(false);
@@ -378,6 +478,13 @@ class Lupus {
       unixtime
     };
   }
+  /**
+   * Post Request
+   * @param path url for post
+   * @param data  payload for post statement
+   * @param config config
+   * @returns response of post request
+   */
   async requestPost(path, data, config) {
     const token = await this.requestToken(false);
     const requestconfig = {
@@ -752,6 +859,7 @@ class Lupus {
     this.setUnixTimestamp("logoutPost");
     return result;
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async isNukiAllive(id) {
     var _a, _b;
     const result = await this.requestGet(urlNukiGet);
@@ -893,6 +1001,7 @@ class Lupus {
                 id,
                 area,
                 zone
+                // ...devices[id],
               };
             }
           }
@@ -1041,6 +1150,12 @@ class Lupus {
     };
     return data;
   }
+  /**
+   *
+   * @param name string or object with name like de: 'tür', en: 'door' or 'tür'
+   * @param extname string or object with name kike de: 'Status', en: 'state' or 'Status'
+   * @returns string or object like de: Status (tür), en: state (door) or Status (tür)
+   */
   async extendCommonName(name, extname) {
     if (!extname || !name)
       return name;
@@ -1194,6 +1309,7 @@ class Lupus {
     if (promisearray)
       await Promise.all(promisearray.map(async (func) => await func()));
   }
+  // Status
   async setAllStatusLupusecEntries(results) {
     var _a, _b;
     const zentrale = results.zentrale;
@@ -1295,6 +1411,11 @@ class Lupus {
       await caminstance.startServer();
     }
   }
+  /**
+   * Is called if a subscribed state changes
+   * @param {string} id
+   * @param {ioBroker.State | null | undefined} state
+   */
   async onStateChange(id, state) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k;
     try {
@@ -1558,6 +1679,11 @@ class Lupus {
       this.adapter.log.error(`Error while setting state: ${error.toString()}`);
     }
   }
+  /**
+   * Is called if a subscribed object changes
+   * @param {string} id
+   * @param {ioBroker.Object | null | undefined} obj
+   */
   async onObjectChange(id, obj) {
     if (obj) {
     } else {

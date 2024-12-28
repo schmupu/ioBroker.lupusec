@@ -52,7 +52,10 @@
                 "pro": true
             }
         },
-        "license": "MIT",
+        "licenseInformation": {
+            "license": "MIT",
+            "type": "free"
+        },
         "platform": "Javascript/Node.js",
         "main": "build/main.js",
         "icon": "icons/lupusec.png",
@@ -77,7 +80,7 @@
         },
         "dependencies": [
             {
-                "js-controller": ">=3.3.22"
+                "js-controller": ">=6.0.0"
             }
         ],
         "globalDependencies": [

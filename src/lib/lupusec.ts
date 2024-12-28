@@ -939,7 +939,7 @@ export class Lupus {
         if (parallelprocessing || this.adapter.config.option_pollfaster) {
             results = await Promise.all(
                 requestarray.map(async (request) => {
-                    let result = {} || undefined;
+                    let result = {};
                     const isasync = Tools.isAsync(request);
                     result = isasync ? await request() : request();
                     return result;
@@ -947,7 +947,7 @@ export class Lupus {
             );
         } else {
             for (const request of requestarray) {
-                let result = {} || undefined;
+                let result = {};
                 const isasync = Tools.isAsync(request);
                 result = isasync ? await request() : request();
                 results.push(result);
@@ -1065,7 +1065,7 @@ export class Lupus {
         if (parallelprocessing || this.adapter.config.option_pollfaster) {
             results = await Promise.all(
                 requestarray.map(async (request) => {
-                    let result = {} || undefined;
+                    let result = {};
                     const isasync = Tools.isAsync(request);
                     result = isasync ? await request() : request();
                     return result;
@@ -1073,7 +1073,7 @@ export class Lupus {
             );
         } else {
             for (const request of requestarray) {
-                let result = {} || undefined;
+                let result = {};
                 const isasync = Tools.isAsync(request);
                 result = isasync ? await request() : request();
                 results.push(result);

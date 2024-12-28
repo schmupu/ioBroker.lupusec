@@ -18,6 +18,10 @@ var __copyProps = (to, from, except, desc) => {
   return to;
 };
 var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
@@ -36,10 +40,19 @@ var import_tools = require("./tools");
 class MJPEGtoJPG {
   adapter;
   chunks;
+  /**
+   *
+   * @param adapter iobroker Adapter
+   */
   constructor(adapter) {
     this.adapter = adapter;
     this.chunks = [];
   }
+  /**
+   *
+   * @param data data
+   * @param callback callback function
+   */
   mjpegTojpeg(data, callback) {
     const soi = Buffer.from([255, 216]);
     const eoi = Buffer.from([255, 217]);
@@ -59,6 +72,9 @@ class MJPEGtoJPG {
       this.chunks.push(data);
     }
   }
+  /**
+   * clear all
+   */
   clearAll() {
     this.chunks = [];
   }
@@ -70,6 +86,12 @@ class Webcam {
   port;
   static instance;
   httpTerminator;
+  // HttpTerminator;
+  /**
+   * Constructur webcam instance
+   * @param adapter iobroker adapter
+   * @param webcams object with webcam from Lupusec system
+   */
   constructor(adapter, webcams) {
     this.adapter = adapter;
     this.webcams = webcams;
@@ -77,16 +99,31 @@ class Webcam {
     this.port = this.adapter.config.webcam_port;
     this.httpTerminator = void 0;
   }
+  /**
+   * Singelton, create webcam instance
+   * @param adapter iobroker adapter
+   * @param webcams object with webcam from Lupusec system
+   * @returns returns webcam instance
+   */
   static getInstance(adapter, webcams) {
     if (!this.instance)
       this.instance = new Webcam(adapter, webcams);
     return this.instance;
   }
+  /**
+   * Gets from path the abssolute Url
+   * @param path path of the Url like /action/logout
+   * @returns full abaolute URI like https://foo.com/action/logout
+   */
   async getAbsoluteURI(path) {
     const alarm_hostname = await import_tools.Tools.lookup(this.adapter.config.alarm_hostname);
     const aboluteURI = this.adapter.config.alarm_https === true ? "https://" + alarm_hostname + path : "http://" + alarm_hostname + path;
     return aboluteURI;
   }
+  /**
+   * Start Server
+   * @returns
+   */
   async startServer() {
     const host = this.host;
     const port = this.port;
@@ -132,12 +169,23 @@ class Webcam {
       }
     }
   }
+  /**
+   * Stop Server
+   */
   async stoptServer() {
     if (this.httpTerminator) {
       this.httpTerminator.terminate();
       delete this.httpTerminator;
     }
   }
+  /**
+   *
+   * @param id
+   * @param url
+   * @param type
+   * @param res
+   * @returns
+   */
   async startStreamingClient(id, url, type, res) {
     if (!id || !url)
       return;

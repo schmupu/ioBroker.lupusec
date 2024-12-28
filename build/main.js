@@ -14,6 +14,10 @@ var __copyProps = (to, from, except, desc) => {
   return to;
 };
 var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
@@ -36,6 +40,9 @@ class Lupusec extends utils.Adapter {
     this.on("message", this.onMessage.bind(this));
     this.on("unload", this.onUnload.bind(this));
   }
+  /**
+   * Is called when databases are connected and adapter received configuration.
+   */
   async onReady() {
     await this.changeDefaultParamter();
     await this.subscribeStatesAsync("devices.*");
@@ -48,6 +55,9 @@ class Lupusec extends utils.Adapter {
     await this.subscribeObjectsAsync("webcams.*");
     await this.startOnlineCheck();
   }
+  /**
+   * Is called when adapter shuts down - callback has to be called under any circumstances!
+   */
   async onUnload(callback) {
     try {
       this.log.info(`Stopping Lupusec processes, please wait!`);
@@ -59,16 +69,27 @@ class Lupusec extends utils.Adapter {
       callback();
     }
   }
+  /**
+   * Is called if a subscribed object changes
+   */
   async onObjectChange(id, obj) {
     const lupusec = await import_lupusec.Lupus.getInstance(this);
     await lupusec.onObjectChange(id, obj);
   }
+  /**
+   * Is called if a subscribed state changes
+   */
   async onStateChange(id, state) {
     const lupusec = await import_lupusec.Lupus.getInstance(this);
     if (state) {
       await lupusec.onStateChange(id, state);
     }
   }
+  /**
+   * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
+   * Using this method requires "common.messagebox" property to be set to true in io-package.json
+   * @param {ioBroker.Message} obj
+   */
   async onMessage(obj) {
     if (typeof obj === "object" && obj.message) {
       if (obj.command === "send") {
@@ -126,6 +147,9 @@ class Lupusec extends utils.Adapter {
       }
     }
   }
+  /**
+   * Change default parameter
+   */
   async changeDefaultParamter() {
     let update = false;
     const id = `system.adapter.${this.namespace}`;
@@ -149,6 +173,11 @@ class Lupusec extends utils.Adapter {
       }
     }
   }
+  /**
+   * returns the hostname and port of configuration.
+   * example. test.foo:80 => {hostanem: test.foo, port: 80}
+   * @returns hostname and port as object
+   */
   async getHostnameAndPort() {
     const alarm_hostname = this.config.alarm_hostname;
     const array = alarm_hostname.split(":");
@@ -156,11 +185,18 @@ class Lupusec extends utils.Adapter {
     const port = array[1] ? array[1] : this.config.alarm_https === true ? 443 : 80;
     return { hostname, port, https: this.config.alarm_https };
   }
+  /**
+   * checks if alam system is reachable
+   * @returns true or false
+   */
   async isAlarmSystemReachable() {
     const server = await this.getHostnameAndPort();
     const isAlive = await import_tools.Tools.probe(server.hostname, server.port);
     return isAlive;
   }
+  /**
+   * Online-Check via TCP ping (when using CoAP)
+   */
   async startOnlineCheck() {
     try {
       const server = await this.getHostnameAndPort();
@@ -182,17 +218,26 @@ class Lupusec extends utils.Adapter {
     }
     this.onlineCheckTimeout = this.setTimeout(async () => await this.startOnlineCheck(), 10 * 1e3);
   }
+  /**
+   * Stops the continously online check
+   */
   async stopOnlineCheck() {
     if (this.onlineCheckTimeout) {
       this.clearTimeout(this.onlineCheckTimeout);
       this.onlineCheckTimeout = void 0;
     }
   }
+  /**
+   * Starts the polling of the states from the Lupusec alarm system.
+   */
   async startLupuscecAdapter() {
     const lupusec = await import_lupusec.Lupus.getInstance(this);
     await lupusec.startallproc();
     await this.setStateAsync("info.connection", { val: true, ack: true });
   }
+  /**
+   * Stops polling the states from the Lupusec alarm system
+   */
   async stopLupusecAdapter() {
     const lupusec = await import_lupusec.Lupus.getInstance(this);
     lupusec.stopallproc();

@@ -30,6 +30,12 @@ class States {
   abort;
   saveobjects;
   savestates;
+  /**
+   *
+   * @param adapter ioBroker Adapter
+   * @param language Language like de, en
+   * @param save state an objects changes saved in internal table
+   */
   constructor(adapter, language, save = false) {
     this.adapter = adapter;
     this.language = language || "en";
@@ -39,6 +45,9 @@ class States {
     this.savestates = save;
     this.abort = adapter.config.alarm_polltime * 1e3 / 2;
   }
+  /**
+   * Reads all states for adapter from ioBroker
+   */
   async initStatesAllAsync() {
     this.states = {};
     const states = await this.adapter.getStatesAsync(`${this.adapter.namespace}.*`);
@@ -55,6 +64,11 @@ class States {
         this.states[idnew] = states[idnew];
     }
   }
+  /**
+   * Get State by id
+   * @param id id of state
+   * @returns returns value und ack from state
+   */
   async getStateAsync(id) {
     if (id) {
       id = id.replace(`${this.adapter.namespace}.`, "");
@@ -67,6 +81,11 @@ class States {
     }
     return void 0;
   }
+  /**
+   *
+   * @param pattern like devices.*.type. If empty pattern = *
+   * @returns all states for pattern
+   */
   async getStatesAllAsync(pattern) {
     if (!this.states) {
       return this.states;
@@ -87,6 +106,12 @@ class States {
       return states;
     }
   }
+  /**
+   * Set State by id, only if state changed (ack or val)
+   * @param id id to state
+   * @param object object with keys val and ack { val: 'value', ack: true/false }
+   * @returns if state changed, you get back the id else undefined
+   */
   async setStateNotExistsAsync(id, object) {
     if (id)
       id = id.replace(`${this.adapter.namespace}.`, "");
@@ -98,6 +123,12 @@ class States {
     }
     return void 0;
   }
+  /**
+   * Set State by id
+   * @param id id to state
+   * @param object object with keys val and ack { val: 'value', ack: true/false }
+   * @returns if state changed, you get back the id, else undefined
+   */
   async setStateAsync(id, object) {
     if (id) {
       const val = import_tools.Tools.hasProperty(object, "val") ? object.val : null;
@@ -109,6 +140,11 @@ class States {
     }
     return void 0;
   }
+  /**
+   * Delete a state by id
+   * @param id id to state
+   * @returns if state deleted, you get back true else false
+   */
   async delStateAsync(id) {
     if (id)
       id = id.replace(`${this.adapter.namespace}.`, "");
@@ -120,6 +156,10 @@ class States {
       await this.adapter.delStateAsync(id);
     }
   }
+  /**
+   * Reads all objects for an adapter
+   * @returns returns all objects
+   */
   async initObjectsAllAsync() {
     this.objects = {};
     const objects = await this.adapter.getAdapterObjectsAsync();
@@ -133,6 +173,11 @@ class States {
     }
     return objects;
   }
+  /**
+   * Get State by id
+   * @param id id to state
+   * @returns returns value und ack from state
+   */
   async getObjectAsync(id) {
     if (id) {
       id = id.replace(`${this.adapter.namespace}.`, "");
@@ -145,6 +190,10 @@ class States {
     }
     return {};
   }
+  /**
+   * reads all objects
+   * @returns {Promise<object>} : return all objects
+   */
   async getObjectsAllAsync() {
     if (this.objects) {
       return this.objects;
@@ -159,6 +208,13 @@ class States {
       return objects;
     }
   }
+  /**
+   * Sets for an id the object data
+   * @param id state id
+   * @param parameter like name
+   * @param options (optional)
+   * @returns returns id if changed, else undefined
+   */
   async setObjectNotExistsAsync(id, object, options) {
     var _a, _b;
     if (id)
@@ -171,6 +227,13 @@ class States {
     }
     return void 0;
   }
+  /**
+   *
+   * @param id id of object
+   * @param object object payload
+   * @param options option (optional)
+   * @returns
+   */
   async setObjectAsync(id, object, options) {
     if (id) {
       id = id.replace(`${this.adapter.namespace}.`, "");
@@ -180,6 +243,10 @@ class States {
     }
     return void 0;
   }
+  /**
+   *
+   * @param id id of object
+   */
   async delObjectAsync(id) {
     if (id)
       id = id.replace(`${this.adapter.namespace}.`, "");
