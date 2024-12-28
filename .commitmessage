@@ -1,5 +1,0 @@
-chore: release v2.0.1
-
-- (Stübi) Redesign - changed everything from JavaScript to TypeScript
-- (Stübi) Using axios for http requests
-- (Stübi) the configuration changed. You have to edit the configuration
