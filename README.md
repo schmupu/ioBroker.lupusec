@@ -140,7 +140,7 @@ sudo chmod u+s `which ping`
 
 ## Changelog
 
-**WORK IN PROGRESS**
+### **WORK IN PROGRESS**
 
 - (Stübi) Adjustments due to migration from ESLint 8x≤ to 9.x.x
 
