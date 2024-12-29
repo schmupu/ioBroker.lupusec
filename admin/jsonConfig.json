@@ -44,7 +44,7 @@
                     "sm": 12,
                     "md": 4,
                     "lg": 1,
-                    "min": 1,
+                    "min": 0.25,
                     "max": 120,
                     "step": 0.25,
                     "label": "Polltime in seconds"

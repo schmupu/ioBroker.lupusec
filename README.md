@@ -139,6 +139,11 @@ sudo chmod u+s `which ping`
 ```
 
 ## Changelog
+
+### **WORK IN PROGRESS**
+
+- (Stübi) Adjustments due to migration from ESLint 8 to 9
+
 ### 2.0.0 (2024-12-28)
 
 - (Stübi) Redesign - changed everything from JavaScript to TypeScript

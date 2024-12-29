@@ -3,7 +3,8 @@ import http from 'http';
 import https from 'https';
 import querystring from 'querystring';
 import { Datapoints } from './datapoints';
-import { States, ifState } from './states';
+import type * as states from './states';
+import { States } from './states';
 import { Tools } from './tools';
 import { Webcam } from './webcam';
 
@@ -76,6 +77,7 @@ export class Lupus {
 
     /**
      * Contructor - Use insteed singelton method getInstance
+     *
      * @param adapter ioBroker adapter instance
      * @param language language for state names (de, en, ..)
      */
@@ -86,9 +88,9 @@ export class Lupus {
         this.language = language || 'en';
         this.states = new States(adapter, language, false);
         this.timerhandle = {};
-        this.auth =
-            'Basic ' +
-            Buffer.from(this.adapter.config.alarm_user + ':' + this.adapter.config.alarm_password).toString('base64');
+        this.auth = `Basic ${Buffer.from(
+            `${this.adapter.config.alarm_user}:${this.adapter.config.alarm_password}`,
+        ).toString('base64')}`;
         this.token = '';
         this.axiostimeout = 15 * 1000; // this.adapter.config.alarm_polltime * 1000
         this.axiosinstance = axios.create();
@@ -97,6 +99,7 @@ export class Lupus {
 
     /**
      * Singelton - get Lupusec class instance
+     *
      * @param adapter ioBroker adapter instance
      * @returns Instane of Lupusec class
      */
@@ -114,6 +117,7 @@ export class Lupus {
 
     /**
      * unique identifier
+     *
      * @returns unique identifier
      */
     private static getUniqueId(): number {
@@ -122,31 +126,40 @@ export class Lupus {
 
     /**
      * starting a prozess every x seconds
+     *
      * @param id unique name  / key of the process
      * @param seconds process restarting after x seconds
      * @param callback function to start (function can be async)
      */
     private async startproc(id: string, seconds: number, callback: () => void): Promise<void> {
-        if (callback) {
+        if (callback !== undefined) {
             try {
+                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                 this.adapter.log.debug(`Starting polling with process ${id}, callback ${callback}`);
+                // eslint-disable-next-line @typescript-eslint/await-thenable
                 Tools.isAsync(callback) ? await callback() : callback();
+                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                 this.adapter.log.debug(`Stoping polling with process ${id}, callback ${callback} `);
             } catch (error: any) {
                 const message = error?.response?.data || error.toString() || 'not known';
                 this.adapter.log.error(`Error: ${message} for process ${id}`);
-                if (error?.stack) this.adapter.log.debug(`Error: ${error.stack.toString()} for process ${id}`);
+                if (error?.stack) {
+                    this.adapter.log.debug(`Error: ${error.stack.toString()} for process ${id}`);
+                }
             }
         }
-        if (this.run[id]) this.adapter.clearTimeout(this.run[id]);
+        if (this.run[id]) {
+            this.adapter.clearTimeout(this.run[id]);
+        }
         this.run[id] = this.adapter.setTimeout(async () => await this.startproc(id, seconds, callback), seconds * 1000);
     }
 
     /**
      * stopping process by id
+     *
      * @param id unique name  / key of the process
      */
-    private async stopproc(id: string): Promise<void> {
+    private stopproc(id: string): void {
         if (this.run[id]) {
             this.adapter.log.debug(`Canceling process with id ${id}`);
             this.adapter.clearTimeout(this.run[id]);
@@ -156,6 +169,7 @@ export class Lupus {
 
     /**
      * does process with id exist
+     *
      * @param id unique name  / key of the process
      * @returns exist true/false
      */
@@ -165,6 +179,7 @@ export class Lupus {
 
     /**
      * set process with value
+     *
      * @param id unique name  / key of the process
      * @param val value is timmer of setTimeout
      */
@@ -207,7 +222,7 @@ export class Lupus {
             });
         }
         if (this.exsitproc('DebugInfos') && stateLogLevel !== 'debug') {
-            await this.stopproc('DebugInfos');
+            this.stopproc('DebugInfos');
         }
     }
 
@@ -228,8 +243,8 @@ export class Lupus {
             memory[i] = `${(((Math.round(memory[i]) / 1024 / 1024) * 100) / 100).toLocaleString(this.language)} MB`;
         }
         if (this.cpu) {
-            memory['cpuUser'] = this.cpu.user.toLocaleString(this.language);
-            memory['cpuSystem'] = this.cpu.system.toLocaleString(this.language);
+            memory.cpuUser = this.cpu.user.toLocaleString(this.language);
+            memory.cpuSystem = this.cpu.system.toLocaleString(this.language);
         }
         this.adapter.log.debug(`Process Meomory: ${JSON.stringify(memory)}`);
     }
@@ -241,14 +256,15 @@ export class Lupus {
     /**
      * stop all process
      */
-    public async stopallproc(): Promise<void> {
+    public stopallproc(): void {
         for (const id in this.run) {
-            await this.stopproc(id);
+            this.stopproc(id);
         }
     }
 
     /**
      * set actual time as unix time for an unique id
+     *
      * @param id unique name  / key of the process
      * @param unixtimestamp unixtime to set (optional)
      */
@@ -270,6 +286,7 @@ export class Lupus {
 
     /**
      * gets unixtime for id
+     *
      * @param id unique name  / key of the process
      * @returns unixtime
      */
@@ -279,6 +296,7 @@ export class Lupus {
 
     /**
      * deletes unixtime für id
+     *
      * @param id {string}
      */
     private delUnixTimestamp(id: string): void {
@@ -288,6 +306,7 @@ export class Lupus {
     /**
      * Get all device ids for a devicetype. Example for devicetype 42 you get back [{ id: 'Z:34324, type:42 }, { id: 'Z:4721', type: 42}]
      * If you set devicetype to undefined. You get back all devices ids
+     *
      * @param devicetype devicetype like 42 oder undefindes
      * @returns return an array with all device ids for a device type
      */
@@ -313,6 +332,7 @@ export class Lupus {
      */
     private async initObjects(): Promise<void> {
         const deviceids = await this.getDeviceIdsByType();
+        // eslint-disable-next-line @typescript-eslint/no-for-in-array
         for (const i in deviceids) {
             const type = deviceids[i].type;
             const objects = Datapoints.getDeviceTypeList(type, this.language);
@@ -322,7 +342,9 @@ export class Lupus {
                 const newobject = objects[j] as any;
                 if (oldobject && newobject) {
                     // cmmmon names excluded
-                    if (oldobject?.common?.name) newobject.common.name = oldobject.common.name;
+                    if (oldobject?.common?.name) {
+                        newobject.common.name = oldobject.common.name;
+                    }
                     const object = {
                         ...oldobject,
                         ...newobject,
@@ -335,6 +357,7 @@ export class Lupus {
 
     /**
      * Lupusec Status to Apple Home Status
+     *
      * @param mode_pc_a Area 1 or 2 (1,2)
      * @param alarm_ex 0 = Disarm, 1 = Arm, 2 = Home1, 3 = Home2, 4 = Home3
      * @returns status for Apple home as number if set. If not set the return valus is undefined
@@ -370,6 +393,7 @@ export class Lupus {
 
     /**
      * Apple Home Status to Lupusec Status
+     *
      * @param applestatus Apple Status from 0 to 4
      * @returns Lupsusec Status from 0 to 3
      */
@@ -398,6 +422,7 @@ export class Lupus {
 
     /**
      * Gets from path the abssolute Url
+     *
      * @param path path of the Url like /action/logout
      * @returns full abaolute URI like https://foo.com/action/logout
      */
@@ -405,23 +430,28 @@ export class Lupus {
         const alarm_hostname = await Tools.lookup(this.adapter.config.alarm_hostname);
         const aboluteURI =
             this.adapter.config.alarm_https === true
-                ? 'https://' + alarm_hostname + path
-                : 'http://' + alarm_hostname + path;
+                ? `https://${alarm_hostname}${path}`
+                : `http://${alarm_hostname}${path}`;
         return aboluteURI;
     }
 
     /**
      * Gets Token from alarm system
+     *
      * @param renew : optinal parameter, to get new Token
      * @returns returns token
      */
     private async requestToken(renew?: boolean): Promise<string> {
-        if (renew === undefined) renew = false;
+        if (renew === undefined) {
+            renew = false;
+        }
         const path = urlTokenGet;
         const lastupdate = this.getUnixTimestamp('Token') || 0;
         const now = this.getUnixTimestampNow();
         const diff = lastupdate + 60 * 1000 - now; // Token alle 60 Sekunden erneuern
-        if (this.token !== '' && renew === false && diff > 0) return this.token;
+        if (this.token !== '' && renew === false && diff > 0) {
+            return this.token;
+        }
         // get new Token
         this.setUnixTimestamp('Token');
         const requestconfig: axios.AxiosRequestConfig = {
@@ -434,13 +464,15 @@ export class Lupus {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
             },
             responseType: 'text',
-            transformResponse: (res) => {
+            transformResponse: res => {
                 return res; // Avoid automatic json parse
             },
         };
         this.adapter.log.debug(`Request Token ${path}`);
         const response = await this.axiosinstance.get(await this.getAbsoluteURI(path), requestconfig);
-        if (response.data) response.data = Tools.JsonParseDelSonderszeichen(response.data);
+        if (response.data) {
+            response.data = Tools.JsonParseDelSonderszeichen(response.data);
+        }
         this.token = response.data.message;
         this.adapter.log.debug(`New Token: ${this.token}`);
         return this.token;
@@ -448,6 +480,7 @@ export class Lupus {
 
     /**
      * make a http request get
+     *
      * @param path path of the request like /action/logout
      * @param config optional parameter, list of configuraion
      * @returns Response of the request
@@ -466,14 +499,16 @@ export class Lupus {
                 'X-Token': token,
             },
             responseType: 'text',
-            transformResponse: (res) => {
+            transformResponse: res => {
                 return res; // Avoid automatic json parse
             },
             ...config,
         };
         this.adapter.log.debug(`Request Get ${path}`);
         const response = await this.axiosinstance.get(await this.getAbsoluteURI(path), requestconfig);
-        if (response.data) response.data = Tools.JsonParseDelSonderszeichen(response.data);
+        if (response.data) {
+            response.data = Tools.JsonParseDelSonderszeichen(response.data);
+        }
         return {
             data: response.data,
             unixtime: unixtime,
@@ -482,6 +517,7 @@ export class Lupus {
 
     /**
      * Post Request
+     *
      * @param path url for post
      * @param data  payload for post statement
      * @param config config
@@ -500,7 +536,7 @@ export class Lupus {
                 'X-Token': token,
             },
             responseType: 'text',
-            transformResponse: (res) => {
+            transformResponse: res => {
                 return res; // Avoid automatic json parse
             },
             ...config,
@@ -509,7 +545,9 @@ export class Lupus {
         const text = querystring.stringify(data as querystring.ParsedUrlQueryInput);
         this.adapter.log.debug(`Request Post ${path} with payload ${JSON.stringify(data)}`);
         const response = await this.axiosinstance.post(await this.getAbsoluteURI(path), text, requestconfig);
-        if (response.data) response.data = Tools.JsonParseDelSonderszeichen(response.data);
+        if (response.data) {
+            response.data = Tools.JsonParseDelSonderszeichen(response.data);
+        }
         return {
             data: response.data,
             unixtime: unixtime,
@@ -521,7 +559,9 @@ export class Lupus {
         const id = states.id || states.sid;
         const idc = `devices.${id}`;
         const type = states.type || states.stype || (await this.states.getStateAsync(`${idc}.type`))?.val;
-        if (type === undefined) return;
+        if (type === undefined) {
+            return;
+        }
         for (const name in states) {
             let value = states[name];
             // For Power Switches, 2 new States
@@ -549,21 +589,31 @@ export class Lupus {
             }
             // alarm_status_ex: value of alarm_status as booelean
             if (name === 'alarm_status_ex') {
-                if (states['alarm_status'] !== undefined) value = states['alarm_status'] ? true : false;
+                if (states.alarm_status !== undefined) {
+                    value = states.alarm_status ? true : false;
+                }
             }
             // status: make it more readdable
             if (name === 'status') {
                 const regstat = /\{WEB_MSG_(DC|DL)_(.+)\}/gm;
                 const m = regstat.exec(value);
-                if (m && m.length > 1) value = m[2]; // .toLowerCase();
+                if (m && m.length > 1) {
+                    value = m[2];
+                } // .toLowerCase();
             }
             if (name === 'logmsg' && states.msg !== undefined) {
                 value = states.msg;
             }
             if (type === 17 || type === 37) {
-                if (name === 'sresp_button_123' && states.sresp_panic !== undefined) value = states.sresp_panic;
-                if (name === 'sresp_button_456' && states.sresp_fire !== undefined) value = states.sresp_fire;
-                if (name === 'sresp_button_789' && states.sresp_medical !== undefined) value = states.sresp_medical;
+                if (name === 'sresp_button_123' && states.sresp_panic !== undefined) {
+                    value = states.sresp_panic;
+                }
+                if (name === 'sresp_button_456' && states.sresp_fire !== undefined) {
+                    value = states.sresp_fire;
+                }
+                if (name === 'sresp_button_789' && states.sresp_medical !== undefined) {
+                    value = states.sresp_medical;
+                }
             }
             // For Power Switches,
             if (type === 24 || type === 48 || type === 50 || type === 66) {
@@ -673,14 +723,21 @@ export class Lupus {
                 if (name === 'off' && states.status !== undefined) {
                     const regstat = /{WEB_MSG_TRV_(OFF)}/gm;
                     const m = regstat.exec(states.status);
-                    if (m && m[1] === 'OFF') value = true;
-                    else value = false;
+                    if (m && m[1] === 'OFF') {
+                        value = true;
+                    } else {
+                        value = false;
+                    }
                 }
                 if (name === 'mode' && states.status !== undefined) {
                     const regstat = /{WEB_MSG_TRV_(AUTO|MANUAL)}/gm;
                     const m = regstat.exec(states.status);
-                    if (m && m[1] === 'AUTO') value = 1;
-                    if (m && m[1] === 'MANUAL') value = 0;
+                    if (m && m[1] === 'AUTO') {
+                        value = 1;
+                    }
+                    if (m && m[1] === 'MANUAL') {
+                        value = 0;
+                    }
                 }
                 if (name === 'thermo_offset' && value !== undefined) {
                     value = Tools.round(value / 10, 0.5);
@@ -691,7 +748,13 @@ export class Lupus {
         return statesmapped;
     }
 
-    private async webcam_mapping_all(id: string, states: any): Promise<any> {
+    /**
+     *
+     * @param id id of webcam
+     * @param states status
+     * @returns image and stream of webcam
+     */
+    private webcam_mapping_all(id: string, states: any): any {
         const statesmapped = states;
         const port = this.adapter.config.webcam_port;
         const bind = this.adapter.config.webcam_bind;
@@ -706,7 +769,12 @@ export class Lupus {
         return statesmapped;
     }
 
-    async zentrale_mapping_all(states: any): Promise<any> {
+    /**
+     *
+     * @param states states
+     * @returns maped states
+     */
+    private zentrale_mapping_all(states: any): any {
         const statesmapped = states;
         statesmapped.apple_home_a1 = this.getAppleStautusFromLupusec(states.mode_pc_a1, states.alarm_ex);
         statesmapped.apple_home_a2 = this.getAppleStautusFromLupusec(states.mode_pc_a2, states.alarm_ex);
@@ -716,26 +784,32 @@ export class Lupus {
         return statesmapped;
     }
 
-    private async dummyDevicePost(id: string): Promise<void> {
+    private dummyDevicePost(id: string): void {
         this.setUnixTimestamp(id);
     }
 
     private async haExecutePost(id: string, form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlHaExecutePost, form);
         this.setUnixTimestamp(id);
         return result;
     }
 
     private async deviceEditThermoPost(id: string, form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlDeviceEditThermoPost, form);
         this.setUnixTimestamp(id);
         return result;
     }
 
     private async deviceEditPost(id: string, form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const ressultold = await this.requestPost(urlDeviceEditGet, { id: form.id });
         if (ressultold?.data?.forms?.ssform) {
             const ssform = ressultold.data.forms.ssform;
@@ -744,10 +818,14 @@ export class Lupus {
                 if (!Tools.hasProperty(form, name)) {
                     switch (typeof value) {
                         case 'string':
-                            if (value.length > 0) form[name] = value;
+                            if (value.length > 0) {
+                                form[name] = value;
+                            }
                             break;
                         default:
-                            if (value) form[name] = value;
+                            if (value) {
+                                form[name] = value;
+                            }
                             break;
                     }
                 }
@@ -759,94 +837,136 @@ export class Lupus {
     }
 
     private async deviceEditShutterPost(id: string, form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlDeviceEditShutterPost, form);
         this.setUnixTimestamp(id);
         return result;
     }
 
     private async deviceSwitchPSSPost(id: string, form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlDeviceSwitchPSSPost, form);
         this.setUnixTimestamp(id);
         return result;
     }
 
     private async deviceNukiCmd(id: string, form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlDeviceNukiCmd, form);
         this.setUnixTimestamp(id);
         return result;
     }
 
     private async deviceEditGet(form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlDeviceEditGet, form);
         return result;
     }
 
     private async deviceEditThermoGet(form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlDeviceEditThermoGet, form);
         return result;
     }
 
     private async deviceEditMeterGet(form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlDeviceEditMeterGet, form);
         return result;
     }
 
     private async deviceEditShutterGet(form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlDeviceEditShutterGet, form);
         return result;
     }
 
     private async deviceEditMeterPost(id: string, form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlDeviceEditMeterPost, form);
         this.setUnixTimestamp(id);
         return result;
     }
 
     private async deviceSwitchDimmerPost(id: string, form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlDeviceSwitchDimmerPost, form);
         this.setUnixTimestamp(id);
         return result;
     }
 
     private async panelCondPost(id: string, form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlPanelCondPost, form);
         this.setUnixTimestamp(id);
         return result;
     }
 
     private async deviceDoUPICPost(id: string, form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlDeviceDoUPICPost, form);
         this.setUnixTimestamp(id);
         return result;
     }
 
+    /**
+     * Sends SMS by card
+     *
+     * @param id id of device
+     * @param form payload to send sms
+     * @returns no value
+     */
     public async sendSMSPost(id: string, form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlSendSMSPost, form);
         this.setUnixTimestamp(id);
         return result;
     }
 
+    /**
+     * Sends SMS by Gateway
+     *
+     * @param id id of device
+     * @param form payload to send sms
+     * @returns no value
+     */
     public async sendSMSgwTestPost(id: string, form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlSmsgwTestPost, form);
         this.setUnixTimestamp(id);
         return result;
     }
 
     private async deviceHueColorControl(id: string, form: any): Promise<any> {
-        if (!form) return;
+        if (!form) {
+            return;
+        }
         const result = await this.requestPost(urlDeviceHueColorControl, form);
         this.setUnixTimestamp(id);
         return result;
@@ -885,13 +1005,13 @@ export class Lupus {
         if (result?.data?.forms?.pcondform1) {
             for (const key in result.data.forms.pcondform1) {
                 const value = result.data.forms.pcondform1[key];
-                data.zentrale[key + '_pc_a1'] = value;
+                data.zentrale[`${key}_pc_a1`] = value;
             }
         }
         if (result?.data?.forms?.pcondform2) {
             for (const key in result.data.forms.pcondform2) {
                 const value = result.data.forms.pcondform2[key];
-                data.zentrale[key + '_pc_a2'] = value;
+                data.zentrale[`${key}_pc_a2`] = value;
             }
         }
         await this.setAllStatusLupusecEntries(data);
@@ -908,7 +1028,9 @@ export class Lupus {
     private async getAllWebcamLupusecEntries(): Promise<void> {
         const webcams: any = {};
         const results = await this.requestGet(urlIpcamGet);
-        if (!results || !results.data) return;
+        if (!results || !results.data) {
+            return;
+        }
         if (results?.data?.forms?.ipcamform) {
             for (const name in results.data.forms.ipcamform) {
                 const value = results.data.forms.ipcamform[name];
@@ -916,7 +1038,9 @@ export class Lupus {
                 // const url = results.data.forms.ipcamform[`url${index}`];
                 // if (!url) continue;
                 if (index >= 1 && index <= 9) {
-                    if (!webcams[`cam${index}`]) webcams[`cam${index}`] = {};
+                    if (!webcams[`cam${index}`]) {
+                        webcams[`cam${index}`] = {};
+                    }
                     webcams[`cam${index}`][name.slice(0, -1)] = value;
                 }
             }
@@ -938,7 +1062,7 @@ export class Lupus {
         let results: any = [];
         if (parallelprocessing || this.adapter.config.option_pollfaster) {
             results = await Promise.all(
-                requestarray.map(async (request) => {
+                requestarray.map(async request => {
                     let result = {};
                     const isasync = Tools.isAsync(request);
                     result = isasync ? await request() : request();
@@ -953,7 +1077,7 @@ export class Lupus {
                 results.push(result);
             }
         }
-        let unixtime: number = 0;
+        let unixtime = 0;
         for (const idx in results) {
             const result: any = results[idx];
             for (const idd in result.devices) {
@@ -962,7 +1086,9 @@ export class Lupus {
                     ...devices[idd],
                 };
             }
-            if (result && result.unixtime > unixtime) unixtime = result.unixtime;
+            if (result && result.unixtime > unixtime) {
+                unixtime = result.unixtime;
+            }
         }
         const data = {
             unixtime: unixtime,
@@ -976,7 +1102,9 @@ export class Lupus {
         const results = await this.requestPost(urlLogsGet, {
             max_count: 10,
         });
-        if (!results || !results.data) return;
+        if (!results || !results.data) {
+            return;
+        }
         if (results?.data?.logrows) {
             const states = await this.states.getStatesAllAsync('devices.*');
             for (const i in results.data.logrows) {
@@ -987,7 +1115,7 @@ export class Lupus {
                     const area = Number(m[1]);
                     const zone = Number(m[2]);
                     let id = Object.keys(states).find(
-                        (key) =>
+                        key =>
                             key.startsWith('devices') &&
                             key.endsWith('zone') &&
                             states[key].val === zone &&
@@ -1064,7 +1192,7 @@ export class Lupus {
         let results = [];
         if (parallelprocessing || this.adapter.config.option_pollfaster) {
             results = await Promise.all(
-                requestarray.map(async (request) => {
+                requestarray.map(async request => {
                     let result = {};
                     const isasync = Tools.isAsync(request);
                     result = isasync ? await request() : request();
@@ -1079,13 +1207,24 @@ export class Lupus {
                 results.push(result);
             }
         }
+        // eslint-disable-next-line @typescript-eslint/no-for-in-array
         for (const idx in results) {
             const result: any = results[idx];
-            if (result?.data?.forms?.ssform) result.data.form = result.data.forms.ssform; // Type 7, 81, 37, 50, 76, 79
-            if (result?.data?.forms?.thermoform) result.data.form = result.data.forms.thermoform; // Type 79
-            if (result?.data?.forms?.shutterform) result.data.form = result.data.forms.shutterform; // Type 76
-            if (result?.data?.forms?.meterform) result.data.form = result.data.forms.meterform; // Type 50
-            if (result?.data?.forms) delete result.data.forms;
+            if (result?.data?.forms?.ssform) {
+                result.data.form = result.data.forms.ssform;
+            } // Type 7, 81, 37, 50, 76, 79
+            if (result?.data?.forms?.thermoform) {
+                result.data.form = result.data.forms.thermoform;
+            } // Type 79
+            if (result?.data?.forms?.shutterform) {
+                result.data.form = result.data.forms.shutterform;
+            } // Type 76
+            if (result?.data?.forms?.meterform) {
+                result.data.form = result.data.forms.meterform;
+            } // Type 50
+            if (result?.data?.forms) {
+                delete result.data.forms;
+            }
             if (result?.data?.form) {
                 const device = result.data.form;
                 if (device.id || device.sid) {
@@ -1096,7 +1235,9 @@ export class Lupus {
                     };
                 }
             }
-            if (result && result.unixtime > unixtime) unixtime = result.unixtime;
+            if (result && result.unixtime > unixtime) {
+                unixtime = result.unixtime;
+            }
         }
         const data = {
             unixtime: unixtime,
@@ -1118,7 +1259,9 @@ export class Lupus {
                 DeviceListUPICGet: resultDeviceListUPICGet,
             },
         };
-        if (!results || !results.data) return;
+        if (!results || !results.data) {
+            return;
+        }
 
         const devices: any = {};
         if (results?.data?.DeviceListGet?.data?.senrows) {
@@ -1159,8 +1302,10 @@ export class Lupus {
      * @param extname string or object with name kike de: 'Status', en: 'state' or 'Status'
      * @returns string or object like de: Status (tür), en: state (door) or Status (tür)
      */
-    private async extendCommonName(name: any, extname?: any): Promise<any> {
-        if (!extname || !name) return name;
+    private extendCommonName(name: any, extname?: any): any {
+        if (!extname || !name) {
+            return name;
+        }
         if (typeof name === 'object' && typeof extname === 'object') {
             const newnames: any = {};
             for (const language in name) {
@@ -1196,7 +1341,7 @@ export class Lupus {
         // const object = Tools.copyObject(obj);  // copy of the object
         const execdelay = 0; // 100; // this.adapter.config.alarm_polltime * 1000;
         const object = obj;
-        const sid = id + '.' + name;
+        const sid = `${id}.${name}`;
         if (object.common.name === '%value%') {
             object.common.name = value !== undefined ? value : undefined;
         }
@@ -1204,14 +1349,16 @@ export class Lupus {
             object.common.name = value !== undefined ? object.common.name.replace('%value%', value) : undefined;
         }
         if (object.common.name) {
-            object.common.name = await this.extendCommonName(object.common.name, devicename);
+            object.common.name = this.extendCommonName(object.common.name, devicename);
         }
         await this.states.setObjectNotExistsAsync(sid, {
             type: object.type,
             common: object.common,
             native: {},
         });
-        if (object.type === 'channel' || object.type === 'device') return;
+        if (object.type === 'channel' || object.type === 'device') {
+            return;
+        }
         const statevalue = Tools.convertPropertyType(value, object.common.type);
         if (statevalue === null || statevalue === undefined) {
             return;
@@ -1259,10 +1406,12 @@ export class Lupus {
         const promisearray = [];
         for (const id in devices) {
             const device = devices[id];
-            const idc = 'devices.' + id;
+            const idc = `devices.${id}`;
             const cname = device.name || device.sname;
             const type = device.type || device.stype || (await this.states.getStateAsync(`${idc}.type`))?.val;
-            if (type === undefined) continue;
+            if (type === undefined) {
+                continue;
+            }
             let objects = Datapoints.getDeviceTypeList(type, this.language);
             if (!objects) {
                 this.adapter.log.warn(
@@ -1322,7 +1471,9 @@ export class Lupus {
                 }
             }
         }
-        if (promisearray) await Promise.all(promisearray.map(async (func) => await func()));
+        if (promisearray) {
+            await Promise.all(promisearray.map(async func => await func()));
+        }
     }
 
     // Status
@@ -1339,7 +1490,7 @@ export class Lupus {
             }
         }
         // Daten erweitern
-        const zentralemapped = await this.zentrale_mapping_all(zentrale);
+        const zentralemapped = this.zentrale_mapping_all(zentrale);
         const cname = (await this.states.getObjectAsync(idc))?.common?.name;
         for (const dp in objects) {
             if (this.adapter.config.option_pollfaster) {
@@ -1351,7 +1502,9 @@ export class Lupus {
                 await this.createObjectSetStates(idc, dp, zentralemapped[dp], unixtime, objects[dp], cname);
             }
         }
-        if (promisearray) await Promise.all(promisearray.map(async (func) => await func()));
+        if (promisearray) {
+            await Promise.all(promisearray.map(async func => await func()));
+        }
     }
 
     private async setAllSMSLupusecEntries(results: any): Promise<void> {
@@ -1376,7 +1529,9 @@ export class Lupus {
                 await this.createObjectSetStates(idc, dp, sms[dp], unixtime, objects[dp], cname);
             }
         }
-        if (promisearray) await Promise.all(promisearray.map(async (func) => await func()));
+        if (promisearray) {
+            await Promise.all(promisearray.map(async func => await func()));
+        }
     }
 
     private async setAllWebcamLupusecEntries(results: any): Promise<void> {
@@ -1386,7 +1541,7 @@ export class Lupus {
         const objects = Datapoints.getWebcamTypeList(this.language);
         for (const id in webcams) {
             const webcam = webcams[id];
-            const idc = 'webcams.' + id;
+            const idc = `webcams.${id}`;
             const cname = webcam.name || `Webcam ${idc.slice(-1)} ` || '';
             const result = await this.states.setObjectNotExistsAsync(idc, {
                 type: 'channel',
@@ -1406,13 +1561,13 @@ export class Lupus {
                 }
             }
             // Daten erweitern
-            const webcammapped = await this.webcam_mapping_all(id, webcam);
+            const webcammapped = this.webcam_mapping_all(id, webcam);
             for (const dp in objects) {
                 if (this.adapter.config.option_pollfaster) {
                     promisearray.push(
                         async () =>
                             await this.createObjectSetStates(
-                                'webcams.' + id,
+                                `webcams.${id}`,
                                 dp,
                                 webcammapped[dp],
                                 unixtime,
@@ -1420,11 +1575,13 @@ export class Lupus {
                             ),
                     );
                 } else {
-                    await this.createObjectSetStates('webcams.' + id, dp, webcammapped[dp], unixtime, objects[dp]);
+                    await this.createObjectSetStates(`webcams.${id}`, dp, webcammapped[dp], unixtime, objects[dp]);
                 }
             }
         }
-        if (promisearray) await Promise.all(promisearray.map(async (func) => await func()));
+        if (promisearray) {
+            await Promise.all(promisearray.map(async func => await func()));
+        }
         if (this.adapter.config.webcam_providing) {
             const caminstance = Webcam.getInstance(this.adapter, webcams);
             await caminstance.startServer();
@@ -1433,14 +1590,15 @@ export class Lupus {
 
     /**
      * Is called if a subscribed state changes
-     * @param {string} id
-     * @param {ioBroker.State | null | undefined} state
+     *
+     * @param id id
+     * @param state state
      */
-    public async onStateChange(id: string, state: ifState): Promise<void> {
+    public async onStateChange(id: string, state: states.ifState): Promise<void> {
         try {
             if (state && state.ack === false) {
                 await this.states.setStateNotExistsAsync(id, { val: state.val, ack: state.ack });
-                if (id.startsWith(this.adapter.namespace + '.devices.')) {
+                if (id.startsWith(`${this.adapter.namespace}.devices.`)) {
                     const execdelay = 0; // in milliseconds - this.adapter.config.alarm_polltime * 1000
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const icchannelabs = id.split('.').slice(0, 4).join('.'); //  lupusec.0.devices.ZS:a61d01
@@ -1462,35 +1620,30 @@ export class Lupus {
                         await this.haExecutePost(iddevice, {
                             exec: exec,
                         });
-                    }
-                    // Type 24,48,66
-                    else if (name === 'pd') {
-                        await this.dummyDevicePost(iddevice);
-                    }
-                    // Type 50
-                    else if (name === 'factor') {
+                    } else if (name === 'pd') {
+                        // Type 24,48,66
+                        this.dummyDevicePost(iddevice);
+                    } else if (name === 'factor') {
+                        // Type 50
                         await this.deviceEditMeterPost(iddevice, {
                             id: channel,
                             factor: state.val,
                         });
-                    }
-                    // Type 52 (Univeral IR Controller)
-                    else if (name.startsWith('mode_name_')) {
+                    } else if (name.startsWith('mode_name_')) {
+                        // Type 52 (Univeral IR Controller)
                         const mode = name.replace('mode_name_', '');
                         await this.deviceDoUPICPost(iddevice, {
                             id: channel,
                             mode: mode,
                         });
-                    }
-                    // Type 52 (Univeral IR Controller)
-                    else if (name === 'leds') {
+                    } else if (name === 'leds') {
+                        // Type 52 (Univeral IR Controller)
                         await this.deviceDoUPICPost(iddevice, {
                             id: channel,
                             led: 'query',
                         });
-                    }
-                    // Type 57
-                    else if (name === 'nuki_action') {
+                    } else if (name === 'nuki_action') {
+                        // Type 57
                         let value: any = undefined;
                         switch (state.val) {
                             case 3:
@@ -1512,16 +1665,17 @@ export class Lupus {
                                     id: channel,
                                     action: value,
                                 });
-                                if (result?.data?.result === 1) break;
+                                if (result?.data?.result === 1) {
+                                    break;
+                                }
                                 this.adapter.log.debug(
                                     `Action on Nuki not executed, because no positive response from Nuki!. Will try it again in a few seconds!`,
                                 );
                                 await Tools.wait(1);
                             }
                         }, 0);
-                    }
-                    // Type 66
-                    else if (name === 'level') {
+                    } else if (name === 'level') {
+                        // Type 66
                         this.adapter.clearTimeout(this.timerhandle[iddevice]);
                         this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
                             await this.deviceSwitchDimmerPost(iddevice, {
@@ -1529,9 +1683,8 @@ export class Lupus {
                                 level: state.val,
                             });
                         }, execdelay);
-                    }
-                    // Type 76
-                    else if (name === 'switch') {
+                    } else if (name === 'switch') {
+                        // Type 76
                         const shutterstates: any = {
                             0: 'on',
                             1: 'off',
@@ -1541,9 +1694,8 @@ export class Lupus {
                         await this.haExecutePost(iddevice, {
                             exec: exec,
                         });
-                    }
-                    // Type 76
-                    else if (name === 'on_time') {
+                    } else if (name === 'on_time') {
+                        // Type 76
                         const on_time = Number(state.val);
                         const off_time = Number((await this.states.getStateAsync(`${idchannel}.off_time`))?.val || 0);
                         await this.deviceEditShutterPost(iddevice, {
@@ -1551,9 +1703,8 @@ export class Lupus {
                             on_time: Math.round(on_time * 10),
                             off_time: Math.round(off_time * 10),
                         });
-                    }
-                    // Type 76
-                    else if (name === 'off_time') {
+                    } else if (name === 'off_time') {
+                        // Type 76
                         const on_time = Number((await this.states.getStateAsync(`${idchannel}.on_time`))?.val || 0);
                         const off_time = Number(state.val);
                         await this.deviceEditShutterPost(iddevice, {
@@ -1561,33 +1712,29 @@ export class Lupus {
                             on_time: Math.round(on_time * 10),
                             off_time: Math.round(off_time * 10),
                         });
-                    }
-                    // Type 79
-                    else if (name === 'thermo_offset') {
+                    } else if (name === 'thermo_offset') {
+                        // Type 79
                         await this.deviceEditThermoPost(iddevice, {
                             id: channel,
                             act: 't_offset',
                             thermo_offset: Math.round(Number(state.val) * 10),
                         });
-                    }
-                    // Type 79
-                    else if (name === 'mode') {
+                    } else if (name === 'mode') {
+                        // Type 79
                         await this.deviceEditThermoPost(iddevice, {
                             id: channel,
                             act: 't_schd_setting',
                             thermo_schd_setting: state.val == 0 ? 0 : 1,
                         });
-                    }
-                    // Type 79
-                    else if (name === 'off') {
+                    } else if (name === 'off') {
+                        // Type 79
                         await this.deviceEditThermoPost(iddevice, {
                             id: channel,
                             act: 't_mode',
                             thermo_mode: state.val == true ? 0 : 4,
                         });
-                    }
-                    // Type 79
-                    else if (name === 'set_temperature') {
+                    } else if (name === 'set_temperature') {
+                        // Type 79
                         this.adapter.clearTimeout(this.timerhandle[iddevice]);
                         this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
                             await this.deviceEditThermoPost(iddevice, {
@@ -1596,9 +1743,8 @@ export class Lupus {
                                 thermo_setpoint: Math.trunc((100 * Math.round(2 * Number(state.val))) / 2),
                             });
                         }, execdelay);
-                    }
-                    // Type 4,7,17,37,81
-                    else if (
+                    } else if (
+                        // Type 4,7,17,37,81
                         name.startsWith('sresp_button_') ||
                         name === 'sresp_emergency' ||
                         name === 'name' ||
@@ -1614,16 +1760,25 @@ export class Lupus {
                             sarea: area,
                             szone: zone,
                         };
-                        if (name === 'sresp_button_123') parameter = 'sresp_panic';
-                        if (name === 'sresp_button_456') parameter = 'sresp_fire';
-                        if (name === 'sresp_button_789') parameter = 'sresp_medical';
-                        if (name === 'name') parameter = 'sname';
-                        if (name === 'bypass') parameter = 'scond_bypass';
+                        if (name === 'sresp_button_123') {
+                            parameter = 'sresp_panic';
+                        }
+                        if (name === 'sresp_button_456') {
+                            parameter = 'sresp_fire';
+                        }
+                        if (name === 'sresp_button_789') {
+                            parameter = 'sresp_medical';
+                        }
+                        if (name === 'name') {
+                            parameter = 'sname';
+                        }
+                        if (name === 'bypass') {
+                            parameter = 'scond_bypass';
+                        }
                         form[parameter] = state.val;
                         await this.deviceEditPost(iddevice, form);
-                    }
-                    // Type 74
-                    else if (name === 'hue') {
+                    } else if (name === 'hue') {
+                        // Type 74
                         this.adapter.clearTimeout(this.timerhandle[iddevice]);
                         this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
                             const valuesat = Number((await this.states.getStateAsync(`${idchannel}.sat`))?.val || 0);
@@ -1635,9 +1790,8 @@ export class Lupus {
                                 mod: 2,
                             });
                         }, execdelay);
-                    }
-                    // Type 74
-                    else if (name === 'sat') {
+                    } else if (name === 'sat') {
+                        // Type 74
                         this.adapter.clearTimeout(this.timerhandle[iddevice]);
                         this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
                             const valuehue = Number((await this.states.getStateAsync(`${idchannel}.hue`))?.val || 0);
@@ -1654,10 +1808,12 @@ export class Lupus {
                         this.dummyDevicePost(iddevice);
                     }
                 }
-                if (id.startsWith(this.adapter.namespace + '.status.')) {
+                if (id.startsWith(`${this.adapter.namespace}.status.`)) {
                     const regstat = /.+\.status\.(.+)/gm;
                     const m = regstat.exec(id);
-                    if (!m) return;
+                    if (!m) {
+                        return;
+                    }
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const icchannelabs = id.split('.').slice(0, -1).join('.'); //  lupusec.0.status
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1670,21 +1826,25 @@ export class Lupus {
                         await this.panelCondPost(iddevice, { area: 2, mode: state.val });
                     } else if (name === 'apple_home_a1') {
                         const mode_pc_a1 = this.getLupusecFromAppleStautus(Number(state.val));
-                        if (mode_pc_a1 !== undefined && mode_pc_a1 >= 0 && mode_pc_a1 <= 4)
+                        if (mode_pc_a1 !== undefined && mode_pc_a1 >= 0 && mode_pc_a1 <= 4) {
                             await this.panelCondPost(iddevice, { area: 1, mode: mode_pc_a1 });
+                        }
                     } else if (name === 'apple_home_a2') {
                         const mode_pc_a2 = this.getLupusecFromAppleStautus(Number(state.val));
-                        if (mode_pc_a2 !== undefined && mode_pc_a2 >= 0 && mode_pc_a2 <= 4)
+                        if (mode_pc_a2 !== undefined && mode_pc_a2 >= 0 && mode_pc_a2 <= 4) {
                             await this.panelCondPost(iddevice, { area: 2, mode: mode_pc_a2 });
+                        }
                     } else {
                         this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
                         this.dummyDevicePost(iddevice);
                     }
                 }
-                if (id.startsWith(this.adapter.namespace + '.sms.')) {
+                if (id.startsWith(`${this.adapter.namespace}.sms.`)) {
                     const regstat = /.+\.sms\.(.+)/gm;
                     const m = regstat.exec(id);
-                    if (!m) return;
+                    if (!m) {
+                        return;
+                    }
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const icchannelabs = id.split('.').slice(0, -1).join('.'); //  lupusec.0.status
                     const idchannel = id.split('.').slice(2, -1).join('.'); //  status
@@ -1739,8 +1899,9 @@ export class Lupus {
 
     /**
      * Is called if a subscribed object changes
-     * @param {string} id
-     * @param {ioBroker.Object | null | undefined} obj
+     *
+     * @param id id of object
+     * @param obj object
      */
     public async onObjectChange(id: string, obj: any): Promise<void> {
         if (obj) {

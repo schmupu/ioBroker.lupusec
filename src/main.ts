@@ -46,14 +46,17 @@ class Lupusec extends utils.Adapter {
 
     /**
      * Is called when adapter shuts down - callback has to be called under any circumstances!
+     *
+     * @param callback calback function
      */
     private async onUnload(callback: () => void): Promise<void> {
         try {
             this.log.info(`Stopping Lupusec processes, please wait!`);
-            await this.stopOnlineCheck();
+            this.stopOnlineCheck();
             await this.stopLupusecAdapter();
             await Tools.wait(15);
             callback();
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             callback();
         }
@@ -61,6 +64,9 @@ class Lupusec extends utils.Adapter {
 
     /**
      * Is called if a subscribed object changes
+     *
+     * @param id id of the object
+     * @param obj object
      */
     private async onObjectChange(id: string, obj: ioBroker.Object | null | undefined): Promise<void> {
         const lupusec = await Lupus.getInstance(this);
@@ -69,6 +75,9 @@ class Lupusec extends utils.Adapter {
 
     /**
      * Is called if a subscribed state changes
+     *
+     * @param id id of state
+     * @param state state
      */
     private async onStateChange(id: string, state: ioBroker.State | null | undefined): Promise<void> {
         const lupusec = await Lupus.getInstance(this);
@@ -80,7 +89,8 @@ class Lupusec extends utils.Adapter {
     /**
      * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
      * Using this method requires "common.messagebox" property to be set to true in io-package.json
-     * @param {ioBroker.Message} obj
+     *
+     * @param obj object
      */
     private async onMessage(obj: ioBroker.Message): Promise<void> {
         if (typeof obj === 'object' && obj.message) {
@@ -89,7 +99,9 @@ class Lupusec extends utils.Adapter {
                 this.log.info('send command');
 
                 // Send response in callback if required
-                if (obj.callback) this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+                if (obj.callback) {
+                    this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+                }
             }
             if (obj.command === 'sendDoor') {
                 const array = [];
@@ -102,7 +114,9 @@ class Lupusec extends utils.Adapter {
                     }
                 }
                 // Send response in callback if required
-                if (obj.callback) this.sendTo(obj.from, obj.command, array, obj.callback);
+                if (obj.callback) {
+                    this.sendTo(obj.from, obj.command, array, obj.callback);
+                }
             }
             if (obj.command === 'sendNuki') {
                 const array = [];
@@ -115,12 +129,14 @@ class Lupusec extends utils.Adapter {
                     }
                 }
                 // Send response in callback if required
-                if (obj.callback) this.sendTo(obj.from, obj.command, array, obj.callback);
+                if (obj.callback) {
+                    this.sendTo(obj.from, obj.command, array, obj.callback);
+                }
             }
             if (obj.command === 'sms' || obj.command === 'smsgw') {
                 const lupusec = await Lupus.getInstance(this);
-                const valText = obj?.message['text'];
-                const valNumber = obj?.message['number'];
+                const valText = obj?.message.text;
+                const valNumber = obj?.message.number;
                 const iddevice = 'sms.dial';
                 if (obj.command === 'sms' && valText && valNumber) {
                     const form = {
@@ -157,7 +173,7 @@ class Lupusec extends utils.Adapter {
                 obj.native.option_pollfaster = false;
                 update = true;
             }
-            const server = await this.getHostnameAndPort();
+            const server = this.getHostnameAndPort();
             const url = server.https
                 ? `https://${server.hostname}:${server.port}`
                 : `http://${server.hostname}:${server.port}`;
@@ -176,9 +192,10 @@ class Lupusec extends utils.Adapter {
     /**
      * returns the hostname and port of configuration.
      * example. test.foo:80 => {hostanem: test.foo, port: 80}
+     *
      * @returns hostname and port as object
      */
-    async getHostnameAndPort(): Promise<any> {
+    getHostnameAndPort(): any {
         const alarm_hostname = this.config.alarm_hostname; // await tools.lookup(this.config.alarm_hostname);
         const array = alarm_hostname.split(':');
         const hostname = array[0];
@@ -188,10 +205,11 @@ class Lupusec extends utils.Adapter {
 
     /**
      * checks if alam system is reachable
+     *
      * @returns true or false
      */
     async isAlarmSystemReachable(): Promise<boolean> {
-        const server = await this.getHostnameAndPort();
+        const server = this.getHostnameAndPort();
         const isAlive = await Tools.probe(server.hostname, server.port);
         return isAlive;
     }
@@ -201,7 +219,7 @@ class Lupusec extends utils.Adapter {
      */
     async startOnlineCheck(): Promise<void> {
         try {
-            const server = await this.getHostnameAndPort();
+            const server = this.getHostnameAndPort();
             const isAlive = await this.isAlarmSystemReachable();
             if (isAlive === true) {
                 this.onlineCheckAvailable === false
@@ -226,7 +244,7 @@ class Lupusec extends utils.Adapter {
     /**
      * Stops the continously online check
      */
-    async stopOnlineCheck(): Promise<void> {
+    stopOnlineCheck(): void {
         if (this.onlineCheckTimeout) {
             this.clearTimeout(this.onlineCheckTimeout);
             this.onlineCheckTimeout = undefined;

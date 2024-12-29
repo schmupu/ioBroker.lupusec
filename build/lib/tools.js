@@ -40,6 +40,7 @@ class Tools {
    * round(2.74, 0.25) = 2.75
    * round(2.74, 0.5) = 2.5
    * round(2.74, 1.0) = 3.0
+   *
    * @param value a number like 2.7, 2.75
    * @param step a number like 0.1, or 2.7
    * @returns a number
@@ -51,6 +52,7 @@ class Tools {
   }
   /**
    * Checking if key exist in object
+   *
    * @param obj {a:1, b:1, c:1}
    * @param key 'b'
    * @returns true or false
@@ -64,8 +66,9 @@ class Tools {
   }
   /**
    * Wait (sleep) x seconds
+   *
    * @param seconds time in seconds
-   * @returns
+   * @returns void
    */
   static wait(seconds) {
     return new Promise((resolve) => setTimeout(resolve, seconds * 1e3));
@@ -85,21 +88,23 @@ class Tools {
   /**
    *
    * @param hostname like www.google.com
-   * @returns
+   * @returns string
    */
   static async lookup(hostname) {
     const hp = this.getHostnamePort(hostname);
     const dns = await import_dns.promises.lookup(hp.hostname);
     let address = dns && dns.address ? dns.address : hp.hostname;
-    if (hp.port !== void 0)
+    if (hp.port !== void 0) {
       address = `${address}:${hp.port}`;
+    }
     return address;
   }
   /**
    * Checks if server (webserver) is reachable
+   *
    * @param hostname hostname or ip address. For example huhu.foo or 192.168.20.30)
-   * @param portport, for example (80, 8080, ...
-   * @returns
+   * @param port port for example (80, 8080, ...
+   * @returns true or false
    */
   static async probe(hostname, port) {
     hostname = await this.lookup(hostname);
@@ -111,6 +116,7 @@ class Tools {
   }
   /**
    * deletes special characteres
+   *
    * @param text : text
    * @returns text without special characters
    */
@@ -125,7 +131,8 @@ class Tools {
   }
   /**
    * deletes special characteres in text (must be a stringyfy object) and returns as object if possible
-   * @text text (stringify object)
+   *
+   * @param text text or stingfy
    * @returns text if possible
    */
   static JsonParseDelSonderszeichen(text) {
@@ -137,29 +144,34 @@ class Tools {
   }
   /**
    * checks if two objects equal
+   *
    * @param obj1 object 1
    * @param obj2  object 2
    * @returns objects equal, true or false
    */
   static isEqual(obj1, obj2) {
-    if (typeof obj1 === "object" && typeof obj2 === "object")
+    if (typeof obj1 === "object" && typeof obj2 === "object") {
       return import_lodash.default.isEqual(obj1, obj2);
+    }
     return obj1 === obj2;
   }
   /**
    * if function / method is a async function / method
+   *
    * @param funct function
    * @returns function is async
    */
   static isAsync(funct) {
-    if (funct && funct.constructor)
+    if (funct && funct.constructor) {
       return funct.constructor.name == "AsyncFunction";
+    }
     return false;
   }
   /**
    * Get datatype of value
-   * @param {any} value : value
-   * @returns {string} : datatype of value (object, array, boolean)
+   *
+   * @param value : value
+   * @returns : datatype of value (object, array, boolean)
    */
   static getPropertyType(value) {
     let type;
@@ -187,13 +199,15 @@ class Tools {
   }
   /**
    * Converts the value to given type. Example value to string, number, ...
-   * @param {*} value : any type of value
-   * @param {string} type :   datatype for converting the value
-   * @returns
+   *
+   * @param value : any type of value
+   * @param type :   datatype for converting the value
+   * @returns any kind of object
    */
   static convertPropertyType(value, type) {
-    if (value === null || value === void 0)
+    if (value === null || value === void 0) {
       return value;
+    }
     let valuenew = value;
     switch (type) {
       case "number":
@@ -206,10 +220,10 @@ class Tools {
         valuenew = Boolean(Number(value));
         break;
       case "object":
-        valuenew = "{" + value.toString() + "}";
+        valuenew = `{${value.toString()}}`;
         break;
       case "array":
-        valuenew = "[" + value.toString() + "]";
+        valuenew = `[${value.toString()}]`;
         break;
       default:
         valuenew = value;
@@ -217,13 +231,23 @@ class Tools {
     }
     return valuenew;
   }
+  /**
+   *
+   * @param object object
+   * @returns object
+   */
   static copyObject(object) {
     if (object && typeof object === "object") {
       return import_lodash.default.cloneDeep(object);
-    } else {
-      return object;
     }
+    return object;
   }
+  /**
+   *
+   * @param object1 object1
+   * @param object2 object2
+   * @returns object1 + object2
+   */
   static mergeObject(object1, object2) {
     return import_lodash.default.merge(object1, object2);
   }

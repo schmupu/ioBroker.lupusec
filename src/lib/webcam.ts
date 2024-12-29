@@ -4,6 +4,9 @@ import { createHttpTerminator } from 'http-terminator';
 import * as https from 'https';
 import { Tools } from './tools';
 
+/**
+ * Class MJPEG to JPG
+ */
 export class MJPEGtoJPG {
     private adapter: any;
     private chunks: any[];
@@ -50,6 +53,9 @@ export class MJPEGtoJPG {
     }
 }
 
+/**
+ * Class Webcam
+ */
 export class Webcam {
     private adapter: any;
     private webcams: any;
@@ -60,6 +66,7 @@ export class Webcam {
 
     /**
      * Constructur webcam instance
+     *
      * @param adapter iobroker adapter
      * @param webcams object with webcam from Lupusec system
      */
@@ -73,17 +80,21 @@ export class Webcam {
 
     /**
      * Singelton, create webcam instance
+     *
      * @param adapter iobroker adapter
      * @param webcams object with webcam from Lupusec system
      * @returns returns webcam instance
      */
     static getInstance(adapter: any, webcams: any): Webcam {
-        if (!this.instance) this.instance = new Webcam(adapter, webcams);
+        if (!this.instance) {
+            this.instance = new Webcam(adapter, webcams);
+        }
         return this.instance;
     }
 
     /**
      * Gets from path the abssolute Url
+     *
      * @param path path of the Url like /action/logout
      * @returns full abaolute URI like https://foo.com/action/logout
      */
@@ -91,21 +102,22 @@ export class Webcam {
         const alarm_hostname = await Tools.lookup(this.adapter.config.alarm_hostname);
         const aboluteURI =
             this.adapter.config.alarm_https === true
-                ? 'https://' + alarm_hostname + path
-                : 'http://' + alarm_hostname + path;
+                ? `https://${alarm_hostname}${path}`
+                : `http://${alarm_hostname}${path}`;
         return aboluteURI;
     }
 
     /**
      * Start Server
-     * @returns
+     *
+     * @returns no return value
      */
     public async startServer(): Promise<void> {
         const host = this.host;
         const port = this.port;
         if (port > 0 && host) {
             try {
-                const bind = host ? host + ':' + port : port;
+                const bind = host ? `${host}:${port}` : port;
                 const running = await Tools.probe(host, port);
                 if (running) {
                     this.adapter.log.debug(`Webcam Listining Service on ${bind} running`);
@@ -116,7 +128,7 @@ export class Webcam {
                 this.httpTerminator = createHttpTerminator({
                     server,
                 });
-                server.on('error', (error) => {
+                server.on('error', error => {
                     this.adapter.log.error(`Error listining Webcam on port ${bind} (${error})`);
                 });
                 server.on('request', async (req, res) => {
@@ -132,7 +144,9 @@ export class Webcam {
                             res.end();
                         }
                         res.socket.on('close', () => {
-                            if (controller) controller.abort();
+                            if (controller) {
+                                controller.abort();
+                            }
                         });
                     }
                 });
@@ -149,7 +163,7 @@ export class Webcam {
     /**
      * Stop Server
      */
-    private async stoptServer(): Promise<void> {
+    private stoptServer(): void {
         if (this.httpTerminator) {
             this.httpTerminator.terminate();
             delete this.httpTerminator;
@@ -158,11 +172,11 @@ export class Webcam {
 
     /**
      *
-     * @param id
-     * @param url
-     * @param type
-     * @param res
-     * @returns
+     * @param id id of webcam
+     * @param url url of wwebam
+     * @param type type
+     * @param res res
+     * @returns controller
      */
     public async startStreamingClient(
         id: string,
@@ -170,18 +184,20 @@ export class Webcam {
         type: string,
         res: any,
     ): Promise<AbortController | void> {
-        if (!id || !url) return;
+        if (!id || !url) {
+            return;
+        }
         const uniqueid = Date.now().toString(36);
         const converter = new MJPEGtoJPG(this.adapter);
         const controller = new AbortController();
         const myURL = new URL(url);
-        const path = myURL.pathname.slice(1) + (myURL.search.length > 0 ? '&' + myURL.search.slice(1) : '');
+        const path = myURL.pathname.slice(1) + (myURL.search.length > 0 ? `&${myURL.search.slice(1)}` : '');
         const camnr = id.slice(-1);
         const urlPasthru = '/action/passthru';
         const uri = await this.getAbsoluteURI(`${urlPasthru}?cam=${camnr}&cmd=${path}`);
-        const auth =
-            'Basic ' +
-            Buffer.from(this.adapter.config.alarm_user + ':' + this.adapter.config.alarm_password).toString('base64');
+        const auth = `Basic ${Buffer.from(
+            `${this.adapter.config.alarm_user}:${this.adapter.config.alarm_password}`,
+        ).toString('base64')}`;
         const agent = new https.Agent({
             rejectUnauthorized: false,
         });
@@ -196,12 +212,14 @@ export class Webcam {
             });
             let contenttype = response.headers['content-type'];
             const stream = response?.data;
-            if (stream) this.adapter.log.debug(`Starting Webcam Client  ${id} with unique id (${uniqueid})`);
+            if (stream) {
+                this.adapter.log.debug(`Starting Webcam Client  ${id} with unique id (${uniqueid})`);
+            }
             stream.on('data', (data: any) => {
                 switch (type) {
                     case 'image':
                         res.setHeader('Content-type', 'image/jpeg');
-                        converter.mjpegTojpeg(data, (img) => {
+                        converter.mjpegTojpeg(data, img => {
                             // fs.writeFileSync(`/Users/thorsten.stueben/Downloads/${id}.jpg`, img);
                             res.end(img);
                             controller.abort();

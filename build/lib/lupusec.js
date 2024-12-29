@@ -94,6 +94,7 @@ class Lupus {
   });
   /**
    * Contructor - Use insteed singelton method getInstance
+   *
    * @param adapter ioBroker adapter instance
    * @param language language for state names (de, en, ..)
    */
@@ -104,7 +105,9 @@ class Lupus {
     this.language = language || "en";
     this.states = new import_states.States(adapter, language, false);
     this.timerhandle = {};
-    this.auth = "Basic " + Buffer.from(this.adapter.config.alarm_user + ":" + this.adapter.config.alarm_password).toString("base64");
+    this.auth = `Basic ${Buffer.from(
+      `${this.adapter.config.alarm_user}:${this.adapter.config.alarm_password}`
+    ).toString("base64")}`;
     this.token = "";
     this.axiostimeout = 15 * 1e3;
     this.axiosinstance = import_axios.default.create();
@@ -112,6 +115,7 @@ class Lupus {
   }
   /**
    * Singelton - get Lupusec class instance
+   *
    * @param adapter ioBroker adapter instance
    * @returns Instane of Lupusec class
    */
@@ -129,6 +133,7 @@ class Lupus {
   }
   /**
    * unique identifier
+   *
    * @returns unique identifier
    */
   static getUniqueId() {
@@ -136,13 +141,14 @@ class Lupus {
   }
   /**
    * starting a prozess every x seconds
+   *
    * @param id unique name  / key of the process
    * @param seconds process restarting after x seconds
    * @param callback function to start (function can be async)
    */
   async startproc(id, seconds, callback) {
     var _a;
-    if (callback) {
+    if (callback !== void 0) {
       try {
         this.adapter.log.debug(`Starting polling with process ${id}, callback ${callback}`);
         import_tools.Tools.isAsync(callback) ? await callback() : callback();
@@ -150,19 +156,22 @@ class Lupus {
       } catch (error) {
         const message = ((_a = error == null ? void 0 : error.response) == null ? void 0 : _a.data) || error.toString() || "not known";
         this.adapter.log.error(`Error: ${message} for process ${id}`);
-        if (error == null ? void 0 : error.stack)
+        if (error == null ? void 0 : error.stack) {
           this.adapter.log.debug(`Error: ${error.stack.toString()} for process ${id}`);
+        }
       }
     }
-    if (this.run[id])
+    if (this.run[id]) {
       this.adapter.clearTimeout(this.run[id]);
+    }
     this.run[id] = this.adapter.setTimeout(async () => await this.startproc(id, seconds, callback), seconds * 1e3);
   }
   /**
    * stopping process by id
+   *
    * @param id unique name  / key of the process
    */
-  async stopproc(id) {
+  stopproc(id) {
     if (this.run[id]) {
       this.adapter.log.debug(`Canceling process with id ${id}`);
       this.adapter.clearTimeout(this.run[id]);
@@ -171,6 +180,7 @@ class Lupus {
   }
   /**
    * does process with id exist
+   *
    * @param id unique name  / key of the process
    * @returns exist true/false
    */
@@ -179,6 +189,7 @@ class Lupus {
   }
   /**
    * set process with value
+   *
    * @param id unique name  / key of the process
    * @param val value is timmer of setTimeout
    */
@@ -221,7 +232,7 @@ class Lupus {
       });
     }
     if (this.exsitproc("DebugInfos") && stateLogLevel !== "debug") {
-      await this.stopproc("DebugInfos");
+      this.stopproc("DebugInfos");
     }
   }
   /**
@@ -240,8 +251,8 @@ class Lupus {
       memory[i] = `${(Math.round(memory[i]) / 1024 / 1024 * 100 / 100).toLocaleString(this.language)} MB`;
     }
     if (this.cpu) {
-      memory["cpuUser"] = this.cpu.user.toLocaleString(this.language);
-      memory["cpuSystem"] = this.cpu.system.toLocaleString(this.language);
+      memory.cpuUser = this.cpu.user.toLocaleString(this.language);
+      memory.cpuSystem = this.cpu.system.toLocaleString(this.language);
     }
     this.adapter.log.debug(`Process Meomory: ${JSON.stringify(memory)}`);
   }
@@ -251,13 +262,14 @@ class Lupus {
   /**
    * stop all process
    */
-  async stopallproc() {
+  stopallproc() {
     for (const id in this.run) {
-      await this.stopproc(id);
+      this.stopproc(id);
     }
   }
   /**
    * set actual time as unix time for an unique id
+   *
    * @param id unique name  / key of the process
    * @param unixtimestamp unixtime to set (optional)
    */
@@ -276,6 +288,7 @@ class Lupus {
   }
   /**
    * gets unixtime for id
+   *
    * @param id unique name  / key of the process
    * @returns unixtime
    */
@@ -284,6 +297,7 @@ class Lupus {
   }
   /**
    * deletes unixtime für id
+   *
    * @param id {string}
    */
   delUnixTimestamp(id) {
@@ -292,6 +306,7 @@ class Lupus {
   /**
    * Get all device ids for a devicetype. Example for devicetype 42 you get back [{ id: 'Z:34324, type:42 }, { id: 'Z:4721', type: 42}]
    * If you set devicetype to undefined. You get back all devices ids
+   *
    * @param devicetype devicetype like 42 oder undefindes
    * @returns return an array with all device ids for a device type
    */
@@ -325,8 +340,9 @@ class Lupus {
         const oldobject = await this.states.getObjectAsync(id);
         const newobject = objects[j];
         if (oldobject && newobject) {
-          if ((_a = oldobject == null ? void 0 : oldobject.common) == null ? void 0 : _a.name)
+          if ((_a = oldobject == null ? void 0 : oldobject.common) == null ? void 0 : _a.name) {
             newobject.common.name = oldobject.common.name;
+          }
           const object = {
             ...oldobject,
             ...newobject
@@ -338,6 +354,7 @@ class Lupus {
   }
   /**
    * Lupusec Status to Apple Home Status
+   *
    * @param mode_pc_a Area 1 or 2 (1,2)
    * @param alarm_ex 0 = Disarm, 1 = Arm, 2 = Home1, 3 = Home2, 4 = Home3
    * @returns status for Apple home as number if set. If not set the return valus is undefined
@@ -372,6 +389,7 @@ class Lupus {
   }
   /**
    * Apple Home Status to Lupusec Status
+   *
    * @param applestatus Apple Status from 0 to 4
    * @returns Lupsusec Status from 0 to 3
    */
@@ -399,28 +417,32 @@ class Lupus {
   }
   /**
    * Gets from path the abssolute Url
+   *
    * @param path path of the Url like /action/logout
    * @returns full abaolute URI like https://foo.com/action/logout
    */
   async getAbsoluteURI(path) {
     const alarm_hostname = await import_tools.Tools.lookup(this.adapter.config.alarm_hostname);
-    const aboluteURI = this.adapter.config.alarm_https === true ? "https://" + alarm_hostname + path : "http://" + alarm_hostname + path;
+    const aboluteURI = this.adapter.config.alarm_https === true ? `https://${alarm_hostname}${path}` : `http://${alarm_hostname}${path}`;
     return aboluteURI;
   }
   /**
    * Gets Token from alarm system
+   *
    * @param renew : optinal parameter, to get new Token
    * @returns returns token
    */
   async requestToken(renew) {
-    if (renew === void 0)
+    if (renew === void 0) {
       renew = false;
+    }
     const path = urlTokenGet;
     const lastupdate = this.getUnixTimestamp("Token") || 0;
     const now = this.getUnixTimestampNow();
     const diff = lastupdate + 60 * 1e3 - now;
-    if (this.token !== "" && renew === false && diff > 0)
+    if (this.token !== "" && renew === false && diff > 0) {
       return this.token;
+    }
     this.setUnixTimestamp("Token");
     const requestconfig = {
       httpsAgent: this.httpsagent,
@@ -438,14 +460,16 @@ class Lupus {
     };
     this.adapter.log.debug(`Request Token ${path}`);
     const response = await this.axiosinstance.get(await this.getAbsoluteURI(path), requestconfig);
-    if (response.data)
+    if (response.data) {
       response.data = import_tools.Tools.JsonParseDelSonderszeichen(response.data);
+    }
     this.token = response.data.message;
     this.adapter.log.debug(`New Token: ${this.token}`);
     return this.token;
   }
   /**
    * make a http request get
+   *
    * @param path path of the request like /action/logout
    * @param config optional parameter, list of configuraion
    * @returns Response of the request
@@ -471,8 +495,9 @@ class Lupus {
     };
     this.adapter.log.debug(`Request Get ${path}`);
     const response = await this.axiosinstance.get(await this.getAbsoluteURI(path), requestconfig);
-    if (response.data)
+    if (response.data) {
       response.data = import_tools.Tools.JsonParseDelSonderszeichen(response.data);
+    }
     return {
       data: response.data,
       unixtime
@@ -480,6 +505,7 @@ class Lupus {
   }
   /**
    * Post Request
+   *
    * @param path url for post
    * @param data  payload for post statement
    * @param config config
@@ -507,8 +533,9 @@ class Lupus {
     const text = import_querystring.default.stringify(data);
     this.adapter.log.debug(`Request Post ${path} with payload ${JSON.stringify(data)}`);
     const response = await this.axiosinstance.post(await this.getAbsoluteURI(path), text, requestconfig);
-    if (response.data)
+    if (response.data) {
       response.data = import_tools.Tools.JsonParseDelSonderszeichen(response.data);
+    }
     return {
       data: response.data,
       unixtime
@@ -520,8 +547,9 @@ class Lupus {
     const id = states.id || states.sid;
     const idc = `devices.${id}`;
     const type = states.type || states.stype || ((_a = await this.states.getStateAsync(`${idc}.type`)) == null ? void 0 : _a.val);
-    if (type === void 0)
+    if (type === void 0) {
       return;
+    }
     for (const name in states) {
       let value = states[name];
       if (name === "rssi" && value !== void 0) {
@@ -546,25 +574,30 @@ class Lupus {
         value = import_datapoints.Datapoints.getDeviceNameByDeviceType(type);
       }
       if (name === "alarm_status_ex") {
-        if (states["alarm_status"] !== void 0)
-          value = states["alarm_status"] ? true : false;
+        if (states.alarm_status !== void 0) {
+          value = states.alarm_status ? true : false;
+        }
       }
       if (name === "status") {
         const regstat = /\{WEB_MSG_(DC|DL)_(.+)\}/gm;
         const m = regstat.exec(value);
-        if (m && m.length > 1)
+        if (m && m.length > 1) {
           value = m[2];
+        }
       }
       if (name === "logmsg" && states.msg !== void 0) {
         value = states.msg;
       }
       if (type === 17 || type === 37) {
-        if (name === "sresp_button_123" && states.sresp_panic !== void 0)
+        if (name === "sresp_button_123" && states.sresp_panic !== void 0) {
           value = states.sresp_panic;
-        if (name === "sresp_button_456" && states.sresp_fire !== void 0)
+        }
+        if (name === "sresp_button_456" && states.sresp_fire !== void 0) {
           value = states.sresp_fire;
-        if (name === "sresp_button_789" && states.sresp_medical !== void 0)
+        }
+        if (name === "sresp_button_789" && states.sresp_medical !== void 0) {
           value = states.sresp_medical;
+        }
       }
       if (type === 24 || type === 48 || type === 50 || type === 66) {
         if (name === "pd") {
@@ -672,18 +705,21 @@ class Lupus {
         if (name === "off" && states.status !== void 0) {
           const regstat = /{WEB_MSG_TRV_(OFF)}/gm;
           const m = regstat.exec(states.status);
-          if (m && m[1] === "OFF")
+          if (m && m[1] === "OFF") {
             value = true;
-          else
+          } else {
             value = false;
+          }
         }
         if (name === "mode" && states.status !== void 0) {
           const regstat = /{WEB_MSG_TRV_(AUTO|MANUAL)}/gm;
           const m = regstat.exec(states.status);
-          if (m && m[1] === "AUTO")
+          if (m && m[1] === "AUTO") {
             value = 1;
-          if (m && m[1] === "MANUAL")
+          }
+          if (m && m[1] === "MANUAL") {
             value = 0;
+          }
         }
         if (name === "thermo_offset" && value !== void 0) {
           value = import_tools.Tools.round(value / 10, 0.5);
@@ -693,7 +729,13 @@ class Lupus {
     }
     return statesmapped;
   }
-  async webcam_mapping_all(id, states) {
+  /**
+   *
+   * @param id id of webcam
+   * @param states status
+   * @returns image and stream of webcam
+   */
+  webcam_mapping_all(id, states) {
     const statesmapped = states;
     const port = this.adapter.config.webcam_port;
     const bind = this.adapter.config.webcam_bind;
@@ -707,7 +749,12 @@ class Lupus {
     }
     return statesmapped;
   }
-  async zentrale_mapping_all(states) {
+  /**
+   *
+   * @param states states
+   * @returns maped states
+   */
+  zentrale_mapping_all(states) {
     const statesmapped = states;
     statesmapped.apple_home_a1 = this.getAppleStautusFromLupusec(states.mode_pc_a1, states.alarm_ex);
     statesmapped.apple_home_a2 = this.getAppleStautusFromLupusec(states.mode_pc_a2, states.alarm_ex);
@@ -716,27 +763,30 @@ class Lupus {
     }
     return statesmapped;
   }
-  async dummyDevicePost(id) {
+  dummyDevicePost(id) {
     this.setUnixTimestamp(id);
   }
   async haExecutePost(id, form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlHaExecutePost, form);
     this.setUnixTimestamp(id);
     return result;
   }
   async deviceEditThermoPost(id, form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlDeviceEditThermoPost, form);
     this.setUnixTimestamp(id);
     return result;
   }
   async deviceEditPost(id, form) {
     var _a, _b;
-    if (!form)
+    if (!form) {
       return;
+    }
     const ressultold = await this.requestPost(urlDeviceEditGet, { id: form.id });
     if ((_b = (_a = ressultold == null ? void 0 : ressultold.data) == null ? void 0 : _a.forms) == null ? void 0 : _b.ssform) {
       const ssform = ressultold.data.forms.ssform;
@@ -745,12 +795,14 @@ class Lupus {
         if (!import_tools.Tools.hasProperty(form, name)) {
           switch (typeof value) {
             case "string":
-              if (value.length > 0)
+              if (value.length > 0) {
                 form[name] = value;
+              }
               break;
             default:
-              if (value)
+              if (value) {
                 form[name] = value;
+              }
               break;
           }
         }
@@ -761,95 +813,123 @@ class Lupus {
     }
   }
   async deviceEditShutterPost(id, form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlDeviceEditShutterPost, form);
     this.setUnixTimestamp(id);
     return result;
   }
   async deviceSwitchPSSPost(id, form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlDeviceSwitchPSSPost, form);
     this.setUnixTimestamp(id);
     return result;
   }
   async deviceNukiCmd(id, form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlDeviceNukiCmd, form);
     this.setUnixTimestamp(id);
     return result;
   }
   async deviceEditGet(form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlDeviceEditGet, form);
     return result;
   }
   async deviceEditThermoGet(form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlDeviceEditThermoGet, form);
     return result;
   }
   async deviceEditMeterGet(form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlDeviceEditMeterGet, form);
     return result;
   }
   async deviceEditShutterGet(form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlDeviceEditShutterGet, form);
     return result;
   }
   async deviceEditMeterPost(id, form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlDeviceEditMeterPost, form);
     this.setUnixTimestamp(id);
     return result;
   }
   async deviceSwitchDimmerPost(id, form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlDeviceSwitchDimmerPost, form);
     this.setUnixTimestamp(id);
     return result;
   }
   async panelCondPost(id, form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlPanelCondPost, form);
     this.setUnixTimestamp(id);
     return result;
   }
   async deviceDoUPICPost(id, form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlDeviceDoUPICPost, form);
     this.setUnixTimestamp(id);
     return result;
   }
+  /**
+   * Sends SMS by card
+   *
+   * @param id id of device
+   * @param form payload to send sms
+   * @returns no value
+   */
   async sendSMSPost(id, form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlSendSMSPost, form);
     this.setUnixTimestamp(id);
     return result;
   }
+  /**
+   * Sends SMS by Gateway
+   *
+   * @param id id of device
+   * @param form payload to send sms
+   * @returns no value
+   */
   async sendSMSgwTestPost(id, form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlSmsgwTestPost, form);
     this.setUnixTimestamp(id);
     return result;
   }
   async deviceHueColorControl(id, form) {
-    if (!form)
+    if (!form) {
       return;
+    }
     const result = await this.requestPost(urlDeviceHueColorControl, form);
     this.setUnixTimestamp(id);
     return result;
@@ -886,13 +966,13 @@ class Lupus {
     if ((_b = (_a = result == null ? void 0 : result.data) == null ? void 0 : _a.forms) == null ? void 0 : _b.pcondform1) {
       for (const key in result.data.forms.pcondform1) {
         const value = result.data.forms.pcondform1[key];
-        data.zentrale[key + "_pc_a1"] = value;
+        data.zentrale[`${key}_pc_a1`] = value;
       }
     }
     if ((_d = (_c = result == null ? void 0 : result.data) == null ? void 0 : _c.forms) == null ? void 0 : _d.pcondform2) {
       for (const key in result.data.forms.pcondform2) {
         const value = result.data.forms.pcondform2[key];
-        data.zentrale[key + "_pc_a2"] = value;
+        data.zentrale[`${key}_pc_a2`] = value;
       }
     }
     await this.setAllStatusLupusecEntries(data);
@@ -908,15 +988,17 @@ class Lupus {
     var _a, _b;
     const webcams = {};
     const results = await this.requestGet(urlIpcamGet);
-    if (!results || !results.data)
+    if (!results || !results.data) {
       return;
+    }
     if ((_b = (_a = results == null ? void 0 : results.data) == null ? void 0 : _a.forms) == null ? void 0 : _b.ipcamform) {
       for (const name in results.data.forms.ipcamform) {
         const value = results.data.forms.ipcamform[name];
         const index = Number(name.slice(-1));
         if (index >= 1 && index <= 9) {
-          if (!webcams[`cam${index}`])
+          if (!webcams[`cam${index}`]) {
             webcams[`cam${index}`] = {};
+          }
           webcams[`cam${index}`][name.slice(0, -1)] = value;
         }
       }
@@ -961,8 +1043,9 @@ class Lupus {
           ...devices[idd]
         };
       }
-      if (result && result.unixtime > unixtime)
+      if (result && result.unixtime > unixtime) {
         unixtime = result.unixtime;
+      }
     }
     const data = {
       unixtime,
@@ -976,8 +1059,9 @@ class Lupus {
     const results = await this.requestPost(urlLogsGet, {
       max_count: 10
     });
-    if (!results || !results.data)
+    if (!results || !results.data) {
       return;
+    }
     if ((_a = results == null ? void 0 : results.data) == null ? void 0 : _a.logrows) {
       const states = await this.states.getStatesAllAsync("devices.*");
       for (const i in results.data.logrows) {
@@ -1075,16 +1159,21 @@ class Lupus {
     }
     for (const idx in results) {
       const result = results[idx];
-      if ((_b = (_a = result == null ? void 0 : result.data) == null ? void 0 : _a.forms) == null ? void 0 : _b.ssform)
+      if ((_b = (_a = result == null ? void 0 : result.data) == null ? void 0 : _a.forms) == null ? void 0 : _b.ssform) {
         result.data.form = result.data.forms.ssform;
-      if ((_d = (_c = result == null ? void 0 : result.data) == null ? void 0 : _c.forms) == null ? void 0 : _d.thermoform)
+      }
+      if ((_d = (_c = result == null ? void 0 : result.data) == null ? void 0 : _c.forms) == null ? void 0 : _d.thermoform) {
         result.data.form = result.data.forms.thermoform;
-      if ((_f = (_e = result == null ? void 0 : result.data) == null ? void 0 : _e.forms) == null ? void 0 : _f.shutterform)
+      }
+      if ((_f = (_e = result == null ? void 0 : result.data) == null ? void 0 : _e.forms) == null ? void 0 : _f.shutterform) {
         result.data.form = result.data.forms.shutterform;
-      if ((_h = (_g = result == null ? void 0 : result.data) == null ? void 0 : _g.forms) == null ? void 0 : _h.meterform)
+      }
+      if ((_h = (_g = result == null ? void 0 : result.data) == null ? void 0 : _g.forms) == null ? void 0 : _h.meterform) {
         result.data.form = result.data.forms.meterform;
-      if ((_i = result == null ? void 0 : result.data) == null ? void 0 : _i.forms)
+      }
+      if ((_i = result == null ? void 0 : result.data) == null ? void 0 : _i.forms) {
         delete result.data.forms;
+      }
       if ((_j = result == null ? void 0 : result.data) == null ? void 0 : _j.form) {
         const device = result.data.form;
         if (device.id || device.sid) {
@@ -1095,8 +1184,9 @@ class Lupus {
           };
         }
       }
-      if (result && result.unixtime > unixtime)
+      if (result && result.unixtime > unixtime) {
         unixtime = result.unixtime;
+      }
     }
     const data = {
       unixtime,
@@ -1117,8 +1207,9 @@ class Lupus {
         DeviceListUPICGet: resultDeviceListUPICGet
       }
     };
-    if (!results || !results.data)
+    if (!results || !results.data) {
       return;
+    }
     const devices = {};
     if ((_c = (_b = (_a = results == null ? void 0 : results.data) == null ? void 0 : _a.DeviceListGet) == null ? void 0 : _b.data) == null ? void 0 : _c.senrows) {
       for (const device of results.data.DeviceListGet.data.senrows) {
@@ -1156,9 +1247,10 @@ class Lupus {
    * @param extname string or object with name kike de: 'Status', en: 'state' or 'Status'
    * @returns string or object like de: Status (tür), en: state (door) or Status (tür)
    */
-  async extendCommonName(name, extname) {
-    if (!extname || !name)
+  extendCommonName(name, extname) {
+    if (!extname || !name) {
       return name;
+    }
     if (typeof name === "object" && typeof extname === "object") {
       const newnames = {};
       for (const language in name) {
@@ -1185,7 +1277,7 @@ class Lupus {
   async createObjectSetStates(id, name, value, unixtime, obj, devicename) {
     const execdelay = 0;
     const object = obj;
-    const sid = id + "." + name;
+    const sid = `${id}.${name}`;
     if (object.common.name === "%value%") {
       object.common.name = value !== void 0 ? value : void 0;
     }
@@ -1193,15 +1285,16 @@ class Lupus {
       object.common.name = value !== void 0 ? object.common.name.replace("%value%", value) : void 0;
     }
     if (object.common.name) {
-      object.common.name = await this.extendCommonName(object.common.name, devicename);
+      object.common.name = this.extendCommonName(object.common.name, devicename);
     }
     await this.states.setObjectNotExistsAsync(sid, {
       type: object.type,
       common: object.common,
       native: {}
     });
-    if (object.type === "channel" || object.type === "device")
+    if (object.type === "channel" || object.type === "device") {
       return;
+    }
     const statevalue = import_tools.Tools.convertPropertyType(value, object.common.type);
     if (statevalue === null || statevalue === void 0) {
       return;
@@ -1244,11 +1337,12 @@ class Lupus {
     const promisearray = [];
     for (const id in devices) {
       const device = devices[id];
-      const idc = "devices." + id;
+      const idc = `devices.${id}`;
       const cname = device.name || device.sname;
       const type = device.type || device.stype || ((_a = await this.states.getStateAsync(`${idc}.type`)) == null ? void 0 : _a.val);
-      if (type === void 0)
+      if (type === void 0) {
         continue;
+      }
       let objects = import_datapoints.Datapoints.getDeviceTypeList(type, this.language);
       if (!objects) {
         this.adapter.log.warn(
@@ -1306,8 +1400,9 @@ class Lupus {
         }
       }
     }
-    if (promisearray)
+    if (promisearray) {
       await Promise.all(promisearray.map(async (func) => await func()));
+    }
   }
   // Status
   async setAllStatusLupusecEntries(results) {
@@ -1322,7 +1417,7 @@ class Lupus {
         zentrale[dp] = void 0;
       }
     }
-    const zentralemapped = await this.zentrale_mapping_all(zentrale);
+    const zentralemapped = this.zentrale_mapping_all(zentrale);
     const cname = (_b = (_a = await this.states.getObjectAsync(idc)) == null ? void 0 : _a.common) == null ? void 0 : _b.name;
     for (const dp in objects) {
       if (this.adapter.config.option_pollfaster) {
@@ -1334,8 +1429,9 @@ class Lupus {
         await this.createObjectSetStates(idc, dp, zentralemapped[dp], unixtime, objects[dp], cname);
       }
     }
-    if (promisearray)
+    if (promisearray) {
       await Promise.all(promisearray.map(async (func) => await func()));
+    }
   }
   async setAllSMSLupusecEntries(results) {
     var _a, _b, _c;
@@ -1359,8 +1455,9 @@ class Lupus {
         await this.createObjectSetStates(idc, dp, sms[dp], unixtime, objects[dp], cname);
       }
     }
-    if (promisearray)
+    if (promisearray) {
       await Promise.all(promisearray.map(async (func) => await func()));
+    }
   }
   async setAllWebcamLupusecEntries(results) {
     const unixtime = results.unixtime;
@@ -1369,7 +1466,7 @@ class Lupus {
     const objects = import_datapoints.Datapoints.getWebcamTypeList(this.language);
     for (const id in webcams) {
       const webcam = webcams[id];
-      const idc = "webcams." + id;
+      const idc = `webcams.${id}`;
       const cname = webcam.name || `Webcam ${idc.slice(-1)} ` || "";
       const result = await this.states.setObjectNotExistsAsync(idc, {
         type: "channel",
@@ -1387,12 +1484,12 @@ class Lupus {
           webcam[dp] = void 0;
         }
       }
-      const webcammapped = await this.webcam_mapping_all(id, webcam);
+      const webcammapped = this.webcam_mapping_all(id, webcam);
       for (const dp in objects) {
         if (this.adapter.config.option_pollfaster) {
           promisearray.push(
             async () => await this.createObjectSetStates(
-              "webcams." + id,
+              `webcams.${id}`,
               dp,
               webcammapped[dp],
               unixtime,
@@ -1400,12 +1497,13 @@ class Lupus {
             )
           );
         } else {
-          await this.createObjectSetStates("webcams." + id, dp, webcammapped[dp], unixtime, objects[dp]);
+          await this.createObjectSetStates(`webcams.${id}`, dp, webcammapped[dp], unixtime, objects[dp]);
         }
       }
     }
-    if (promisearray)
+    if (promisearray) {
       await Promise.all(promisearray.map(async (func) => await func()));
+    }
     if (this.adapter.config.webcam_providing) {
       const caminstance = import_webcam.Webcam.getInstance(this.adapter, webcams);
       await caminstance.startServer();
@@ -1413,15 +1511,16 @@ class Lupus {
   }
   /**
    * Is called if a subscribed state changes
-   * @param {string} id
-   * @param {ioBroker.State | null | undefined} state
+   *
+   * @param id id
+   * @param state state
    */
   async onStateChange(id, state) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k;
     try {
       if (state && state.ack === false) {
         await this.states.setStateNotExistsAsync(id, { val: state.val, ack: state.ack });
-        if (id.startsWith(this.adapter.namespace + ".devices.")) {
+        if (id.startsWith(`${this.adapter.namespace}.devices.`)) {
           const execdelay = 0;
           const icchannelabs = id.split(".").slice(0, 4).join(".");
           const idchannel = id.split(".").slice(2, 4).join(".");
@@ -1440,7 +1539,7 @@ class Lupus {
               exec
             });
           } else if (name === "pd") {
-            await this.dummyDevicePost(iddevice);
+            this.dummyDevicePost(iddevice);
           } else if (name === "factor") {
             await this.deviceEditMeterPost(iddevice, {
               id: channel,
@@ -1480,8 +1579,9 @@ class Lupus {
                   id: channel,
                   action: value
                 });
-                if (((_a2 = result == null ? void 0 : result.data) == null ? void 0 : _a2.result) === 1)
+                if (((_a2 = result == null ? void 0 : result.data) == null ? void 0 : _a2.result) === 1) {
                   break;
+                }
                 this.adapter.log.debug(
                   `Action on Nuki not executed, because no positive response from Nuki!. Will try it again in a few seconds!`
                 );
@@ -1549,23 +1649,31 @@ class Lupus {
                 thermo_setpoint: Math.trunc(100 * Math.round(2 * Number(state.val)) / 2)
               });
             }, execdelay);
-          } else if (name.startsWith("sresp_button_") || name === "sresp_emergency" || name === "name" || name === "send_notify" || name === "bypass" || name === "bypass_tamper" || name === "schar_latch_rpt" || name === "always_off") {
+          } else if (
+            // Type 4,7,17,37,81
+            name.startsWith("sresp_button_") || name === "sresp_emergency" || name === "name" || name === "send_notify" || name === "bypass" || name === "bypass_tamper" || name === "schar_latch_rpt" || name === "always_off"
+          ) {
             let parameter = name;
             const form = {
               id: channel,
               sarea: area,
               szone: zone
             };
-            if (name === "sresp_button_123")
+            if (name === "sresp_button_123") {
               parameter = "sresp_panic";
-            if (name === "sresp_button_456")
+            }
+            if (name === "sresp_button_456") {
               parameter = "sresp_fire";
-            if (name === "sresp_button_789")
+            }
+            if (name === "sresp_button_789") {
               parameter = "sresp_medical";
-            if (name === "name")
+            }
+            if (name === "name") {
               parameter = "sname";
-            if (name === "bypass")
+            }
+            if (name === "bypass") {
               parameter = "scond_bypass";
+            }
             form[parameter] = state.val;
             await this.deviceEditPost(iddevice, form);
           } else if (name === "hue") {
@@ -1599,11 +1707,12 @@ class Lupus {
             this.dummyDevicePost(iddevice);
           }
         }
-        if (id.startsWith(this.adapter.namespace + ".status.")) {
+        if (id.startsWith(`${this.adapter.namespace}.status.`)) {
           const regstat = /.+\.status\.(.+)/gm;
           const m = regstat.exec(id);
-          if (!m)
+          if (!m) {
             return;
+          }
           const icchannelabs = id.split(".").slice(0, -1).join(".");
           const idchannel = id.split(".").slice(2, -1).join(".");
           const iddevice = id.split(".").slice(2).join(".");
@@ -1614,22 +1723,25 @@ class Lupus {
             await this.panelCondPost(iddevice, { area: 2, mode: state.val });
           } else if (name === "apple_home_a1") {
             const mode_pc_a1 = this.getLupusecFromAppleStautus(Number(state.val));
-            if (mode_pc_a1 !== void 0 && mode_pc_a1 >= 0 && mode_pc_a1 <= 4)
+            if (mode_pc_a1 !== void 0 && mode_pc_a1 >= 0 && mode_pc_a1 <= 4) {
               await this.panelCondPost(iddevice, { area: 1, mode: mode_pc_a1 });
+            }
           } else if (name === "apple_home_a2") {
             const mode_pc_a2 = this.getLupusecFromAppleStautus(Number(state.val));
-            if (mode_pc_a2 !== void 0 && mode_pc_a2 >= 0 && mode_pc_a2 <= 4)
+            if (mode_pc_a2 !== void 0 && mode_pc_a2 >= 0 && mode_pc_a2 <= 4) {
               await this.panelCondPost(iddevice, { area: 2, mode: mode_pc_a2 });
+            }
           } else {
             this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
             this.dummyDevicePost(iddevice);
           }
         }
-        if (id.startsWith(this.adapter.namespace + ".sms.")) {
+        if (id.startsWith(`${this.adapter.namespace}.sms.`)) {
           const regstat = /.+\.sms\.(.+)/gm;
           const m = regstat.exec(id);
-          if (!m)
+          if (!m) {
             return;
+          }
           const icchannelabs = id.split(".").slice(0, -1).join(".");
           const idchannel = id.split(".").slice(2, -1).join(".");
           const iddevice = id.split(".").slice(2).join(".");
@@ -1681,8 +1793,9 @@ class Lupus {
   }
   /**
    * Is called if a subscribed object changes
-   * @param {string} id
-   * @param {ioBroker.Object | null | undefined} obj
+   *
+   * @param id id of object
+   * @param obj object
    */
   async onObjectChange(id, obj) {
     if (obj) {

@@ -2891,20 +2891,22 @@ class Datapoints {
   }
   /**
    * Get all information (datapoints) like name, value type, ...for a device type
-   * @param {number} devicetype : Lupusec Type like 38
-   * @param {string} language: Language like en, de, ...
-   * @returns {object | undefined}: List of state for Type
+   *
+   * @param devicetype Lupusec Type like 38
+   * @param language Language like en, de, ...
+   * @returns List of state for Type
    */
   static getDeviceTypeList(devicetype, language) {
     var _a, _b;
     const deviceTypes = Datapoints.getDeviceTypes();
     const deviceDatapoints = Datapoints.getDeviceDatapoints();
-    if (devicetype === void 0)
+    if (devicetype === void 0) {
       return;
+    }
     const typename = `TYPE_${devicetype}`;
     const icon = (_a = deviceTypes[typename]) == null ? void 0 : _a.icon;
     const devlist = (_b = deviceTypes[typename]) == null ? void 0 : _b.devlist;
-    const devicelist = import_tools.Tools.mergeObject(deviceDatapoints[devlist], deviceDatapoints["type_all"]);
+    const devicelist = import_tools.Tools.mergeObject(deviceDatapoints[devlist], deviceDatapoints.type_all);
     if (devicelist) {
       for (const name in devicelist) {
         if (devicelist[name].common && icon && !devicelist[name].common.icon) {
@@ -2914,8 +2916,8 @@ class Datapoints {
           devicelist[name].common.states = devicelist[name].common.states[language];
           continue;
         }
-        if (devicelist[name].common && devicelist[name].common.states && devicelist[name].common.states["en"]) {
-          devicelist[name].common.states = devicelist[name].common.states["en"];
+        if (devicelist[name].common && devicelist[name].common.states && devicelist[name].common.states.en) {
+          devicelist[name].common.states = devicelist[name].common.states.en;
           continue;
         }
       }
@@ -2924,14 +2926,16 @@ class Datapoints {
   }
   /**
    * Returns a icon for a devicetype
-   * @param {number} devicetype : device type like 20, 30, 21
-   * @returns {string | undefined} : icon
+   *
+   * @param devicetype : device type like 20, 30, 21
+   * @returns : icon
    */
   static getDeviceIconByDeviceType(devicetype) {
     var _a;
     const deviceTypes = Datapoints.getDeviceTypes();
-    if (devicetype === void 0)
+    if (devicetype === void 0) {
       return;
+    }
     const typename = `TYPE_${devicetype}`;
     const icon = (_a = deviceTypes[typename]) == null ? void 0 : _a.icon;
     return icon;
@@ -2944,12 +2948,18 @@ class Datapoints {
   static getDeviceNameByDeviceType(devicetype) {
     var _a;
     const deviceTypes = Datapoints.getDeviceTypes();
-    if (devicetype === void 0)
+    if (devicetype === void 0) {
       return;
+    }
     const typename = `TYPE_${devicetype}`;
     const name = (_a = deviceTypes[typename]) == null ? void 0 : _a.name;
     return name;
   }
+  /**
+   *
+   * @param language language like en or de
+   * @returns status datapoints
+   */
   static getStatusTypeList(language) {
     var _a;
     const statuslist = Datapoints.getStatusDatapoints();
@@ -2959,8 +2969,8 @@ class Datapoints {
           statuslist[name].common.states = statuslist[name].common.states[language];
           continue;
         }
-        if (statuslist[name].common && statuslist[name].common.states && statuslist[name].common.states["en"]) {
-          statuslist[name].common.states = statuslist[name].common.states["en"];
+        if (statuslist[name].common && statuslist[name].common.states && statuslist[name].common.states.en) {
+          statuslist[name].common.states = statuslist[name].common.states.en;
           continue;
         }
         (_a = statuslist[name].common) == null ? true : delete _a.states;
@@ -2968,6 +2978,11 @@ class Datapoints {
     }
     return statuslist;
   }
+  /**
+   *
+   * @param language language like en or de
+   * @returns sms datapoints
+   */
   static getSMSTypeList(language) {
     var _a;
     const smslist = Datapoints.getSmsDatapoints();
@@ -2977,8 +2992,8 @@ class Datapoints {
           smslist[name].common.states = smslist[name].common.states[language];
           continue;
         }
-        if (smslist[name].common && smslist[name].common.states && smslist[name].common.states["en"]) {
-          smslist[name].common.states = smslist[name].common.states["en"];
+        if (smslist[name].common && smslist[name].common.states && smslist[name].common.states.en) {
+          smslist[name].common.states = smslist[name].common.states.en;
           continue;
         }
         (_a = smslist[name].common) == null ? true : delete _a.states;
@@ -2986,6 +3001,11 @@ class Datapoints {
     }
     return smslist;
   }
+  /**
+   *
+   * @param language language like en or de
+   * @returns webcam datapoints
+   */
   static getWebcamTypeList(language) {
     var _a;
     const webcamlist = Datapoints.getWebcamDatapoints();
@@ -2995,8 +3015,8 @@ class Datapoints {
           webcamlist[name].common.states = webcamlist[name].common.states[language];
           continue;
         }
-        if (webcamlist[name].common && webcamlist[name].common.states && webcamlist[name].common.states["en"]) {
-          webcamlist[name].common.states = webcamlist[name].common.states["en"];
+        if (webcamlist[name].common && webcamlist[name].common.states && webcamlist[name].common.states.en) {
+          webcamlist[name].common.states = webcamlist[name].common.states.en;
           continue;
         }
         (_a = webcamlist[name].common) == null ? true : delete _a.states;

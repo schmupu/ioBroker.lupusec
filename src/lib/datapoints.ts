@@ -1,5 +1,8 @@
 import { Tools } from './tools';
 
+/**
+ * Interface Device Types
+ */
 export interface defDeviceTypes {
     [index: string]: {
         name: string;
@@ -8,22 +11,37 @@ export interface defDeviceTypes {
     };
 }
 
+/**
+ * Interface Device Datapoints
+ */
 export interface defDeviceDatapoints {
     [index: string]: object;
 }
 
+/**
+ * Interface SMS datapoints
+ */
 export interface defSmsDatapoints {
     [index: string]: any;
 }
 
+/**
+ * Interface webcam datapoints
+ */
 export interface defWebcamDatapoints {
     [index: string]: any;
 }
 
+/**
+ * Interface status datapoints
+ */
 export interface defStatusDatapoints {
     [index: string]: any;
 }
 
+/**
+ * Class for datapoints
+ */
 export class Datapoints {
     /**
      * Types of Devices
@@ -2906,15 +2924,18 @@ export class Datapoints {
 
     /**
      * Get all information (datapoints) like name, value type, ...for a device type
-     * @param {number} devicetype : Lupusec Type like 38
-     * @param {string} language: Language like en, de, ...
-     * @returns {object | undefined}: List of state for Type
+     *
+     * @param devicetype Lupusec Type like 38
+     * @param language Language like en, de, ...
+     * @returns List of state for Type
      */
     public static getDeviceTypeList(devicetype: number, language: string): defDeviceDatapoints | undefined {
         const deviceTypes = Datapoints.getDeviceTypes();
         const deviceDatapoints = Datapoints.getDeviceDatapoints();
 
-        if (devicetype === undefined) return;
+        if (devicetype === undefined) {
+            return;
+        }
         const typename = `TYPE_${devicetype}`;
         const icon = deviceTypes[typename]?.icon;
         const devlist = deviceTypes[typename]?.devlist;
@@ -2924,7 +2945,7 @@ export class Datapoints {
         ...deviceDatapoints['type_all']
     });
     */
-        const devicelist = Tools.mergeObject(deviceDatapoints[devlist], deviceDatapoints['type_all']);
+        const devicelist = Tools.mergeObject(deviceDatapoints[devlist], deviceDatapoints.type_all);
         // const devicelist = tools.mergeObject(tools.copyObject(deviceDatapoints[devlist]), tools.copyObject(deviceDatapoints['type_all']));
         if (devicelist) {
             for (const name in devicelist) {
@@ -2939,8 +2960,8 @@ export class Datapoints {
                     devicelist[name].common.states = devicelist[name].common.states[language];
                     continue;
                 }
-                if (devicelist[name].common && devicelist[name].common.states && devicelist[name].common.states['en']) {
-                    devicelist[name].common.states = devicelist[name].common.states['en'];
+                if (devicelist[name].common && devicelist[name].common.states && devicelist[name].common.states.en) {
+                    devicelist[name].common.states = devicelist[name].common.states.en;
                     continue;
                 }
             }
@@ -2950,12 +2971,15 @@ export class Datapoints {
 
     /**
      * Returns a icon for a devicetype
-     * @param {number} devicetype : device type like 20, 30, 21
-     * @returns {string | undefined} : icon
+     *
+     * @param devicetype : device type like 20, 30, 21
+     * @returns : icon
      */
     public static getDeviceIconByDeviceType(devicetype: number): string | undefined {
         const deviceTypes = Datapoints.getDeviceTypes();
-        if (devicetype === undefined) return;
+        if (devicetype === undefined) {
+            return;
+        }
         const typename = `TYPE_${devicetype}`;
         const icon = deviceTypes[typename]?.icon;
         return icon;
@@ -2968,12 +2992,19 @@ export class Datapoints {
      */
     public static getDeviceNameByDeviceType(devicetype: number): string | undefined {
         const deviceTypes = Datapoints.getDeviceTypes();
-        if (devicetype === undefined) return;
+        if (devicetype === undefined) {
+            return;
+        }
         const typename = `TYPE_${devicetype}`;
         const name = deviceTypes[typename]?.name;
         return name;
     }
 
+    /**
+     *
+     * @param language language like en or de
+     * @returns status datapoints
+     */
     public static getStatusTypeList(language: string): defStatusDatapoints {
         const statuslist = Datapoints.getStatusDatapoints();
         if (statuslist) {
@@ -2986,8 +3017,8 @@ export class Datapoints {
                     statuslist[name].common.states = statuslist[name].common.states[language];
                     continue;
                 }
-                if (statuslist[name].common && statuslist[name].common.states && statuslist[name].common.states['en']) {
-                    statuslist[name].common.states = statuslist[name].common.states['en'];
+                if (statuslist[name].common && statuslist[name].common.states && statuslist[name].common.states.en) {
+                    statuslist[name].common.states = statuslist[name].common.states.en;
                     continue;
                 }
                 delete statuslist[name].common?.states;
@@ -2996,6 +3027,11 @@ export class Datapoints {
         return statuslist;
     }
 
+    /**
+     *
+     * @param language language like en or de
+     * @returns sms datapoints
+     */
     public static getSMSTypeList(language: string): defSmsDatapoints {
         const smslist = Datapoints.getSmsDatapoints();
         if (smslist) {
@@ -3004,8 +3040,8 @@ export class Datapoints {
                     smslist[name].common.states = smslist[name].common.states[language];
                     continue;
                 }
-                if (smslist[name].common && smslist[name].common.states && smslist[name].common.states['en']) {
-                    smslist[name].common.states = smslist[name].common.states['en'];
+                if (smslist[name].common && smslist[name].common.states && smslist[name].common.states.en) {
+                    smslist[name].common.states = smslist[name].common.states.en;
                     continue;
                 }
                 delete smslist[name].common?.states;
@@ -3014,6 +3050,11 @@ export class Datapoints {
         return smslist;
     }
 
+    /**
+     *
+     * @param language language like en or de
+     * @returns webcam datapoints
+     */
     public static getWebcamTypeList(language: string): defWebcamDatapoints {
         const webcamlist = Datapoints.getWebcamDatapoints();
         if (webcamlist) {
@@ -3026,8 +3067,8 @@ export class Datapoints {
                     webcamlist[name].common.states = webcamlist[name].common.states[language];
                     continue;
                 }
-                if (webcamlist[name].common && webcamlist[name].common.states && webcamlist[name].common.states['en']) {
-                    webcamlist[name].common.states = webcamlist[name].common.states['en'];
+                if (webcamlist[name].common && webcamlist[name].common.states && webcamlist[name].common.states.en) {
+                    webcamlist[name].common.states = webcamlist[name].common.states.en;
                     continue;
                 }
                 delete webcamlist[name].common?.states;

@@ -2,17 +2,26 @@ import { promises as dnsPromises } from 'dns';
 import _ from 'lodash';
 import * as tcpPing from 'tcp-ping';
 
+/**
+ * Interface hostname
+ */
 export interface ifHostnamePort {
+    // eslint-disable-next-line jsdoc/require-jsdoc
     hostname: string;
+    // eslint-disable-next-line jsdoc/require-jsdoc
     port: number | undefined;
 }
 
+/**
+ * Class of tools
+ */
 export class Tools {
     /**
      * round(2.74, 0.1) = 2.7
      * round(2.74, 0.25) = 2.75
      * round(2.74, 0.5) = 2.5
      * round(2.74, 1.0) = 3.0
+     *
      * @param value a number like 2.7, 2.75
      * @param step a number like 0.1, or 2.7
      * @returns a number
@@ -25,6 +34,7 @@ export class Tools {
 
     /**
      * Checking if key exist in object
+     *
      * @param obj {a:1, b:1, c:1}
      * @param key 'b'
      * @returns true or false
@@ -32,6 +42,7 @@ export class Tools {
     public static hasProperty(obj: object, key: string): boolean {
         try {
             return obj && key in obj ? true : false;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             return false;
         }
@@ -39,11 +50,12 @@ export class Tools {
 
     /**
      * Wait (sleep) x seconds
+     *
      * @param seconds time in seconds
-     * @returns
+     * @returns void
      */
     public static wait(seconds: number): Promise<void> {
-        return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+        return new Promise(resolve => setTimeout(resolve, seconds * 1000));
     }
 
     /**
@@ -62,25 +74,29 @@ export class Tools {
     /**
      *
      * @param hostname like www.google.com
-     * @returns
+     * @returns string
      */
     public static async lookup(hostname: string): Promise<string> {
         const hp = this.getHostnamePort(hostname);
         const dns = await dnsPromises.lookup(hp.hostname);
         let address = dns && dns.address ? dns.address : hp.hostname;
-        if (hp.port !== undefined) address = `${address}:${hp.port}`;
+        if (hp.port !== undefined) {
+            address = `${address}:${hp.port}`;
+        }
         return address;
     }
 
     /**
      * Checks if server (webserver) is reachable
+     *
      * @param hostname hostname or ip address. For example huhu.foo or 192.168.20.30)
-     * @param portport, for example (80, 8080, ...
-     * @returns
+     * @param port port for example (80, 8080, ...
+     * @returns true or false
      */
     public static async probe(hostname: string, port: number): Promise<boolean> {
         hostname = await this.lookup(hostname);
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
+            // eslint-disable-next-line @typescript-eslint/require-await
             tcpPing.probe(hostname, port, async (error: any, isAlive: any) => {
                 resolve(isAlive);
             });
@@ -89,6 +105,7 @@ export class Tools {
 
     /**
      * deletes special characteres
+     *
      * @param text : text
      * @returns text without special characters
      */
@@ -104,12 +121,14 @@ export class Tools {
 
     /**
      * deletes special characteres in text (must be a stringyfy object) and returns as object if possible
-     * @text text (stringify object)
+     *
+     * @param text text or stingfy
      * @returns text if possible
      */
     public static JsonParseDelSonderszeichen(text: string): object | string {
         try {
             return typeof text === 'string' ? JSON.parse(this.delSonderzeichen(text)) : text;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             return text;
         }
@@ -117,29 +136,36 @@ export class Tools {
 
     /**
      * checks if two objects equal
+     *
      * @param obj1 object 1
      * @param obj2  object 2
      * @returns objects equal, true or false
      */
     public static isEqual(obj1: object, obj2: object): boolean {
-        if (typeof obj1 === 'object' && typeof obj2 === 'object') return _.isEqual(obj1, obj2);
+        if (typeof obj1 === 'object' && typeof obj2 === 'object') {
+            return _.isEqual(obj1, obj2);
+        }
         return obj1 === obj2;
     }
 
     /**
      * if function / method is a async function / method
+     *
      * @param funct function
      * @returns function is async
      */
     public static isAsync(funct: any): boolean {
-        if (funct && funct.constructor) return funct.constructor.name == 'AsyncFunction';
+        if (funct && funct.constructor) {
+            return funct.constructor.name == 'AsyncFunction';
+        }
         return false;
     }
 
     /**
      * Get datatype of value
-     * @param {any} value : value
-     * @returns {string} : datatype of value (object, array, boolean)
+     *
+     * @param value : value
+     * @returns : datatype of value (object, array, boolean)
      */
     public static getPropertyType(value: any): string {
         let type;
@@ -168,12 +194,15 @@ export class Tools {
 
     /**
      * Converts the value to given type. Example value to string, number, ...
-     * @param {*} value : any type of value
-     * @param {string} type :   datatype for converting the value
-     * @returns
+     *
+     * @param value : any type of value
+     * @param type :   datatype for converting the value
+     * @returns any kind of object
      */
     public static convertPropertyType(value: any, type: string): any {
-        if (value === null || value === undefined) return value;
+        if (value === null || value === undefined) {
+            return value;
+        }
         let valuenew = value;
         switch (type) {
             case 'number':
@@ -186,10 +215,10 @@ export class Tools {
                 valuenew = Boolean(Number(value));
                 break;
             case 'object':
-                valuenew = '{' + value.toString() + '}';
+                valuenew = `{${value.toString()}}`;
                 break;
             case 'array':
-                valuenew = '[' + value.toString() + ']';
+                valuenew = `[${value.toString()}]`;
                 break;
             default:
                 valuenew = value;
@@ -198,14 +227,24 @@ export class Tools {
         return valuenew;
     }
 
+    /**
+     *
+     * @param object object
+     * @returns object
+     */
     public static copyObject(object: any): any {
         if (object && typeof object === 'object') {
             return _.cloneDeep(object);
-        } else {
-            return object;
         }
+        return object;
     }
 
+    /**
+     *
+     * @param object1 object1
+     * @param object2 object2
+     * @returns object1 + object2
+     */
     public static mergeObject(object1: any, object2: any): any {
         return _.merge(object1, object2);
     }
