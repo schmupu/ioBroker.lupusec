@@ -1,9 +1,22 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "tier": 3,
     "news": {
+      "2.0.1": {
+        "en": "Adjustments due to migration from ESLint 8 to 9",
+        "de": "Anpassungen durch Migration von ESLint 8 bis 9",
+        "ru": "Корректировки в связи с миграцией из ESLint 8 в 9",
+        "pt": "Ajustes devido à migração de ESLint 8 a 9",
+        "nl": "Aanpassingen als gevolg van migratie van ESLint 8 tot 9",
+        "fr": "Ajustements dus à la migration de ESLint 8 à 9",
+        "it": "Adeguamenti dovuti alla migrazione da ESLint 8 a 9",
+        "es": "Ajustes debido a la migración de ESLint 8 a 9",
+        "pl": "Korekty wynikające z migracji z ESLint 8 do 9",
+        "uk": "Налаштування через міграцію від ESLint 8 до 9",
+        "zh-cn": "因从ESLint 8 迁移到9而作的调整"
+      },
       "2.0.0": {
         "en": "Redesign - changed everything from JavaScript to TypeScript\nUsing axios for http requests\nthe configuration changed. You have to edit the configuration",
         "de": "Redesign - hat alles von JavaScript in TypeScript geändert\nVerwendung von axios für http-Anfragen\ndie Konfiguration geändert. Sie müssen die Konfiguration bearbeiten",
