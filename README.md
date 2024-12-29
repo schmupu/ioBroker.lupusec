@@ -139,9 +139,10 @@ sudo chmod u+s `which ping`
 ```
 
 ## Changelog
-### 2.0.1 (2024-12-29)
 
-- (Stübi) Adjustments due to migration from ESLint 8 to 9
+### **WORK IN PROGRESS**
+
+- (Stübi) Adjustments due to migration from ESLint 8x≤ to 9.x.x
 
 ### 2.0.0 (2024-12-28)
 
