@@ -1,9 +1,22 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "tier": 3,
     "news": {
+      "2.0.3": {
+        "en": "Adjustments due to migration from ESLint 8x≤ to 9.x.x",
+        "de": "Anpassungen durch Migration von ESLint 8x ≤ auf 9.x.x",
+        "ru": "Корректировки из-за миграции из ESLint 8x≤ в 9.x.x",
+        "pt": "Ajustes devido à migração de ESLint 8x≤ para 9.x.x",
+        "nl": "Aanpassingen als gevolg van migratie van ESLint 8x≤ naar 9.x.x",
+        "fr": "Ajustements dus à la migration d'ESLint 8x.x à 9.x.x",
+        "it": "Regolazioni dovute alla migrazione da ESLint 8x≤ a 9.x.x",
+        "es": "Ajustes debido a la migración de ESLint 8x≤ a 9.x.x",
+        "pl": "Korekty wynikające z migracji z ESLint 8x ≤ do 9.x.x",
+        "uk": "Налаштування через міграцію від ESLint 8x≤ до 9.x.x",
+        "zh-cn": "由于从ESLint 8x≤ 迁移到9.x.xx而做出的调整"
+      },
       "2.0.2": {
         "en": "Adjustments due to migration from ESLint 8x≤ to 9.x.x",
         "de": "Anpassungen durch Migration von ESLint 8x ≤ auf 9.x.x",
