@@ -8,7 +8,7 @@
 [![Downloads](https://img.shields.io/npm/dm/iobroker.lupusec.svg)](https://www.npmjs.com/package/iobroker.lupusec)  
 [![NPM](https://nodei.co/npm/iobroker.lupusec.png?downloads=true)](https://nodei.co/npm/iobroker.lupusec/)
 
-**Requires node.js 18.0 or higher and Admin v5!**
+**Requires node.js 20.0 or higher and Admin v5!**
 
 This adapter connects the Lupusec alarm system XT1 Plus, XT2, XT2 Plus and XT3 with ioBroker.
 The XT1 (without Plus) will not be supported. You can read the status of the Lupusec sensors
@@ -81,6 +81,14 @@ The two states apple_home_a1 and lupusec.0.status.apple_home_a2 for the Apple Ho
 If you own a device that is not listed in the list above, please contact me
 at Thorsten Stueben <thorsten@stueben.de>.
 
+## Migration from adapter version 1.x.x to 2.x.x 
+If you have installed version 1.x.x installed and you would like to switch to version 2.0.0 or higher, you unfortunately have to configure the Lupusec instance again. 
+The old configruation values from version 1.x.x ​​are not adopted. 
+
+This is due to the fact that the configuration interface has been completely revised.
+
+To make the settings for the Nuki lock, you first have to enter the hostname, username and password and then save. The instance will now restart. As soon as it starts without errors, open the instance configuration again. You can now configure your Nuki lock on the Nuki tab.
+
 ## Objects
 
 ### Lupusec Status
@@ -143,6 +151,7 @@ sudo chmod u+s `which ping`
 ### **WORK IN PROGRESS**
 
 - (Stübi) Adjustments of test and release yml
+- (Stübi) Readme expanded to include migration instructions
 
 ### 2.0.3 (2024-12-29)
 

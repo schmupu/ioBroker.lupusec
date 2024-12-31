@@ -10,7 +10,9 @@
                     "type": "text",
                     "sm": 12,
                     "md": 6,
-                    "lg": 6,
+                    "lg": 4,
+                    "xl": 4,
+                    "xs": 12,
                     "label": "Hostname",
                     "help": "IP or hostname of your Lupusec alarm system (alternativ with port)"
                 },
@@ -18,7 +20,9 @@
                     "type": "checkbox",
                     "sm": 12,
                     "md": 6,
-                    "lg": 6,
+                    "lg": 4,
+                    "xl": 4,
+                    "xs": 12,
                     "label": "https"
                 },
                 "alarm_user": {
@@ -26,24 +30,30 @@
                     "type": "text",
                     "sm": 12,
                     "md": 6,
-                    "lg": 6,
+                    "lg": 4,
+                    "xl": 4,
+                    "xs": 12,
                     "label": "Username"
                 },
                 "alarm_password": {
                     "type": "password",
                     "repeat": false,
-                    "visible": false,
+                    "visible": true,
                     "sm": 12,
                     "md": 6,
-                    "lg": 6,
+                    "lg": 4,
+                    "xl": 4,
+                    "xs": 12,
                     "label": "Password"
                 },
                 "alarm_polltime": {
                     "newLine": true,
                     "type": "number",
                     "sm": 12,
-                    "md": 4,
-                    "lg": 1,
+                    "md": 6,
+                    "lg": 4,
+                    "xl": 4,
+                    "xs": 12,
                     "min": 0.25,
                     "max": 120,
                     "step": 0.25,
@@ -54,7 +64,9 @@
                     "type": "checkbox",
                     "sm": 12,
                     "md": 6,
-                    "lg": 6,
+                    "lg": 4,
+                    "xl": 4,
+                    "xs": 12,
                     "label": "Read faster new Status (higher CPU workload, needs more memory)",
                     "hidden": "true"
                 }
@@ -68,7 +80,9 @@
                     "type": "checkbox",
                     "sm": 12,
                     "md": 6,
-                    "lg": 6,
+                    "lg": 4,
+                    "xl": 4,
+                    "xs": 12,
                     "label": "Provide Lupusec Webcams"
                 },
                 "webcam_bind": {
@@ -76,8 +90,10 @@
                     "type": "ip",
                     "listenOnAllPorts": true,
                     "sm": 12,
-                    "md": 8,
-                    "lg": 6,
+                    "md": 6,
+                    "lg": 4,
+                    "xl": 4,
+                    "xs": 12,
                     "label": "Webcam Listen IP"
                 },
                 "webcam_port": {
@@ -85,8 +101,10 @@
                     "min": 1,
                     "max": 65535,
                     "sm": 12,
-                    "md": 4,
-                    "lg": 1,
+                    "md": 6,
+                    "lg": 4,
+                    "xl": 4,
+                    "xs": 12,
                     "label": "Webcam Listen Port"
                 }
             }
@@ -99,8 +117,10 @@
                     "newLine": true,
                     "type": "table",
                     "sm": 12,
-                    "md": 12,
-                    "lg": 12,
+                    "md": 6,
+                    "lg": 10,
+                    "xl": 10,
+                    "xs": 12,
                     "label": "Nuki connection to door/windows devices",
                     "items": [
                         {
@@ -114,7 +134,7 @@
                             "jsonData": "{\"config\":{\"nuki\":\"\"}}",
                             "command": "sendNuki",
                             "style": {
-                                "width": "100%"
+                                "width": "calc(100% - 100px)"
                             }
                         },
                         {
@@ -128,7 +148,7 @@
                             "jsonData": "{\"config\":{\"door\":\"\"}}",
                             "command": "sendDoor",
                             "style": {
-                                "width": "100%"
+                                "width": "calc(100% - 100px)"
                             }
                         }
                     ]
