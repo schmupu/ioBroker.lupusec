@@ -44,8 +44,15 @@
             "uk": "Сигналізація Lupusec",
             "zh-cn": "Lupusec 报警系统"
         },
-        "authors": ["Thorsten Stueben <thorsten@stueben.de>"],
-        "keywords": ["lupusec", "burlgar alarm", "alarm system", "lupus"],
+        "authors": [
+            "Thorsten Stueben <thorsten@stueben.de>"
+        ],
+        "keywords": [
+            "lupusec",
+            "burlgar alarm",
+            "alarm system",
+            "lupus"
+        ],
         "localLinks": {
             "_default": {
                 "link": "%alarmlink%",
@@ -88,8 +95,13 @@
             }
         ]
     },
-    "protectedNative": ["alarm_user", "alarm_password"],
-    "encryptedNative": ["alarm_password"],
+    "protectedNative": [
+        "alarm_user",
+        "alarm_password"
+    ],
+    "encryptedNative": [
+        "alarm_password"
+    ],
     "native": {
         "alarm_hostname": "192.168.11.22",
         "alarm_https": false,
