@@ -1,4 +1,4 @@
-![Logo](admin/icons/lupusec.png)
+![Logo](admin/lupusec.png)
 
 # ioBroker.lupusec
 
@@ -151,21 +151,17 @@ sudo chmod u+s `which ping`
 ### **WORK IN PROGRESS**
 
 - (Stübi) Adjustments of test and release yml
-- (Stübi) Readme expanded to include migration instructions
+- (Stübi) Readme expanded to include migration instructions (Issue #97)
 
 ### 2.0.3 (2024-12-29)
 
-- (Stübi) Adjustments due to migration from ESLint 8x≤ to 9.x.x
-
-### 2.0.2 (2024-12-29)
-
-- (Stübi) Adjustments due to migration from ESLint 8x≤ to 9.x.x
-
-### 2.0.0 (2024-12-28)
-
+- (Stübi) Adjustments due to migration from ESLint 8x≤ to 9.x.x (Issue #91)
 - (Stübi) Redesign - changed everything from JavaScript to TypeScript
 - (Stübi) Using axios for http requests
 - (Stübi) the configuration changed. You have to edit the configuration
+- (Stübi) js-controller in version 6 and 7 will be supported (Issue #83, #84, #95)
+- (Stübi) nodejs 20 and nodejs 22 will be suported (Issue #87)
+
 
 ## Planed
 
