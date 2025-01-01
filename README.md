@@ -81,9 +81,10 @@ The two states apple_home_a1 and lupusec.0.status.apple_home_a2 for the Apple Ho
 If you own a device that is not listed in the list above, please contact me
 at Thorsten Stueben <thorsten@stueben.de>.
 
-## Migration from adapter version 1.x.x to 2.x.x 
-If you have installed version 1.x.x installed and you would like to switch to version 2.0.0 or higher, you unfortunately have to configure the Lupusec instance again. 
-The old configruation values from version 1.x.x ​​are not adopted. 
+## Migration from adapter version 1.x.x to 2.x.x
+
+If you have installed version 1.x.x installed and you would like to switch to version 2.0.0 or higher, you unfortunately have to configure the Lupusec instance again.
+The old configruation values from version 1.x.x ​​are not adopted.
 
 This is due to the fact that the configuration interface has been completely revised.
 
@@ -152,6 +153,7 @@ sudo chmod u+s `which ping`
 
 - (Stübi) Adjustments of test and release yml
 - (Stübi) Readme expanded to include migration instructions (Issue #97)
+- (Stübi) Fixed error with HUE lights (Issue #104)
 
 ### 2.0.3 (2024-12-29)
 
@@ -161,7 +163,6 @@ sudo chmod u+s `which ping`
 - (Stübi) the configuration changed. You have to edit the configuration
 - (Stübi) js-controller in version 6 and 7 will be supported (Issue #83, #84, #95)
 - (Stübi) nodejs 20 and nodejs 22 will be suported (Issue #87)
-
 
 ## Planed
 

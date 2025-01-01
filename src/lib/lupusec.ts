@@ -685,6 +685,13 @@ export class Lupus {
                     value = await this.isNukiAllive(states.consumer_id);
                 }
             }
+            if (type === 66 || type === 74) {
+                if (name === 'status_ex') {
+                    const regstat = /\{WEB_MSG_DIMMER_(ON|OFF)\}/gm;
+                    const m = regstat.exec(states.status);
+                    value = m && m[1] === 'ON' ? true : false;
+                }
+            }
             // Shutter, if shutter level (0-100%) change, the swich value will change too
             if (type === 76) {
                 if (name === 'switch') {
