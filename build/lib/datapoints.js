@@ -176,7 +176,7 @@ class Datapoints {
       },
       TYPE_54: {
         name: "Raumsensor",
-        devlist: "type_raumsensor",
+        devlist: "type_raumsensor54",
         icon: "/icons/54.png"
       },
       TYPE_57: {
@@ -1176,7 +1176,7 @@ class Datapoints {
         }
       },
       // Raumsensor / Thermostat Type 54
-      type_raumsensor: {
+      type_raumsensor54: {
         actual_temperature: {
           type: "state",
           common: {
@@ -1207,6 +1207,102 @@ class Datapoints {
             min: 0,
             max: 100,
             unit: "%"
+          }
+        },
+        actual_wind_angle: {
+          type: "state",
+          common: {
+            type: "number",
+            role: "value",
+            name: {
+              en: "Wind angle",
+              de: "Windrichtung"
+            },
+            read: true,
+            write: false,
+            min: 0,
+            max: 360,
+            unit: "\xB0"
+          }
+        },
+        actual_wind_strength: {
+          type: "state",
+          common: {
+            type: "number",
+            role: "value.speed",
+            name: {
+              en: "Wind strength",
+              de: "Windgeschwindigkeit"
+            },
+            read: true,
+            write: false,
+            min: 0,
+            max: 1e3,
+            unit: "km/h"
+          }
+        },
+        actual_gust_strength: {
+          type: "state",
+          common: {
+            type: "number",
+            role: "value.speed",
+            name: {
+              en: "Wind gust",
+              de: "Windb\xF6hen"
+            },
+            read: true,
+            write: false,
+            min: 0,
+            max: 1e3,
+            unit: "km/h"
+          }
+        },
+        actual_air_pressure: {
+          type: "state",
+          common: {
+            type: "number",
+            role: "value.pressure",
+            name: {
+              en: "Air pressure",
+              de: "Luftdruck"
+            },
+            read: true,
+            write: false,
+            min: -2e3,
+            max: 2e3,
+            unit: "mbar"
+          }
+        },
+        actual_noise: {
+          type: "state",
+          common: {
+            type: "number",
+            role: "value",
+            name: {
+              en: "Noise",
+              de: "Lautst\xE4rke"
+            },
+            read: true,
+            write: false,
+            min: 0,
+            max: 1e3,
+            unit: "db"
+          }
+        },
+        actual_co2: {
+          type: "state",
+          common: {
+            type: "number",
+            role: "value.co2",
+            name: {
+              en: "CO2 content",
+              de: "CO2 Gehalt"
+            },
+            read: true,
+            write: false,
+            min: 0,
+            max: 1e4,
+            unit: "ppm"
           }
         },
         send_notify: {

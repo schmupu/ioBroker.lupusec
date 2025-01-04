@@ -647,6 +647,48 @@ class Lupus {
             value = Number(m[1].trim());
           }
         }
+        if (name === "actual_wind_angle" && states.status !== void 0) {
+          const regstat = /{WEB_MSG_WIND_ANGLE}\s*([\d.]+)/gm;
+          const m = regstat.exec(states.status);
+          if (m) {
+            value = Number(m[1].trim());
+          }
+        }
+        if (name === "actual_wind_strength" && states.status !== void 0) {
+          const regstat = /{WEB_MSG_WIND_STRENGTH}\s*([\d.]+)/gm;
+          const m = regstat.exec(states.status);
+          if (m) {
+            value = Number(m[1].trim());
+          }
+        }
+        if (name === "actual_gust_strength" && states.status !== void 0) {
+          const regstat = /{WEB_MSG_GUST_STRENGTH}\s*([\d.]+)/gm;
+          const m = regstat.exec(states.status);
+          if (m) {
+            value = Number(m[1].trim());
+          }
+        }
+        if (name === "actual_air_pressure" && states.status !== void 0) {
+          const regstat = /{WEB_MSG_PRESSURE}\s*([\d.]+)/gm;
+          const m = regstat.exec(states.status);
+          if (m) {
+            value = Number(m[1].trim());
+          }
+        }
+        if (name === "actual_noise" && states.status !== void 0) {
+          const regstat = /{WEB_MSG_NOISE}\s*([\d.]+)/gm;
+          const m = regstat.exec(states.status);
+          if (m) {
+            value = Number(m[1].trim());
+          }
+        }
+        if (name === "actual_co2" && states.status !== void 0) {
+          const regstat = /{WEB_MSG_CO2}\s*([\d.]+)/gm;
+          const m = regstat.exec(states.status);
+          if (m) {
+            value = Number(m[1].trim());
+          }
+        }
       }
       if (type === 57) {
         if (name === "nuki_state" && states.nuki !== void 0) {

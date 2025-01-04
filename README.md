@@ -154,6 +154,7 @@ sudo chmod u+s `which ping`
 - (Stübi) Adjustments of test and release yml
 - (Stübi) Readme expanded to include migration instructions (Issue #97)
 - (Stübi) Fixed error with HUE lights (Issue #104)
+- (Stübi) Added the following values ​​for type 54: air pressure, wind strength, wind angle, wind gust, co2, wind speed
 
 ### 2.0.3 (2024-12-29)
 
@@ -175,7 +176,7 @@ Following things are planed in the future:
 
 The MIT License (MIT)
 
-Copyright (c) 2024 Thorsten Stueben <thorsten@stueben.de>
+Copyright (c) 2025 Thorsten Stueben <thorsten@stueben.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
