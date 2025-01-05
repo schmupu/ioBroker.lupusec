@@ -604,6 +604,15 @@ export class Lupus {
             if (name === 'logmsg' && states.msg !== undefined) {
                 value = states.msg;
             }
+            if (name === 'hue') {
+                value = Tools.hueLupusecToDegree(value);
+            }
+            if (name === 'sat') {
+                value = Tools.satLupusecToPercent(value);
+            }
+            if (name === 'ctempk' && states.ctemp !== undefined) {
+                value = Tools.tempLupusecToKelvin(states.ctemp);
+            }
             if (type === 17 || type === 37) {
                 if (name === 'sresp_button_123' && states.sresp_panic !== undefined) {
                     value = states.sresp_panic;
@@ -1684,7 +1693,7 @@ export class Lupus {
      * @param state state
      */
     private async onStateChangeDevices(id: string, state: states.ifState): Promise<void> {
-        const execdelay = 100; // in milliseconds
+        const execdelay = 250; // in milliseconds
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const icchannelabs = id.split('.').slice(0, 4).join('.'); //  lupusec.0.devices.ZS:a61d01
         const idchannel = id.split('.').slice(2, 4).join('.'); //  devices.ZS:a61d01
@@ -1865,8 +1874,10 @@ export class Lupus {
             // Type 74
             this.adapter.clearTimeout(this.timerhandle[iddevice]);
             this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                const valuesat = Number((await this.states.getStateAsync(`${idchannel}.sat`))?.val || 0);
-                const valuehue = state.val || 0;
+                const valuesat = Tools.satPercentToLupusec(
+                    Number((await this.states.getStateAsync(`${idchannel}.sat`))?.val || 0),
+                );
+                const valuehue = Tools.hueDegreeToLupusec(state.val || 0);
                 const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
                 const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
                 const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
@@ -1878,8 +1889,10 @@ export class Lupus {
             // Type 74
             this.adapter.clearTimeout(this.timerhandle[iddevice]);
             this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                const valuehue = Number((await this.states.getStateAsync(`${idchannel}.hue`))?.val || 0);
-                const valuesat = state.val || 0;
+                const valuehue = Tools.hueDegreeToLupusec(
+                    Number((await this.states.getStateAsync(`${idchannel}.hue`))?.val || 0),
+                );
+                const valuesat = Tools.satPercentToLupusec(state.val || 0);
                 const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
                 const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
                 const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
@@ -1892,6 +1905,18 @@ export class Lupus {
             this.adapter.clearTimeout(this.timerhandle[iddevice]);
             this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
                 const ctemp = state.val || 0;
+                const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
+                const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
+                const exec = `a=${area}&z=${zone}&dimmer=on&hue=-1,-1,${ctemp},-1,-1&pd=${valuepdtxt}`;
+                await this.haExecutePost(iddevice, {
+                    exec: exec,
+                });
+            }, execdelay);
+        } else if (name === 'ctempk') {
+            // Type 74
+            this.adapter.clearTimeout(this.timerhandle[iddevice]);
+            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+                const ctemp = Tools.tempKelvinToLupusec(state.val || 0);
                 const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
                 const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
                 const exec = `a=${area}&z=${zone}&dimmer=on&hue=-1,-1,${ctemp},-1,-1&pd=${valuepdtxt}`;

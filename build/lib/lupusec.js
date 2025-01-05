@@ -588,6 +588,15 @@ class Lupus {
       if (name === "logmsg" && states.msg !== void 0) {
         value = states.msg;
       }
+      if (name === "hue") {
+        value = import_tools.Tools.hueLupusecToDegree(value);
+      }
+      if (name === "sat") {
+        value = import_tools.Tools.satLupusecToPercent(value);
+      }
+      if (name === "ctempk" && states.ctemp !== void 0) {
+        value = import_tools.Tools.tempLupusecToKelvin(states.ctemp);
+      }
       if (type === 17 || type === 37) {
         if (name === "sresp_button_123" && states.sresp_panic !== void 0) {
           value = states.sresp_panic;
@@ -1601,7 +1610,7 @@ class Lupus {
    */
   async onStateChangeDevices(id, state) {
     var _a, _b, _c, _d, _e, _f;
-    const execdelay = 100;
+    const execdelay = 250;
     const icchannelabs = id.split(".").slice(0, 4).join(".");
     const idchannel = id.split(".").slice(2, 4).join(".");
     const iddevice = id.split(".").slice(2).join(".");
@@ -1760,8 +1769,10 @@ class Lupus {
       this.adapter.clearTimeout(this.timerhandle[iddevice]);
       this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
         var _a2, _b2;
-        const valuesat = Number(((_a2 = await this.states.getStateAsync(`${idchannel}.sat`)) == null ? void 0 : _a2.val) || 0);
-        const valuehue = state.val || 0;
+        const valuesat = import_tools.Tools.satPercentToLupusec(
+          Number(((_a2 = await this.states.getStateAsync(`${idchannel}.sat`)) == null ? void 0 : _a2.val) || 0)
+        );
+        const valuehue = import_tools.Tools.hueDegreeToLupusec(state.val || 0);
         const valuepd = Number(((_b2 = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _b2.val) || 0) * 60 || 0;
         const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
         const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
@@ -1773,8 +1784,10 @@ class Lupus {
       this.adapter.clearTimeout(this.timerhandle[iddevice]);
       this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
         var _a2, _b2;
-        const valuehue = Number(((_a2 = await this.states.getStateAsync(`${idchannel}.hue`)) == null ? void 0 : _a2.val) || 0);
-        const valuesat = state.val || 0;
+        const valuehue = import_tools.Tools.hueDegreeToLupusec(
+          Number(((_a2 = await this.states.getStateAsync(`${idchannel}.hue`)) == null ? void 0 : _a2.val) || 0)
+        );
+        const valuesat = import_tools.Tools.satPercentToLupusec(state.val || 0);
         const valuepd = Number(((_b2 = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _b2.val) || 0) * 60 || 0;
         const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
         const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
@@ -1787,6 +1800,18 @@ class Lupus {
       this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
         var _a2;
         const ctemp = state.val || 0;
+        const valuepd = Number(((_a2 = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _a2.val) || 0) * 60 || 0;
+        const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
+        const exec = `a=${area}&z=${zone}&dimmer=on&hue=-1,-1,${ctemp},-1,-1&pd=${valuepdtxt}`;
+        await this.haExecutePost(iddevice, {
+          exec
+        });
+      }, execdelay);
+    } else if (name === "ctempk") {
+      this.adapter.clearTimeout(this.timerhandle[iddevice]);
+      this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+        var _a2;
+        const ctemp = import_tools.Tools.tempKelvinToLupusec(state.val || 0);
         const valuepd = Number(((_a2 = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _a2.val) || 0) * 60 || 0;
         const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
         const exec = `a=${area}&z=${zone}&dimmer=on&hue=-1,-1,${ctemp},-1,-1&pd=${valuepdtxt}`;

@@ -257,6 +257,82 @@ class Tools {
   static getUnixTimestampNow() {
     return Math.ceil((/* @__PURE__ */ new Date()).getTime());
   }
+  /**
+   * Mappes values from Lupusec 0 .. 254 to 0 .. 360 degree
+   *
+   * @param value hue value from lupusec
+   * @returns hue value in degree
+   */
+  static hueLupusecToDegree(value) {
+    if (value === null || value === void 0) {
+      return value;
+    }
+    return Math.floor(360 * value / 254);
+  }
+  /**
+   * Mappes values from 0 .. 360 degree to Lupusec 0 .. 254
+   *
+   * @param value hue value in degree
+   * @returns hue value from lupusec
+   */
+  static hueDegreeToLupusec(value) {
+    if (value === null || value === void 0) {
+      return value;
+    }
+    return Math.floor(254 * value / 360);
+  }
+  /**
+   * Mappes values from Lupusec 0 .. 254 to 0% .. 100%
+   *
+   * @param value saturation value from Lupusec
+   * @returns saturation value in %
+   */
+  static satLupusecToPercent(value) {
+    if (value === null || value === void 0) {
+      return value;
+    }
+    return Math.floor(100 * value / 254);
+  }
+  /**
+   * Mappes values from 0% .. 100% to Lupusec value 0 .. 254
+   *
+   * @param value saturation value in %
+   * @returns saturation value from Lupusec
+   */
+  static satPercentToLupusec(value) {
+    if (value === null || value === void 0) {
+      return value;
+    }
+    return Math.floor(254 * value / 100);
+  }
+  /**
+   * Mappes values from Lupusec 0 .. 164 to 2220 .. 6500 K
+   *
+   * @param value temperature value from Lupusec
+   * @returns temperature value in kelvin
+   */
+  static tempLupusecToKelvin(value) {
+    if (value === null || value === void 0) {
+      return value;
+    }
+    const m = (2200 - 6500) / (500 - 169);
+    const b = 6500 - m * 169;
+    return Math.floor(m * value + b);
+  }
+  /**
+   * Mappes values from 2220 .. 6500K to Lupusec value 0 .. 164
+   *
+   * @param value temperature value in kelvin
+   * @returns temperature value from Lupusec
+   */
+  static tempKelvinToLupusec(value) {
+    if (value === null || value === void 0) {
+      return value;
+    }
+    const m = (500 - 169) / (2200 - 6500);
+    const b = 500 - m * 2200;
+    return Math.floor(m * value + b);
+  }
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

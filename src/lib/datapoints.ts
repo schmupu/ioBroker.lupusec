@@ -700,6 +700,7 @@ export class Datapoints {
                         min: 0,
                         max: 180,
                         def: 0,
+                        unit: '',
                     },
                 },
             },
@@ -744,7 +745,8 @@ export class Datapoints {
                         read: true,
                         write: true,
                         min: 0,
-                        max: 65535,
+                        max: 360,
+                        unit: '°',
                     },
                 },
                 sat: {
@@ -756,7 +758,8 @@ export class Datapoints {
                         read: true,
                         write: true,
                         min: 0,
-                        max: 360,
+                        max: 100,
+                        unit: '%',
                     },
                 },
                 hue_cmode: {
@@ -776,6 +779,22 @@ export class Datapoints {
                         },
                         min: 0,
                         max: 2,
+                    },
+                },
+                ctempk: {
+                    type: 'state',
+                    common: {
+                        type: 'number',
+                        role: 'level.color.temperature',
+                        name: {
+                            en: 'Temperature K',
+                            de: 'Temperatur K',
+                        },
+                        read: true,
+                        write: true,
+                        min: 2200,
+                        max: 6500,
+                        unit: 'K',
                     },
                 },
                 ctemp: {
