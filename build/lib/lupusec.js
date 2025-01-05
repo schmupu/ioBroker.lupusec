@@ -1610,7 +1610,7 @@ class Lupus {
    */
   async onStateChangeDevices(id, state) {
     var _a, _b, _c, _d, _e, _f;
-    const execdelay = 250;
+    const execdelay = 0;
     const icchannelabs = id.split(".").slice(0, 4).join(".");
     const idchannel = id.split(".").slice(2, 4).join(".");
     const iddevice = id.split(".").slice(2).join(".");
