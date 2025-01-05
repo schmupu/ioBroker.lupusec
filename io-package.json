@@ -1,193 +1,206 @@
 {
-    "common": {
-        "name": "lupusec",
-        "version": "2.0.3",
-        "tier": 3,
-        "news": {
-            "2.0.3": {
-                "en": "Adjustments due to migration from ESLint 8x≤ to 9.x.x",
-                "de": "Anpassungen durch Migration von ESLint 8x ≤ auf 9.x.x",
-                "ru": "Корректировки из-за миграции из ESLint 8x≤ в 9.x.x",
-                "pt": "Ajustes devido à migração de ESLint 8x≤ para 9.x.x",
-                "nl": "Aanpassingen als gevolg van migratie van ESLint 8x≤ naar 9.x.x",
-                "fr": "Ajustements dus à la migration d'ESLint 8x.x à 9.x.x",
-                "it": "Regolazioni dovute alla migrazione da ESLint 8x≤ a 9.x.x",
-                "es": "Ajustes debido a la migración de ESLint 8x≤ a 9.x.x",
-                "pl": "Korekty wynikające z migracji z ESLint 8x ≤ do 9.x.x",
-                "uk": "Налаштування через міграцію від ESLint 8x≤ до 9.x.x",
-                "zh-cn": "由于从ESLint 8x≤ 迁移到9.x.xx而做出的调整"
-            }
-        },
-        "titleLang": {
-            "en": "Lupusec alarm system",
-            "de": "Lupusec-Alarmsystem",
-            "ru": "Система сигнализации Лупусек",
-            "pt": "Sistema de alarme Lupusec",
-            "nl": "Lupusec-alarmsysteem",
-            "fr": "Système d'alarme Lupusec",
-            "it": "Sistema di allarme Lupusec",
-            "es": "sistema de alarma lupusec",
-            "pl": "System alarmowy Lupusec",
-            "uk": "Сигналізація Lupusec",
-            "zh-cn": "卢普塞克报警系统"
-        },
-        "desc": {
-            "en": "Lupusec alarm system",
-            "de": "Lupusec-Alarmsystem",
-            "ru": "Система сигнализации Lupusec",
-            "pt": "Sistema de alarme Lupusec",
-            "nl": "Lupusec alarmsysteem",
-            "fr": "Système d'alarme Lupusec",
-            "it": "Sistema di allarme Lupusec",
-            "es": "Sistema de alarma Lupusec",
-            "pl": "System alarmowy Lupusec",
-            "uk": "Сигналізація Lupusec",
-            "zh-cn": "Lupusec 报警系统"
-        },
-        "authors": [
-            "Thorsten Stueben <thorsten@stueben.de>"
-        ],
-        "keywords": [
-            "lupusec",
-            "burlgar alarm",
-            "alarm system",
-            "lupus"
-        ],
-        "localLinks": {
-            "_default": {
-                "link": "%alarmlink%",
-                "pro": true
-            }
-        },
-        "licenseInformation": {
-            "license": "MIT",
-            "type": "free"
-        },
-        "platform": "Javascript/Node.js",
-        "icon": "lupusec.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
-        "readme": "https://github.com/schmupu/ioBroker.lupusec/blob/master/README.md",
-        "loglevel": "info",
-        "messagebox": true,
-        "mode": "daemon",
-        "type": "alarm",
-        "compact": true,
-        "connectionType": "local",
-        "dataSource": "poll",
-        "plugins": {
-            "sentry": {
-                "dsn": "https://8a50c3e06fdb402d9e7b0ad5ae9f6400@sentry.iobroker.net/82",
-                "pathWhitelist": []
-            }
-        },
-        "adminUI": {
-            "config": "json"
-        },
-        "dependencies": [
-            {
-                "js-controller": ">=5.0.19"
-            }
-        ],
-        "globalDependencies": [
-            {
-                "admin": ">=6.4.4"
-            }
-        ]
+  "common": {
+    "name": "lupusec",
+    "version": "2.0.4",
+    "tier": 3,
+    "news": {
+      "2.0.4": {
+        "en": "Adjustments of test and release yml\nReadme expanded to include migration instructions (Issue #97)\nFixed error with HUE lights (Issue #104)\nAdded the following values ​​for type 54: air pressure, wind strength, wind angle, wind gust, co2, wind speed\nAdded for HUE the values mode (hue or temperature) and tempererature\nAdded not used states will be not be shwon.\nFixed value range for HUE to 0 to 360 degree, saturation from 0% to 100% and temperature from 2200 to 6500 kelvin",
+        "de": "Anpassungen von Test und Release yml\nReadme erweitert um Migrationsanweisungen (Issue #97)\nFehler behoben mit HUE-Leuchten (Issue #104)\nFolgende Werte für Typ 54 wurden hinzugefügt: Luftdruck, Windstärke, Windwinkel, Wind gust, co2, Windgeschwindigkeit\nHinzugefügt für HUE die Werte Modus (Farbe oder Temperatur) und Temperatur\nHinzu kommen nicht benutzte Zustände werden nicht geschwon.\nFestwertbereich für HUE bis 0 bis 360 Grad, Sättigung von 0 bis 100 % und Temperatur von 2200 bis 6500 Kelvin",
+        "ru": "Корректировки теста и выпуска yml\nReadme расширился, включив миграционные инструкции (Isue #97)\nИсправленная ошибка с помощью огней HUE (Исход #104)\nДобавлены следующие значения для типа 54: давление воздуха, сила ветра, угол ветра, ветренная пыль, ко2, скорость ветра\nДобавлено для HUE режим значений (высота или температура) и температура\nДобавленные не используемые состояния не будут швонами.\nИсправленный диапазон значений для HUE до 0-360 градусов, насыщенность от 0% до 100% и температура от 2200 до 6500 кельвин",
+        "pt": "Ajustes de teste e liberação yml\nReadme expandido para incluir instruções de migração (Issue #97)\nErro fixo com luzes HUE (Issue #104)\nAdicionado os seguintes valores para o tipo 54: pressão do ar, força do vento, ângulo do vento, rajada do vento, co2, velocidade do vento\nAdicionado para HUE o modo valores (hue ou temperatura) e tempererature\nAdicionados estados não usados não será shwon.\nFaixa de valor fixo para HUE a 0 a 360 graus, saturação de 0% a 100% e temperatura de 2200 a 6500 kelvin",
+        "nl": "Aanpassingen van test en afgifte yml\nReadme uitgebreid met migratie instructies (Issue #97)\nFout vastgesteld met HUE verlichting (Issue #104)\nToegevoegd de volgende waarden voor type 54: luchtdruk, windsterkte, windhoek, windgust, co2, windsnelheid\nToegevoegd voor HUE de waarden modus (kleur of temperatuur) en temperatuur\nToegevoegd niet gebruikte staten zullen niet worden shwon.\nVaste waarde bereik voor HUE tot 0 tot 360 graden, verzadiging van 0% tot 100% en temperatuur van 2200 tot 6500 kelvin",
+        "fr": "Ajustements de l'essai et libération yml\nReadme élargi pour inclure des instructions de migration (Émission n°97)\nErreur corrigée avec les feux HUE (numéro 104)\nAjout des valeurs suivantes pour le type 54: pression atmosphérique, force du vent, angle du vent, rafales de vent, co2, vitesse du vent\nAjouté pour HUE le mode valeurs (hue ou température) et la température\nLes États non utilisés ne seront pas shwon.\nPlage de valeurs fixes pour HUE à 0 à 360 degrés, saturation de 0% à 100% et température de 2200 à 6500 kelvin",
+        "it": "Aggiustazioni di test e rilascio yml\nReadme ampliato per includere le istruzioni di migrazione (Issue #97)\nErrore fisso con luci HUE (Essue #104)\nAggiunto i seguenti valori per il tipo 54: pressione dell'aria, resistenza del vento, angolo del vento, vento, co2, velocità del vento\nAggiunto per HUE la modalità valori (umido o temperatura) e tempereratura\nAggiunto stati non utilizzati non sarà shwon.\nGamma di valore fisso per HUE a 0 a 360 gradi, saturazione da 0% a 100% e temperatura da 2200 a 6500 kelvin",
+        "es": "Ajustes de prueba y liberación yml\nReadme expandido para incluir instrucciones de migración (Isue #97)\nError fijo con luces HUE (Isue #104)\nSe agregaron los siguientes valores para el tipo 54: presión del aire, fuerza del viento, ángulo del viento, ráfaga del viento, co2, velocidad del viento\nAñadido para HUE el modo de valores (hue o temperatura) y la temperatura\nLos estados no utilizados no serán reducidos.\nRango de valor fijo para HUE a 0 a 360 grados, saturación de 0% a 100% y temperatura de 2200 a 6500 kelvin",
+        "pl": "Regulacje badania i uwalniania yml\nReadme rozszerzony o instrukcje migracji (wydanie # 97)\nNaprawiono błąd z światłami HUE (wydanie # 104)\nDodano następujące wartości dla typu 54: ciśnienie powietrza, siła wiatru, kąt wiatru, podmuch wiatru, co2, prędkość wiatru\nDodano dla HUE tryb wartości (odcień lub temperatura) i tempererature\nDodano nie używane stany nie będą shwon.\nStała wartość zakresu HUE do 0 do 360 stopni, nasycenie od 0% do 100% i temperatura od 2200 do 6500 kelvin",
+        "uk": "Регулювання тесту і релізу yml\nReadme розширено для включення інструкцій з міграції (Issue #97)\nВиправлена помилка з HUE вогні (Isue #104)\nДодано наступні значення для типу 54: тиск повітря, сила вітру, кут вітру, кон2, швидкість вітру\nДодано для HUE режим значень (відтінок або температура) і температура\nНе використовуються стани не будуть швонами.\nФіксований діапазон значення для HUE до 0 до 360 градусів, насичення від 0% до 100% і температури від 2200 до 6500 kelvin",
+        "zh-cn": "测试和释放的调整\nReadme 已扩大,包括了迁移指令(问题97)\nHUE灯的固定错误( 问题 # 104)\n添加了54型的以下数值:气压,风力,风角,风涌,co2,风速\n为 HUE 添加值模式( 色度或温度) 和温度\n添加的未使用状态将不会是 Shwon .\nHUE到0到360度的固定值范围,饱和度从0%到100%,温度从2200到6500 kelvin"
+      },
+      "2.0.3": {
+        "en": "Adjustments due to migration from ESLint 8x≤ to 9.x.x",
+        "de": "Anpassungen durch Migration von ESLint 8x ≤ auf 9.x.x",
+        "ru": "Корректировки из-за миграции из ESLint 8x≤ в 9.x.x",
+        "pt": "Ajustes devido à migração de ESLint 8x≤ para 9.x.x",
+        "nl": "Aanpassingen als gevolg van migratie van ESLint 8x≤ naar 9.x.x",
+        "fr": "Ajustements dus à la migration d'ESLint 8x.x à 9.x.x",
+        "it": "Regolazioni dovute alla migrazione da ESLint 8x≤ a 9.x.x",
+        "es": "Ajustes debido a la migración de ESLint 8x≤ a 9.x.x",
+        "pl": "Korekty wynikające z migracji z ESLint 8x ≤ do 9.x.x",
+        "uk": "Налаштування через міграцію від ESLint 8x≤ до 9.x.x",
+        "zh-cn": "由于从ESLint 8x≤ 迁移到9.x.xx而做出的调整"
+      }
     },
-    "protectedNative": [
-        "alarm_user",
-        "alarm_password"
-    ],
-    "encryptedNative": [
-        "alarm_password"
-    ],
-    "native": {
-        "alarm_hostname": "192.168.11.22",
-        "alarm_https": false,
-        "alarm_type": "lupusec_xt2",
-        "alarm_user": "admin",
-        "alarm_password": "",
-        "alarm_polltime": 1,
-        "nuki_doorsensors": [],
-        "webcam_providing": true,
-        "webcam_bind": "0.0.0.0",
-        "webcam_port": 7000,
-        "option_pollfaster": false
+    "titleLang": {
+      "en": "Lupusec alarm system",
+      "de": "Lupusec-Alarmsystem",
+      "ru": "Система сигнализации Лупусек",
+      "pt": "Sistema de alarme Lupusec",
+      "nl": "Lupusec-alarmsysteem",
+      "fr": "Système d'alarme Lupusec",
+      "it": "Sistema di allarme Lupusec",
+      "es": "sistema de alarma lupusec",
+      "pl": "System alarmowy Lupusec",
+      "uk": "Сигналізація Lupusec",
+      "zh-cn": "卢普塞克报警系统"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "devices",
-            "type": "channel",
-            "common": {
-                "icon": "/icons/zentrale.png",
-                "name": {
-                    "en": "Devices alarmsystem",
-                    "de": "Geräte Alarmanlage"
-                }
-            },
-            "native": {}
-        },
-        {
-            "_id": "status",
-            "type": "channel",
-            "common": {
-                "icon": "/icons/zentrale.png",
-                "statusStates": {
-                    "onlineId": "reachable"
-                },
-                "name": {
-                    "en": "Status alarmsystem",
-                    "de": "Status Alarmanlage"
-                }
-            },
-            "native": {}
-        },
-        {
-            "_id": "sms",
-            "type": "channel",
-            "common": {
-                "icon": "/icons/sms.png",
-                "name": {
-                    "en": "SMS",
-                    "de": "SMS"
-                }
-            },
-            "native": {}
-        },
-        {
-            "_id": "webcams",
-            "type": "channel",
-            "common": {
-                "icon": "/icons/webcam.png",
-                "name": {
-                    "en": "Webcam alarmsystems",
-                    "de": "Webcam Alarmanlage"
-                }
-            },
-            "native": {}
-        }
+    "desc": {
+      "en": "Lupusec alarm system",
+      "de": "Lupusec-Alarmsystem",
+      "ru": "Система сигнализации Lupusec",
+      "pt": "Sistema de alarme Lupusec",
+      "nl": "Lupusec alarmsysteem",
+      "fr": "Système d'alarme Lupusec",
+      "it": "Sistema di allarme Lupusec",
+      "es": "Sistema de alarma Lupusec",
+      "pl": "System alarmowy Lupusec",
+      "uk": "Сигналізація Lupusec",
+      "zh-cn": "Lupusec 报警系统"
+    },
+    "authors": [
+      "Thorsten Stueben <thorsten@stueben.de>"
+    ],
+    "keywords": [
+      "lupusec",
+      "burlgar alarm",
+      "alarm system",
+      "lupus"
+    ],
+    "localLinks": {
+      "_default": {
+        "link": "%alarmlink%",
+        "pro": true
+      }
+    },
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
+    "platform": "Javascript/Node.js",
+    "icon": "lupusec.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
+    "readme": "https://github.com/schmupu/ioBroker.lupusec/blob/master/README.md",
+    "loglevel": "info",
+    "messagebox": true,
+    "mode": "daemon",
+    "type": "alarm",
+    "compact": true,
+    "connectionType": "local",
+    "dataSource": "poll",
+    "plugins": {
+      "sentry": {
+        "dsn": "https://8a50c3e06fdb402d9e7b0ad5ae9f6400@sentry.iobroker.net/82",
+        "pathWhitelist": []
+      }
+    },
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=5.0.19"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=6.4.4"
+      }
     ]
+  },
+  "protectedNative": [
+    "alarm_user",
+    "alarm_password"
+  ],
+  "encryptedNative": [
+    "alarm_password"
+  ],
+  "native": {
+    "alarm_hostname": "192.168.11.22",
+    "alarm_https": false,
+    "alarm_type": "lupusec_xt2",
+    "alarm_user": "admin",
+    "alarm_password": "",
+    "alarm_polltime": 1,
+    "nuki_doorsensors": [],
+    "webcam_providing": true,
+    "webcam_bind": "0.0.0.0",
+    "webcam_port": 7000,
+    "option_pollfaster": false
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Device or service connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "devices",
+      "type": "channel",
+      "common": {
+        "icon": "/icons/zentrale.png",
+        "name": {
+          "en": "Devices alarmsystem",
+          "de": "Geräte Alarmanlage"
+        }
+      },
+      "native": {}
+    },
+    {
+      "_id": "status",
+      "type": "channel",
+      "common": {
+        "icon": "/icons/zentrale.png",
+        "statusStates": {
+          "onlineId": "reachable"
+        },
+        "name": {
+          "en": "Status alarmsystem",
+          "de": "Status Alarmanlage"
+        }
+      },
+      "native": {}
+    },
+    {
+      "_id": "sms",
+      "type": "channel",
+      "common": {
+        "icon": "/icons/sms.png",
+        "name": {
+          "en": "SMS",
+          "de": "SMS"
+        }
+      },
+      "native": {}
+    },
+    {
+      "_id": "webcams",
+      "type": "channel",
+      "common": {
+        "icon": "/icons/webcam.png",
+        "name": {
+          "en": "Webcam alarmsystems",
+          "de": "Webcam Alarmanlage"
+        }
+      },
+      "native": {}
+    }
+  ]
 }

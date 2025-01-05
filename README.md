@@ -148,8 +148,7 @@ sudo chmod u+s `which ping`
 ```
 
 ## Changelog
-
-### **WORK IN PROGRESS**
+### 2.0.4 (2025-01-05)
 
 - (Stübi) Adjustments of test and release yml
 - (Stübi) Readme expanded to include migration instructions (Issue #97)
