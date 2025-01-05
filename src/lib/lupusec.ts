@@ -1214,7 +1214,7 @@ export class Lupus {
         for (const deviceid of deviceids) {
             const type = deviceid.type;
             const id = deviceid.id;
-            if ([4, 7, 17, 81, 37, 50, 76, 79, 81].includes(type)) {
+            if ([4, 7, 17, 81, 37, 46, 50, 54, 76, 79, 81].includes(type)) {
                 if (type) {
                     requestarray.push(
                         async () =>
