@@ -1205,7 +1205,7 @@ export class Lupus {
         for (const deviceid of deviceids) {
             const type = deviceid.type;
             const id = deviceid.id;
-            if ([7, 17, 81, 37, 50, 76, 79, 81].includes(type)) {
+            if ([4, 7, 17, 81, 37, 50, 76, 79, 81].includes(type)) {
                 if (type) {
                     requestarray.push(
                         async () =>
@@ -1263,7 +1263,7 @@ export class Lupus {
             const result: any = results[idx];
             if (result?.data?.forms?.ssform) {
                 result.data.form = result.data.forms.ssform;
-            } // Type 7, 81, 37, 50, 76, 79
+            } // Type 4, 7, 81, 37, 50, 76, 79
             if (result?.data?.forms?.thermoform) {
                 result.data.form = result.data.forms.thermoform;
             } // Type 79
@@ -1390,17 +1390,23 @@ export class Lupus {
         devicename?: any,
     ): Promise<void> {
         // const object = Tools.copyObject(obj);  // copy of the object
-        const execdelay = 0; // 100; // this.adapter.config.alarm_polltime * 1000;
+        const execdelay = this.adapter.config.alarm_polltime * 1000 * 10;
         const object = obj;
         const sid = `${id}.${name}`;
+
+        if (!Tools.hasProperty(obj.common, 'def') && value === undefined) {
+            return;
+        }
         if (object.common.name === '%value%') {
-            object.common.name = value !== undefined ? value : undefined;
+            object.common.name = value !== undefined ? value : '';
         }
         if (typeof object.common.name === 'string' && object.common.name.indexOf('%value%') !== -1) {
             object.common.name = value !== undefined ? object.common.name.replace('%value%', value) : undefined;
         }
         if (object.common.name) {
             object.common.name = this.extendCommonName(object.common.name, devicename);
+        } else {
+            object.common.name = this.extendCommonName('-', devicename);
         }
         await this.states.setObjectNotExistsAsync(sid, {
             type: object.type,
@@ -1415,38 +1421,40 @@ export class Lupus {
             return;
         }
         const stateget = await this.states.getStateAsync(sid);
-        // const stateunixtime = this.getUnixTimestamp(sid) +
-        const stateunixtime =
-            this.getUnixTimestamp(sid) > 0 ? this.getUnixTimestamp(sid) + execdelay : this.getUnixTimestamp(sid);
+        const stateunixtime = this.getUnixTimestamp(sid) > 0 ? this.getUnixTimestamp(sid) + execdelay : 0;
         // const stateunixtime = stateget && stateget.ts ? stateget.ts : undefined;
-        if (stateget && stateunixtime === undefined && stateget.ack === true && stateget.val === statevalue) {
-            this.delUnixTimestamp(sid);
-            return;
-        }
-        if (!stateget || stateunixtime === undefined || (stateget.ack === true && stateget.val !== statevalue)) {
+        if (stateget === undefined) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
             this.delUnixTimestamp(sid);
-            if (stateget) {
-                this.adapter.log.debug(
-                    `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`,
-                );
-            } else {
-                this.adapter.log.debug(`State ${sid} changed to value ${statevalue} and ack to true)`);
-            }
+            this.adapter.log.debug(`State ${sid} changed to value ${statevalue} and ack to true)`);
             return;
         }
-        if (!stateget || (stateget.ack === false && stateunixtime > 0 && stateunixtime < unixtime)) {
+        if (stateget.ack === false && stateget.val === statevalue) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
             this.delUnixTimestamp(sid);
-            if (stateget) {
-                this.adapter.log.debug(
-                    `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`,
-                );
-            } else {
-                this.adapter.log.debug(`State ${sid} changed to value ${statevalue} and ack to true)`);
-            }
+            this.adapter.log.debug(
+                `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`,
+            );
+            return;
+        }
+        if (stateunixtime === 0 && stateget.ack === true && stateget.val !== statevalue) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
+            this.delUnixTimestamp(sid);
+            this.adapter.log.debug(
+                `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`,
+            );
+            return;
+        }
+        if (stateunixtime < unixtime && stateget.ack === false) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
+            this.delUnixTimestamp(sid);
+            this.adapter.log.debug(
+                `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`,
+            );
             return;
         }
     }
@@ -1650,292 +1658,13 @@ export class Lupus {
             if (state && state.ack === false) {
                 await this.states.setStateNotExistsAsync(id, { val: state.val, ack: state.ack });
                 if (id.startsWith(`${this.adapter.namespace}.devices.`)) {
-                    const execdelay = 0; // in milliseconds - this.adapter.config.alarm_polltime * 1000
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    const icchannelabs = id.split('.').slice(0, 4).join('.'); //  lupusec.0.devices.ZS:a61d01
-                    const idchannel = id.split('.').slice(2, 4).join('.'); //  devices.ZS:a61d01
-                    const iddevice = id.split('.').slice(2).join('.'); // devices.ZS:a61d01.status_ex
-                    const channel = id.split('.').slice(3, 4).join('.'); // Device ID - ZS:a61d01
-                    const name = id.split('.').slice(-1).join('.'); // statusname - status_ex
-                    const zone = (await this.states.getStateAsync(`${idchannel}.zone`))?.val;
-                    const area = (await this.states.getStateAsync(`${idchannel}.area`))?.val;
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    const type = (await this.states.getStateAsync(`${idchannel}.type`))?.val;
-                    // Type 24,48,66
-                    if (name === 'status_ex') {
-                        const value = state.val === true ? 'on' : 'off';
-                        const valuepd =
-                            Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
-                        const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
-                        const exec = `a=${area}&z=${zone}&sw=${value}&pd=${valuepdtxt}`;
-                        await this.haExecutePost(iddevice, {
-                            exec: exec,
-                        });
-                    } else if (name === 'pd') {
-                        // Type 24,48,66
-                        this.dummyDevicePost(iddevice);
-                    } else if (name === 'factor') {
-                        // Type 50
-                        await this.deviceEditMeterPost(iddevice, {
-                            id: channel,
-                            factor: state.val,
-                        });
-                    } else if (name.startsWith('mode_name_')) {
-                        // Type 52 (Univeral IR Controller)
-                        const mode = name.replace('mode_name_', '');
-                        await this.deviceDoUPICPost(iddevice, {
-                            id: channel,
-                            mode: mode,
-                        });
-                    } else if (name === 'leds') {
-                        // Type 52 (Univeral IR Controller)
-                        await this.deviceDoUPICPost(iddevice, {
-                            id: channel,
-                            led: 'query',
-                        });
-                    } else if (name === 'nuki_action') {
-                        // Type 57
-                        let value: any = undefined;
-                        switch (state.val) {
-                            case 3:
-                                value = 1; // unlock
-                                break;
-                            case 1:
-                                value = 2; // lock
-                                break;
-                            case 0:
-                                value = 3; // open
-                                break;
-                            default:
-                                break;
-                        }
-                        this.adapter.clearTimeout(this.timerhandle[iddevice]);
-                        this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                            for (let i = 1; i <= 10; i++) {
-                                const result = await this.deviceNukiCmd(iddevice, {
-                                    id: channel,
-                                    action: value,
-                                });
-                                if (result?.data?.result === 1) {
-                                    break;
-                                }
-                                this.adapter.log.debug(
-                                    `Action on Nuki not executed, because no positive response from Nuki!. Will try it again in a few seconds!`,
-                                );
-                                await Tools.wait(1);
-                            }
-                        }, 0);
-                    } else if (name === 'level') {
-                        // Type 66
-                        this.adapter.clearTimeout(this.timerhandle[iddevice]);
-                        this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                            await this.deviceSwitchDimmerPost(iddevice, {
-                                id: channel,
-                                level: state.val,
-                            });
-                        }, execdelay);
-                    } else if (name === 'switch') {
-                        // Type 76
-                        const shutterstates: any = {
-                            0: 'on',
-                            1: 'off',
-                            2: 'stop',
-                        };
-                        const exec = `a=${area}&z=${zone}&shutter=${shutterstates[state.val]}`;
-                        await this.haExecutePost(iddevice, {
-                            exec: exec,
-                        });
-                    } else if (name === 'on_time') {
-                        // Type 76
-                        const on_time = Number(state.val);
-                        const off_time = Number((await this.states.getStateAsync(`${idchannel}.off_time`))?.val || 0);
-                        await this.deviceEditShutterPost(iddevice, {
-                            id: channel,
-                            on_time: Math.round(on_time * 10),
-                            off_time: Math.round(off_time * 10),
-                        });
-                    } else if (name === 'off_time') {
-                        // Type 76
-                        const on_time = Number((await this.states.getStateAsync(`${idchannel}.on_time`))?.val || 0);
-                        const off_time = Number(state.val);
-                        await this.deviceEditShutterPost(iddevice, {
-                            id: channel,
-                            on_time: Math.round(on_time * 10),
-                            off_time: Math.round(off_time * 10),
-                        });
-                    } else if (name === 'thermo_offset') {
-                        // Type 79
-                        await this.deviceEditThermoPost(iddevice, {
-                            id: channel,
-                            act: 't_offset',
-                            thermo_offset: Math.round(Number(state.val) * 10),
-                        });
-                    } else if (name === 'mode') {
-                        // Type 79
-                        await this.deviceEditThermoPost(iddevice, {
-                            id: channel,
-                            act: 't_schd_setting',
-                            thermo_schd_setting: state.val == 0 ? 0 : 1,
-                        });
-                    } else if (name === 'off') {
-                        // Type 79
-                        await this.deviceEditThermoPost(iddevice, {
-                            id: channel,
-                            act: 't_mode',
-                            thermo_mode: state.val == true ? 0 : 4,
-                        });
-                    } else if (name === 'set_temperature') {
-                        // Type 79
-                        this.adapter.clearTimeout(this.timerhandle[iddevice]);
-                        this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                            await this.deviceEditThermoPost(iddevice, {
-                                id: channel,
-                                act: 't_setpoint',
-                                thermo_setpoint: Math.trunc((100 * Math.round(2 * Number(state.val))) / 2),
-                            });
-                        }, execdelay);
-                    } else if (
-                        // Type 4,7,17,37,81
-                        name.startsWith('sresp_button_') ||
-                        name === 'sresp_emergency' ||
-                        name === 'name' ||
-                        name === 'send_notify' ||
-                        name === 'bypass' ||
-                        name === 'bypass_tamper' ||
-                        name === 'schar_latch_rpt' ||
-                        name === 'always_off'
-                    ) {
-                        let parameter = name;
-                        const form: any = {
-                            id: channel,
-                            sarea: area,
-                            szone: zone,
-                        };
-                        if (name === 'sresp_button_123') {
-                            parameter = 'sresp_panic';
-                        }
-                        if (name === 'sresp_button_456') {
-                            parameter = 'sresp_fire';
-                        }
-                        if (name === 'sresp_button_789') {
-                            parameter = 'sresp_medical';
-                        }
-                        if (name === 'name') {
-                            parameter = 'sname';
-                        }
-                        if (name === 'bypass') {
-                            parameter = 'scond_bypass';
-                        }
-                        form[parameter] = state.val;
-                        await this.deviceEditPost(iddevice, form);
-                    } else if (name === 'hue') {
-                        // Type 74
-                        this.adapter.clearTimeout(this.timerhandle[iddevice]);
-                        this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                            const valuesat = Number((await this.states.getStateAsync(`${idchannel}.sat`))?.val || 0);
-                            await this.deviceHueColorControl(iddevice, {
-                                id: channel,
-                                act: 't_setpoint',
-                                hue: state.val || 0,
-                                saturation: valuesat,
-                                mod: 2,
-                            });
-                        }, execdelay);
-                    } else if (name === 'sat') {
-                        // Type 74
-                        this.adapter.clearTimeout(this.timerhandle[iddevice]);
-                        this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                            const valuehue = Number((await this.states.getStateAsync(`${idchannel}.hue`))?.val || 0);
-                            await this.deviceHueColorControl(iddevice, {
-                                id: channel,
-                                act: 't_setpoint',
-                                hue: valuehue,
-                                saturation: state.val || 0,
-                                mod: 2,
-                            });
-                        }, execdelay);
-                    } else {
-                        this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
-                        this.dummyDevicePost(iddevice);
-                    }
+                    await this.onStateChangeDevices(id, state);
                 }
                 if (id.startsWith(`${this.adapter.namespace}.status.`)) {
-                    const regstat = /.+\.status\.(.+)/gm;
-                    const m = regstat.exec(id);
-                    if (!m) {
-                        return;
-                    }
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    const icchannelabs = id.split('.').slice(0, -1).join('.'); //  lupusec.0.status
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    const idchannel = id.split('.').slice(2, -1).join('.'); //  status
-                    const iddevice = id.split('.').slice(2).join('.'); //  status.apple_home_a1
-                    const name = m[1]; // Device ID - apple_home_a1
-                    if (name === 'mode_pc_a1') {
-                        await this.panelCondPost(iddevice, { area: 1, mode: state.val });
-                    } else if (name === 'mode_pc_a2') {
-                        await this.panelCondPost(iddevice, { area: 2, mode: state.val });
-                    } else if (name === 'apple_home_a1') {
-                        const mode_pc_a1 = this.getLupusecFromAppleStautus(Number(state.val));
-                        if (mode_pc_a1 !== undefined && mode_pc_a1 >= 0 && mode_pc_a1 <= 4) {
-                            await this.panelCondPost(iddevice, { area: 1, mode: mode_pc_a1 });
-                        }
-                    } else if (name === 'apple_home_a2') {
-                        const mode_pc_a2 = this.getLupusecFromAppleStautus(Number(state.val));
-                        if (mode_pc_a2 !== undefined && mode_pc_a2 >= 0 && mode_pc_a2 <= 4) {
-                            await this.panelCondPost(iddevice, { area: 2, mode: mode_pc_a2 });
-                        }
-                    } else {
-                        this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
-                        this.dummyDevicePost(iddevice);
-                    }
+                    await this.onStateChangeStatus(id, state);
                 }
                 if (id.startsWith(`${this.adapter.namespace}.sms.`)) {
-                    const regstat = /.+\.sms\.(.+)/gm;
-                    const m = regstat.exec(id);
-                    if (!m) {
-                        return;
-                    }
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    const icchannelabs = id.split('.').slice(0, -1).join('.'); //  lupusec.0.status
-                    const idchannel = id.split('.').slice(2, -1).join('.'); //  status
-                    const iddevice = id.split('.').slice(2).join('.'); //  status.apple_home_a1
-                    const name = m[1]; // Device ID - apple_home_a1
-                    const valText = (await this.states.getStateAsync(`${idchannel}.text`))?.val;
-                    const valNumber = (await this.states.getStateAsync(`${idchannel}.number`))?.val;
-                    const valProvider = (await this.states.getStateAsync(`${idchannel}.provider`))?.val;
-                    let resultsms;
-                    if (name === 'dial') {
-                        if (valText && valNumber) {
-                            switch (valProvider) {
-                                case 1:
-                                    resultsms = await this.sendSMSPost(iddevice, {
-                                        phone: valNumber,
-                                        smstext: valText,
-                                    });
-                                    await this.states.setStateNotExistsAsync(`${idchannel}.result`, {
-                                        val: resultsms?.data?.result,
-                                        ack: true,
-                                    });
-                                    break;
-                                case 2:
-                                    resultsms = await this.sendSMSgwTestPost(iddevice, {
-                                        to: valNumber,
-                                        message: valText,
-                                    });
-                                    await this.states.setStateNotExistsAsync(`${idchannel}.result`, {
-                                        val: resultsms?.data?.result,
-                                        ack: true,
-                                    });
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    } else {
-                        this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
-                        this.dummyDevicePost(iddevice);
-                    }
+                    await this.onStateChangeSMS(id, state);
                 }
             }
             if (!state) {
@@ -1945,6 +1674,326 @@ export class Lupus {
             }
         } catch (error: any) {
             this.adapter.log.error(`Error while setting state: ${error.toString()}`);
+        }
+    }
+
+    /**
+     * Is called if a subscribed state changes of devices
+     *
+     * @param id id
+     * @param state state
+     */
+    private async onStateChangeDevices(id: string, state: states.ifState): Promise<void> {
+        const execdelay = 100; // in milliseconds
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const icchannelabs = id.split('.').slice(0, 4).join('.'); //  lupusec.0.devices.ZS:a61d01
+        const idchannel = id.split('.').slice(2, 4).join('.'); //  devices.ZS:a61d01
+        const iddevice = id.split('.').slice(2).join('.'); // devices.ZS:a61d01.status_ex
+        const channel = id.split('.').slice(3, 4).join('.'); // Device ID - ZS:a61d01
+        const name = id.split('.').slice(-1).join('.'); // statusname - status_ex
+        const zone = (await this.states.getStateAsync(`${idchannel}.zone`))?.val;
+        const area = (await this.states.getStateAsync(`${idchannel}.area`))?.val;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const type = (await this.states.getStateAsync(`${idchannel}.type`))?.val;
+        // Type 24,48,66
+        if (name === 'status_ex') {
+            const value = state.val === true ? 'on' : 'off';
+            const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
+            const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
+            const exec = `a=${area}&z=${zone}&sw=${value}&pd=${valuepdtxt}`;
+            await this.haExecutePost(iddevice, {
+                exec: exec,
+            });
+        } else if (name === 'pd') {
+            // Type 24,48,66
+            this.dummyDevicePost(iddevice);
+        } else if (name === 'factor') {
+            // Type 50
+            await this.deviceEditMeterPost(iddevice, {
+                id: channel,
+                factor: state.val,
+            });
+        } else if (name.startsWith('mode_name_')) {
+            // Type 52 (Univeral IR Controller)
+            const mode = name.replace('mode_name_', '');
+            await this.deviceDoUPICPost(iddevice, {
+                id: channel,
+                mode: mode,
+            });
+        } else if (name === 'leds') {
+            // Type 52 (Univeral IR Controller)
+            await this.deviceDoUPICPost(iddevice, {
+                id: channel,
+                led: 'query',
+            });
+        } else if (name === 'nuki_action') {
+            // Type 57
+            let value: any = undefined;
+            switch (state.val) {
+                case 3:
+                    value = 1; // unlock
+                    break;
+                case 1:
+                    value = 2; // lock
+                    break;
+                case 0:
+                    value = 3; // open
+                    break;
+                default:
+                    break;
+            }
+            this.adapter.clearTimeout(this.timerhandle[iddevice]);
+            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+                for (let i = 1; i <= 10; i++) {
+                    const result = await this.deviceNukiCmd(iddevice, {
+                        id: channel,
+                        action: value,
+                    });
+                    if (result?.data?.result === 1) {
+                        break;
+                    }
+                    this.adapter.log.debug(
+                        `Action on Nuki not executed, because no positive response from Nuki!. Will try it again in a few seconds!`,
+                    );
+                    await Tools.wait(1);
+                }
+            }, 0);
+        } else if (name === 'level') {
+            // Type 66
+            this.adapter.clearTimeout(this.timerhandle[iddevice]);
+            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+                await this.deviceSwitchDimmerPost(iddevice, {
+                    id: channel,
+                    level: state.val,
+                });
+            }, execdelay);
+        } else if (name === 'switch') {
+            // Type 76
+            const shutterstates: any = {
+                0: 'on',
+                1: 'off',
+                2: 'stop',
+            };
+            const exec = `a=${area}&z=${zone}&shutter=${shutterstates[state.val]}`;
+            await this.haExecutePost(iddevice, {
+                exec: exec,
+            });
+        } else if (name === 'on_time') {
+            // Type 76
+            const on_time = Number(state.val);
+            const off_time = Number((await this.states.getStateAsync(`${idchannel}.off_time`))?.val || 0);
+            await this.deviceEditShutterPost(iddevice, {
+                id: channel,
+                on_time: Math.round(on_time * 10),
+                off_time: Math.round(off_time * 10),
+            });
+        } else if (name === 'off_time') {
+            // Type 76
+            const on_time = Number((await this.states.getStateAsync(`${idchannel}.on_time`))?.val || 0);
+            const off_time = Number(state.val);
+            await this.deviceEditShutterPost(iddevice, {
+                id: channel,
+                on_time: Math.round(on_time * 10),
+                off_time: Math.round(off_time * 10),
+            });
+        } else if (name === 'thermo_offset') {
+            // Type 79
+            await this.deviceEditThermoPost(iddevice, {
+                id: channel,
+                act: 't_offset',
+                thermo_offset: Math.round(Number(state.val) * 10),
+            });
+        } else if (name === 'mode') {
+            // Type 79
+            await this.deviceEditThermoPost(iddevice, {
+                id: channel,
+                act: 't_schd_setting',
+                thermo_schd_setting: state.val == 0 ? 0 : 1,
+            });
+        } else if (name === 'off') {
+            // Type 79
+            await this.deviceEditThermoPost(iddevice, {
+                id: channel,
+                act: 't_mode',
+                thermo_mode: state.val == true ? 0 : 4,
+            });
+        } else if (name === 'set_temperature') {
+            // Type 79
+            this.adapter.clearTimeout(this.timerhandle[iddevice]);
+            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+                await this.deviceEditThermoPost(iddevice, {
+                    id: channel,
+                    act: 't_setpoint',
+                    thermo_setpoint: Math.trunc((100 * Math.round(2 * Number(state.val))) / 2),
+                });
+            }, execdelay);
+        } else if (
+            // Type 4,7,17,37,81
+            name.startsWith('sresp_button_') ||
+            name === 'sresp_emergency' ||
+            name === 'name' ||
+            name === 'send_notify' ||
+            name === 'bypass' ||
+            name === 'bypass_tamper' ||
+            name === 'schar_latch_rpt' ||
+            name === 'always_off'
+        ) {
+            let parameter = name;
+            const form: any = {
+                id: channel,
+                sarea: area,
+                szone: zone,
+            };
+            if (name === 'sresp_button_123') {
+                parameter = 'sresp_panic';
+            }
+            if (name === 'sresp_button_456') {
+                parameter = 'sresp_fire';
+            }
+            if (name === 'sresp_button_789') {
+                parameter = 'sresp_medical';
+            }
+            if (name === 'name') {
+                parameter = 'sname';
+            }
+            if (name === 'bypass') {
+                parameter = 'scond_bypass';
+            }
+            form[parameter] = state.val;
+            await this.deviceEditPost(iddevice, form);
+        } else if (name === 'hue') {
+            // Type 74
+            this.adapter.clearTimeout(this.timerhandle[iddevice]);
+            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+                const valuesat = Number((await this.states.getStateAsync(`${idchannel}.sat`))?.val || 0);
+                const valuehue = state.val || 0;
+                const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
+                const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
+                const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
+                await this.haExecutePost(iddevice, {
+                    exec: exec,
+                });
+            }, execdelay);
+        } else if (name === 'sat') {
+            // Type 74
+            this.adapter.clearTimeout(this.timerhandle[iddevice]);
+            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+                const valuehue = Number((await this.states.getStateAsync(`${idchannel}.hue`))?.val || 0);
+                const valuesat = state.val || 0;
+                const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
+                const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
+                const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
+                await this.haExecutePost(iddevice, {
+                    exec: exec,
+                });
+            }, execdelay);
+        } else if (name === 'ctemp') {
+            // Type 74
+            this.adapter.clearTimeout(this.timerhandle[iddevice]);
+            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+                const ctemp = state.val || 0;
+                const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
+                const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
+                const exec = `a=${area}&z=${zone}&dimmer=on&hue=-1,-1,${ctemp},-1,-1&pd=${valuepdtxt}`;
+                await this.haExecutePost(iddevice, {
+                    exec: exec,
+                });
+            }, execdelay);
+        } else {
+            this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
+            this.dummyDevicePost(iddevice);
+        }
+    }
+
+    /**
+     * Is called if a subscribed state changes of status
+     *
+     * @param id id
+     * @param state state
+     */
+    private async onStateChangeStatus(id: string, state: states.ifState): Promise<void> {
+        const regstat = /.+\.status\.(.+)/gm;
+        const m = regstat.exec(id);
+        if (!m) {
+            return;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const icchannelabs = id.split('.').slice(0, -1).join('.'); //  lupusec.0.status
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const idchannel = id.split('.').slice(2, -1).join('.'); //  status
+        const iddevice = id.split('.').slice(2).join('.'); //  status.apple_home_a1
+        const name = m[1]; // Device ID - apple_home_a1
+        if (name === 'mode_pc_a1') {
+            await this.panelCondPost(iddevice, { area: 1, mode: state.val });
+        } else if (name === 'mode_pc_a2') {
+            await this.panelCondPost(iddevice, { area: 2, mode: state.val });
+        } else if (name === 'apple_home_a1') {
+            const mode_pc_a1 = this.getLupusecFromAppleStautus(Number(state.val));
+            if (mode_pc_a1 !== undefined && mode_pc_a1 >= 0 && mode_pc_a1 <= 4) {
+                await this.panelCondPost(iddevice, { area: 1, mode: mode_pc_a1 });
+            }
+        } else if (name === 'apple_home_a2') {
+            const mode_pc_a2 = this.getLupusecFromAppleStautus(Number(state.val));
+            if (mode_pc_a2 !== undefined && mode_pc_a2 >= 0 && mode_pc_a2 <= 4) {
+                await this.panelCondPost(iddevice, { area: 2, mode: mode_pc_a2 });
+            }
+        } else {
+            this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
+            this.dummyDevicePost(iddevice);
+        }
+    }
+
+    /**
+     * Is called if a subscribed state changes of status
+     *
+     * @param id id
+     * @param state state
+     */
+    private async onStateChangeSMS(id: string, state: states.ifState): Promise<void> {
+        const regstat = /.+\.sms\.(.+)/gm;
+        const m = regstat.exec(id);
+        if (!m) {
+            return;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const icchannelabs = id.split('.').slice(0, -1).join('.'); //  lupusec.0.status
+        const idchannel = id.split('.').slice(2, -1).join('.'); //  status
+        const iddevice = id.split('.').slice(2).join('.'); //  status.apple_home_a1
+        const name = m[1]; // Device ID - apple_home_a1
+        const valText = (await this.states.getStateAsync(`${idchannel}.text`))?.val;
+        const valNumber = (await this.states.getStateAsync(`${idchannel}.number`))?.val;
+        const valProvider = (await this.states.getStateAsync(`${idchannel}.provider`))?.val;
+        let resultsms;
+        if (name === 'dial') {
+            if (valText && valNumber) {
+                switch (valProvider) {
+                    case 1:
+                        resultsms = await this.sendSMSPost(iddevice, {
+                            phone: valNumber,
+                            smstext: valText,
+                        });
+                        await this.states.setStateNotExistsAsync(`${idchannel}.result`, {
+                            val: resultsms?.data?.result,
+                            ack: true,
+                        });
+                        break;
+                    case 2:
+                        resultsms = await this.sendSMSgwTestPost(iddevice, {
+                            to: valNumber,
+                            message: valText,
+                        });
+                        await this.states.setStateNotExistsAsync(`${idchannel}.result`, {
+                            val: resultsms?.data?.result,
+                            ack: true,
+                        });
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } else {
+            this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
+            this.dummyDevicePost(iddevice);
         }
     }
 

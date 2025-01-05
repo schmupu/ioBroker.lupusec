@@ -155,6 +155,8 @@ sudo chmod u+s `which ping`
 - (Stübi) Readme expanded to include migration instructions (Issue #97)
 - (Stübi) Fixed error with HUE lights (Issue #104)
 - (Stübi) Added the following values ​​for type 54: air pressure, wind strength, wind angle, wind gust, co2, wind speed
+- (Stübi) Added for HUE the values mode (hue or temperature) and tempererature
+- (Stübi) Added not used states will be not be shwon.
 
 ### 2.0.3 (2024-12-29)
 

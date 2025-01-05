@@ -1157,7 +1157,7 @@ class Lupus {
     for (const deviceid of deviceids) {
       const type = deviceid.type;
       const id = deviceid.id;
-      if ([7, 17, 81, 37, 50, 76, 79, 81].includes(type)) {
+      if ([4, 7, 17, 81, 37, 50, 76, 79, 81].includes(type)) {
         if (type) {
           requestarray.push(
             async () => await this.deviceEditGet({
@@ -1324,17 +1324,22 @@ class Lupus {
     }
   }
   async createObjectSetStates(id, name, value, unixtime, obj, devicename) {
-    const execdelay = 0;
+    const execdelay = this.adapter.config.alarm_polltime * 1e3 * 10;
     const object = obj;
     const sid = `${id}.${name}`;
+    if (!import_tools.Tools.hasProperty(obj.common, "def") && value === void 0) {
+      return;
+    }
     if (object.common.name === "%value%") {
-      object.common.name = value !== void 0 ? value : void 0;
+      object.common.name = value !== void 0 ? value : "";
     }
     if (typeof object.common.name === "string" && object.common.name.indexOf("%value%") !== -1) {
       object.common.name = value !== void 0 ? object.common.name.replace("%value%", value) : void 0;
     }
     if (object.common.name) {
       object.common.name = this.extendCommonName(object.common.name, devicename);
+    } else {
+      object.common.name = this.extendCommonName("-", devicename);
     }
     await this.states.setObjectNotExistsAsync(sid, {
       type: object.type,
@@ -1349,33 +1354,35 @@ class Lupus {
       return;
     }
     const stateget = await this.states.getStateAsync(sid);
-    const stateunixtime = this.getUnixTimestamp(sid) > 0 ? this.getUnixTimestamp(sid) + execdelay : this.getUnixTimestamp(sid);
-    if (stateget && stateunixtime === void 0 && stateget.ack === true && stateget.val === statevalue) {
-      this.delUnixTimestamp(sid);
-      return;
-    }
-    if (!stateget || stateunixtime === void 0 || stateget.ack === true && stateget.val !== statevalue) {
+    const stateunixtime = this.getUnixTimestamp(sid) > 0 ? this.getUnixTimestamp(sid) + execdelay : 0;
+    if (stateget === void 0) {
       const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
       this.delUnixTimestamp(sid);
-      if (stateget) {
-        this.adapter.log.debug(
-          `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`
-        );
-      } else {
-        this.adapter.log.debug(`State ${sid} changed to value ${statevalue} and ack to true)`);
-      }
+      this.adapter.log.debug(`State ${sid} changed to value ${statevalue} and ack to true)`);
       return;
     }
-    if (!stateget || stateget.ack === false && stateunixtime > 0 && stateunixtime < unixtime) {
+    if (stateget.ack === false && stateget.val === statevalue) {
       const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
       this.delUnixTimestamp(sid);
-      if (stateget) {
-        this.adapter.log.debug(
-          `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`
-        );
-      } else {
-        this.adapter.log.debug(`State ${sid} changed to value ${statevalue} and ack to true)`);
-      }
+      this.adapter.log.debug(
+        `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`
+      );
+      return;
+    }
+    if (stateunixtime === 0 && stateget.ack === true && stateget.val !== statevalue) {
+      const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
+      this.delUnixTimestamp(sid);
+      this.adapter.log.debug(
+        `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`
+      );
+      return;
+    }
+    if (stateunixtime < unixtime && stateget.ack === false) {
+      const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
+      this.delUnixTimestamp(sid);
+      this.adapter.log.debug(
+        `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`
+      );
       return;
     }
   }
@@ -1565,271 +1572,17 @@ class Lupus {
    * @param state state
    */
   async onStateChange(id, state) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k;
     try {
       if (state && state.ack === false) {
         await this.states.setStateNotExistsAsync(id, { val: state.val, ack: state.ack });
         if (id.startsWith(`${this.adapter.namespace}.devices.`)) {
-          const execdelay = 0;
-          const icchannelabs = id.split(".").slice(0, 4).join(".");
-          const idchannel = id.split(".").slice(2, 4).join(".");
-          const iddevice = id.split(".").slice(2).join(".");
-          const channel = id.split(".").slice(3, 4).join(".");
-          const name = id.split(".").slice(-1).join(".");
-          const zone = (_a = await this.states.getStateAsync(`${idchannel}.zone`)) == null ? void 0 : _a.val;
-          const area = (_b = await this.states.getStateAsync(`${idchannel}.area`)) == null ? void 0 : _b.val;
-          const type = (_c = await this.states.getStateAsync(`${idchannel}.type`)) == null ? void 0 : _c.val;
-          if (name === "status_ex") {
-            const value = state.val === true ? "on" : "off";
-            const valuepd = Number(((_d = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _d.val) || 0) * 60 || 0;
-            const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
-            const exec = `a=${area}&z=${zone}&sw=${value}&pd=${valuepdtxt}`;
-            await this.haExecutePost(iddevice, {
-              exec
-            });
-          } else if (name === "pd") {
-            this.dummyDevicePost(iddevice);
-          } else if (name === "factor") {
-            await this.deviceEditMeterPost(iddevice, {
-              id: channel,
-              factor: state.val
-            });
-          } else if (name.startsWith("mode_name_")) {
-            const mode = name.replace("mode_name_", "");
-            await this.deviceDoUPICPost(iddevice, {
-              id: channel,
-              mode
-            });
-          } else if (name === "leds") {
-            await this.deviceDoUPICPost(iddevice, {
-              id: channel,
-              led: "query"
-            });
-          } else if (name === "nuki_action") {
-            let value = void 0;
-            switch (state.val) {
-              case 3:
-                value = 1;
-                break;
-              case 1:
-                value = 2;
-                break;
-              case 0:
-                value = 3;
-                break;
-              default:
-                break;
-            }
-            this.adapter.clearTimeout(this.timerhandle[iddevice]);
-            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-              var _a2;
-              for (let i = 1; i <= 10; i++) {
-                const result = await this.deviceNukiCmd(iddevice, {
-                  id: channel,
-                  action: value
-                });
-                if (((_a2 = result == null ? void 0 : result.data) == null ? void 0 : _a2.result) === 1) {
-                  break;
-                }
-                this.adapter.log.debug(
-                  `Action on Nuki not executed, because no positive response from Nuki!. Will try it again in a few seconds!`
-                );
-                await import_tools.Tools.wait(1);
-              }
-            }, 0);
-          } else if (name === "level") {
-            this.adapter.clearTimeout(this.timerhandle[iddevice]);
-            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-              await this.deviceSwitchDimmerPost(iddevice, {
-                id: channel,
-                level: state.val
-              });
-            }, execdelay);
-          } else if (name === "switch") {
-            const shutterstates = {
-              0: "on",
-              1: "off",
-              2: "stop"
-            };
-            const exec = `a=${area}&z=${zone}&shutter=${shutterstates[state.val]}`;
-            await this.haExecutePost(iddevice, {
-              exec
-            });
-          } else if (name === "on_time") {
-            const on_time = Number(state.val);
-            const off_time = Number(((_e = await this.states.getStateAsync(`${idchannel}.off_time`)) == null ? void 0 : _e.val) || 0);
-            await this.deviceEditShutterPost(iddevice, {
-              id: channel,
-              on_time: Math.round(on_time * 10),
-              off_time: Math.round(off_time * 10)
-            });
-          } else if (name === "off_time") {
-            const on_time = Number(((_f = await this.states.getStateAsync(`${idchannel}.on_time`)) == null ? void 0 : _f.val) || 0);
-            const off_time = Number(state.val);
-            await this.deviceEditShutterPost(iddevice, {
-              id: channel,
-              on_time: Math.round(on_time * 10),
-              off_time: Math.round(off_time * 10)
-            });
-          } else if (name === "thermo_offset") {
-            await this.deviceEditThermoPost(iddevice, {
-              id: channel,
-              act: "t_offset",
-              thermo_offset: Math.round(Number(state.val) * 10)
-            });
-          } else if (name === "mode") {
-            await this.deviceEditThermoPost(iddevice, {
-              id: channel,
-              act: "t_schd_setting",
-              thermo_schd_setting: state.val == 0 ? 0 : 1
-            });
-          } else if (name === "off") {
-            await this.deviceEditThermoPost(iddevice, {
-              id: channel,
-              act: "t_mode",
-              thermo_mode: state.val == true ? 0 : 4
-            });
-          } else if (name === "set_temperature") {
-            this.adapter.clearTimeout(this.timerhandle[iddevice]);
-            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-              await this.deviceEditThermoPost(iddevice, {
-                id: channel,
-                act: "t_setpoint",
-                thermo_setpoint: Math.trunc(100 * Math.round(2 * Number(state.val)) / 2)
-              });
-            }, execdelay);
-          } else if (
-            // Type 4,7,17,37,81
-            name.startsWith("sresp_button_") || name === "sresp_emergency" || name === "name" || name === "send_notify" || name === "bypass" || name === "bypass_tamper" || name === "schar_latch_rpt" || name === "always_off"
-          ) {
-            let parameter = name;
-            const form = {
-              id: channel,
-              sarea: area,
-              szone: zone
-            };
-            if (name === "sresp_button_123") {
-              parameter = "sresp_panic";
-            }
-            if (name === "sresp_button_456") {
-              parameter = "sresp_fire";
-            }
-            if (name === "sresp_button_789") {
-              parameter = "sresp_medical";
-            }
-            if (name === "name") {
-              parameter = "sname";
-            }
-            if (name === "bypass") {
-              parameter = "scond_bypass";
-            }
-            form[parameter] = state.val;
-            await this.deviceEditPost(iddevice, form);
-          } else if (name === "hue") {
-            this.adapter.clearTimeout(this.timerhandle[iddevice]);
-            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-              var _a2;
-              const valuesat = Number(((_a2 = await this.states.getStateAsync(`${idchannel}.sat`)) == null ? void 0 : _a2.val) || 0);
-              await this.deviceHueColorControl(iddevice, {
-                id: channel,
-                act: "t_setpoint",
-                hue: state.val || 0,
-                saturation: valuesat,
-                mod: 2
-              });
-            }, execdelay);
-          } else if (name === "sat") {
-            this.adapter.clearTimeout(this.timerhandle[iddevice]);
-            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-              var _a2;
-              const valuehue = Number(((_a2 = await this.states.getStateAsync(`${idchannel}.hue`)) == null ? void 0 : _a2.val) || 0);
-              await this.deviceHueColorControl(iddevice, {
-                id: channel,
-                act: "t_setpoint",
-                hue: valuehue,
-                saturation: state.val || 0,
-                mod: 2
-              });
-            }, execdelay);
-          } else {
-            this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
-            this.dummyDevicePost(iddevice);
-          }
+          await this.onStateChangeDevices(id, state);
         }
         if (id.startsWith(`${this.adapter.namespace}.status.`)) {
-          const regstat = /.+\.status\.(.+)/gm;
-          const m = regstat.exec(id);
-          if (!m) {
-            return;
-          }
-          const icchannelabs = id.split(".").slice(0, -1).join(".");
-          const idchannel = id.split(".").slice(2, -1).join(".");
-          const iddevice = id.split(".").slice(2).join(".");
-          const name = m[1];
-          if (name === "mode_pc_a1") {
-            await this.panelCondPost(iddevice, { area: 1, mode: state.val });
-          } else if (name === "mode_pc_a2") {
-            await this.panelCondPost(iddevice, { area: 2, mode: state.val });
-          } else if (name === "apple_home_a1") {
-            const mode_pc_a1 = this.getLupusecFromAppleStautus(Number(state.val));
-            if (mode_pc_a1 !== void 0 && mode_pc_a1 >= 0 && mode_pc_a1 <= 4) {
-              await this.panelCondPost(iddevice, { area: 1, mode: mode_pc_a1 });
-            }
-          } else if (name === "apple_home_a2") {
-            const mode_pc_a2 = this.getLupusecFromAppleStautus(Number(state.val));
-            if (mode_pc_a2 !== void 0 && mode_pc_a2 >= 0 && mode_pc_a2 <= 4) {
-              await this.panelCondPost(iddevice, { area: 2, mode: mode_pc_a2 });
-            }
-          } else {
-            this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
-            this.dummyDevicePost(iddevice);
-          }
+          await this.onStateChangeStatus(id, state);
         }
         if (id.startsWith(`${this.adapter.namespace}.sms.`)) {
-          const regstat = /.+\.sms\.(.+)/gm;
-          const m = regstat.exec(id);
-          if (!m) {
-            return;
-          }
-          const icchannelabs = id.split(".").slice(0, -1).join(".");
-          const idchannel = id.split(".").slice(2, -1).join(".");
-          const iddevice = id.split(".").slice(2).join(".");
-          const name = m[1];
-          const valText = (_g = await this.states.getStateAsync(`${idchannel}.text`)) == null ? void 0 : _g.val;
-          const valNumber = (_h = await this.states.getStateAsync(`${idchannel}.number`)) == null ? void 0 : _h.val;
-          const valProvider = (_i = await this.states.getStateAsync(`${idchannel}.provider`)) == null ? void 0 : _i.val;
-          let resultsms;
-          if (name === "dial") {
-            if (valText && valNumber) {
-              switch (valProvider) {
-                case 1:
-                  resultsms = await this.sendSMSPost(iddevice, {
-                    phone: valNumber,
-                    smstext: valText
-                  });
-                  await this.states.setStateNotExistsAsync(`${idchannel}.result`, {
-                    val: (_j = resultsms == null ? void 0 : resultsms.data) == null ? void 0 : _j.result,
-                    ack: true
-                  });
-                  break;
-                case 2:
-                  resultsms = await this.sendSMSgwTestPost(iddevice, {
-                    to: valNumber,
-                    message: valText
-                  });
-                  await this.states.setStateNotExistsAsync(`${idchannel}.result`, {
-                    val: (_k = resultsms == null ? void 0 : resultsms.data) == null ? void 0 : _k.result,
-                    ack: true
-                  });
-                  break;
-                default:
-                  break;
-              }
-            }
-          } else {
-            this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
-            this.dummyDevicePost(iddevice);
-          }
+          await this.onStateChangeSMS(id, state);
         }
       }
       if (!state) {
@@ -1838,6 +1591,300 @@ class Lupus {
       }
     } catch (error) {
       this.adapter.log.error(`Error while setting state: ${error.toString()}`);
+    }
+  }
+  /**
+   * Is called if a subscribed state changes of devices
+   *
+   * @param id id
+   * @param state state
+   */
+  async onStateChangeDevices(id, state) {
+    var _a, _b, _c, _d, _e, _f;
+    const execdelay = 100;
+    const icchannelabs = id.split(".").slice(0, 4).join(".");
+    const idchannel = id.split(".").slice(2, 4).join(".");
+    const iddevice = id.split(".").slice(2).join(".");
+    const channel = id.split(".").slice(3, 4).join(".");
+    const name = id.split(".").slice(-1).join(".");
+    const zone = (_a = await this.states.getStateAsync(`${idchannel}.zone`)) == null ? void 0 : _a.val;
+    const area = (_b = await this.states.getStateAsync(`${idchannel}.area`)) == null ? void 0 : _b.val;
+    const type = (_c = await this.states.getStateAsync(`${idchannel}.type`)) == null ? void 0 : _c.val;
+    if (name === "status_ex") {
+      const value = state.val === true ? "on" : "off";
+      const valuepd = Number(((_d = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _d.val) || 0) * 60 || 0;
+      const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
+      const exec = `a=${area}&z=${zone}&sw=${value}&pd=${valuepdtxt}`;
+      await this.haExecutePost(iddevice, {
+        exec
+      });
+    } else if (name === "pd") {
+      this.dummyDevicePost(iddevice);
+    } else if (name === "factor") {
+      await this.deviceEditMeterPost(iddevice, {
+        id: channel,
+        factor: state.val
+      });
+    } else if (name.startsWith("mode_name_")) {
+      const mode = name.replace("mode_name_", "");
+      await this.deviceDoUPICPost(iddevice, {
+        id: channel,
+        mode
+      });
+    } else if (name === "leds") {
+      await this.deviceDoUPICPost(iddevice, {
+        id: channel,
+        led: "query"
+      });
+    } else if (name === "nuki_action") {
+      let value = void 0;
+      switch (state.val) {
+        case 3:
+          value = 1;
+          break;
+        case 1:
+          value = 2;
+          break;
+        case 0:
+          value = 3;
+          break;
+        default:
+          break;
+      }
+      this.adapter.clearTimeout(this.timerhandle[iddevice]);
+      this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+        var _a2;
+        for (let i = 1; i <= 10; i++) {
+          const result = await this.deviceNukiCmd(iddevice, {
+            id: channel,
+            action: value
+          });
+          if (((_a2 = result == null ? void 0 : result.data) == null ? void 0 : _a2.result) === 1) {
+            break;
+          }
+          this.adapter.log.debug(
+            `Action on Nuki not executed, because no positive response from Nuki!. Will try it again in a few seconds!`
+          );
+          await import_tools.Tools.wait(1);
+        }
+      }, 0);
+    } else if (name === "level") {
+      this.adapter.clearTimeout(this.timerhandle[iddevice]);
+      this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+        await this.deviceSwitchDimmerPost(iddevice, {
+          id: channel,
+          level: state.val
+        });
+      }, execdelay);
+    } else if (name === "switch") {
+      const shutterstates = {
+        0: "on",
+        1: "off",
+        2: "stop"
+      };
+      const exec = `a=${area}&z=${zone}&shutter=${shutterstates[state.val]}`;
+      await this.haExecutePost(iddevice, {
+        exec
+      });
+    } else if (name === "on_time") {
+      const on_time = Number(state.val);
+      const off_time = Number(((_e = await this.states.getStateAsync(`${idchannel}.off_time`)) == null ? void 0 : _e.val) || 0);
+      await this.deviceEditShutterPost(iddevice, {
+        id: channel,
+        on_time: Math.round(on_time * 10),
+        off_time: Math.round(off_time * 10)
+      });
+    } else if (name === "off_time") {
+      const on_time = Number(((_f = await this.states.getStateAsync(`${idchannel}.on_time`)) == null ? void 0 : _f.val) || 0);
+      const off_time = Number(state.val);
+      await this.deviceEditShutterPost(iddevice, {
+        id: channel,
+        on_time: Math.round(on_time * 10),
+        off_time: Math.round(off_time * 10)
+      });
+    } else if (name === "thermo_offset") {
+      await this.deviceEditThermoPost(iddevice, {
+        id: channel,
+        act: "t_offset",
+        thermo_offset: Math.round(Number(state.val) * 10)
+      });
+    } else if (name === "mode") {
+      await this.deviceEditThermoPost(iddevice, {
+        id: channel,
+        act: "t_schd_setting",
+        thermo_schd_setting: state.val == 0 ? 0 : 1
+      });
+    } else if (name === "off") {
+      await this.deviceEditThermoPost(iddevice, {
+        id: channel,
+        act: "t_mode",
+        thermo_mode: state.val == true ? 0 : 4
+      });
+    } else if (name === "set_temperature") {
+      this.adapter.clearTimeout(this.timerhandle[iddevice]);
+      this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+        await this.deviceEditThermoPost(iddevice, {
+          id: channel,
+          act: "t_setpoint",
+          thermo_setpoint: Math.trunc(100 * Math.round(2 * Number(state.val)) / 2)
+        });
+      }, execdelay);
+    } else if (
+      // Type 4,7,17,37,81
+      name.startsWith("sresp_button_") || name === "sresp_emergency" || name === "name" || name === "send_notify" || name === "bypass" || name === "bypass_tamper" || name === "schar_latch_rpt" || name === "always_off"
+    ) {
+      let parameter = name;
+      const form = {
+        id: channel,
+        sarea: area,
+        szone: zone
+      };
+      if (name === "sresp_button_123") {
+        parameter = "sresp_panic";
+      }
+      if (name === "sresp_button_456") {
+        parameter = "sresp_fire";
+      }
+      if (name === "sresp_button_789") {
+        parameter = "sresp_medical";
+      }
+      if (name === "name") {
+        parameter = "sname";
+      }
+      if (name === "bypass") {
+        parameter = "scond_bypass";
+      }
+      form[parameter] = state.val;
+      await this.deviceEditPost(iddevice, form);
+    } else if (name === "hue") {
+      this.adapter.clearTimeout(this.timerhandle[iddevice]);
+      this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+        var _a2, _b2;
+        const valuesat = Number(((_a2 = await this.states.getStateAsync(`${idchannel}.sat`)) == null ? void 0 : _a2.val) || 0);
+        const valuehue = state.val || 0;
+        const valuepd = Number(((_b2 = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _b2.val) || 0) * 60 || 0;
+        const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
+        const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
+        await this.haExecutePost(iddevice, {
+          exec
+        });
+      }, execdelay);
+    } else if (name === "sat") {
+      this.adapter.clearTimeout(this.timerhandle[iddevice]);
+      this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+        var _a2, _b2;
+        const valuehue = Number(((_a2 = await this.states.getStateAsync(`${idchannel}.hue`)) == null ? void 0 : _a2.val) || 0);
+        const valuesat = state.val || 0;
+        const valuepd = Number(((_b2 = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _b2.val) || 0) * 60 || 0;
+        const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
+        const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
+        await this.haExecutePost(iddevice, {
+          exec
+        });
+      }, execdelay);
+    } else if (name === "ctemp") {
+      this.adapter.clearTimeout(this.timerhandle[iddevice]);
+      this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+        var _a2;
+        const ctemp = state.val || 0;
+        const valuepd = Number(((_a2 = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _a2.val) || 0) * 60 || 0;
+        const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
+        const exec = `a=${area}&z=${zone}&dimmer=on&hue=-1,-1,${ctemp},-1,-1&pd=${valuepdtxt}`;
+        await this.haExecutePost(iddevice, {
+          exec
+        });
+      }, execdelay);
+    } else {
+      this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
+      this.dummyDevicePost(iddevice);
+    }
+  }
+  /**
+   * Is called if a subscribed state changes of status
+   *
+   * @param id id
+   * @param state state
+   */
+  async onStateChangeStatus(id, state) {
+    const regstat = /.+\.status\.(.+)/gm;
+    const m = regstat.exec(id);
+    if (!m) {
+      return;
+    }
+    const icchannelabs = id.split(".").slice(0, -1).join(".");
+    const idchannel = id.split(".").slice(2, -1).join(".");
+    const iddevice = id.split(".").slice(2).join(".");
+    const name = m[1];
+    if (name === "mode_pc_a1") {
+      await this.panelCondPost(iddevice, { area: 1, mode: state.val });
+    } else if (name === "mode_pc_a2") {
+      await this.panelCondPost(iddevice, { area: 2, mode: state.val });
+    } else if (name === "apple_home_a1") {
+      const mode_pc_a1 = this.getLupusecFromAppleStautus(Number(state.val));
+      if (mode_pc_a1 !== void 0 && mode_pc_a1 >= 0 && mode_pc_a1 <= 4) {
+        await this.panelCondPost(iddevice, { area: 1, mode: mode_pc_a1 });
+      }
+    } else if (name === "apple_home_a2") {
+      const mode_pc_a2 = this.getLupusecFromAppleStautus(Number(state.val));
+      if (mode_pc_a2 !== void 0 && mode_pc_a2 >= 0 && mode_pc_a2 <= 4) {
+        await this.panelCondPost(iddevice, { area: 2, mode: mode_pc_a2 });
+      }
+    } else {
+      this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
+      this.dummyDevicePost(iddevice);
+    }
+  }
+  /**
+   * Is called if a subscribed state changes of status
+   *
+   * @param id id
+   * @param state state
+   */
+  async onStateChangeSMS(id, state) {
+    var _a, _b, _c, _d, _e;
+    const regstat = /.+\.sms\.(.+)/gm;
+    const m = regstat.exec(id);
+    if (!m) {
+      return;
+    }
+    const icchannelabs = id.split(".").slice(0, -1).join(".");
+    const idchannel = id.split(".").slice(2, -1).join(".");
+    const iddevice = id.split(".").slice(2).join(".");
+    const name = m[1];
+    const valText = (_a = await this.states.getStateAsync(`${idchannel}.text`)) == null ? void 0 : _a.val;
+    const valNumber = (_b = await this.states.getStateAsync(`${idchannel}.number`)) == null ? void 0 : _b.val;
+    const valProvider = (_c = await this.states.getStateAsync(`${idchannel}.provider`)) == null ? void 0 : _c.val;
+    let resultsms;
+    if (name === "dial") {
+      if (valText && valNumber) {
+        switch (valProvider) {
+          case 1:
+            resultsms = await this.sendSMSPost(iddevice, {
+              phone: valNumber,
+              smstext: valText
+            });
+            await this.states.setStateNotExistsAsync(`${idchannel}.result`, {
+              val: (_d = resultsms == null ? void 0 : resultsms.data) == null ? void 0 : _d.result,
+              ack: true
+            });
+            break;
+          case 2:
+            resultsms = await this.sendSMSgwTestPost(iddevice, {
+              to: valNumber,
+              message: valText
+            });
+            await this.states.setStateNotExistsAsync(`${idchannel}.result`, {
+              val: (_e = resultsms == null ? void 0 : resultsms.data) == null ? void 0 : _e.result,
+              ack: true
+            });
+            break;
+          default:
+            break;
+        }
+      }
+    } else {
+      this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
+      this.dummyDevicePost(iddevice);
     }
   }
   /**

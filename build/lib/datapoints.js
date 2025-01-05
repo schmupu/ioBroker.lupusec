@@ -733,6 +733,40 @@ class Datapoints {
             max: 360
           }
         },
+        hue_cmode: {
+          type: "state",
+          common: {
+            type: "number",
+            role: "value",
+            name: {
+              en: "Modus",
+              de: "Modus"
+            },
+            read: true,
+            write: false,
+            states: {
+              en: { 0: "Color", 2: "Temperature" },
+              de: { 0: "Farbe", 2: "Temperatur" }
+            },
+            min: 0,
+            max: 2
+          }
+        },
+        ctemp: {
+          type: "state",
+          common: {
+            type: "number",
+            role: "level.color.temperature",
+            name: {
+              en: "Temperature",
+              de: "Temperatur"
+            },
+            read: true,
+            write: true,
+            min: 169,
+            max: 500
+          }
+        },
         level: {
           type: "state",
           common: {
@@ -800,7 +834,8 @@ class Datapoints {
             role: "text",
             name: "Push notification",
             read: true,
-            write: true
+            write: true,
+            def: ""
           }
         },
         schar_latch_rpt: {
@@ -819,7 +854,8 @@ class Datapoints {
               de: { false: "Aus", true: "An" }
             },
             min: 0,
-            max: 1
+            max: 1,
+            def: 0
           }
         }
       },
@@ -852,7 +888,8 @@ class Datapoints {
             role: "text",
             name: "Push notification",
             read: true,
-            write: true
+            write: true,
+            def: ""
           }
         }
       },
@@ -885,7 +922,8 @@ class Datapoints {
             role: "text",
             name: "Push notification",
             read: true,
-            write: true
+            write: true,
+            def: ""
           }
         }
       },
@@ -918,7 +956,8 @@ class Datapoints {
             role: "text",
             name: "Push Nachricht",
             read: true,
-            write: true
+            write: true,
+            def: ""
           }
         }
       },
@@ -951,7 +990,8 @@ class Datapoints {
             role: "text",
             name: "Push notification",
             read: true,
-            write: true
+            write: true,
+            def: ""
           }
         }
       },
@@ -984,7 +1024,8 @@ class Datapoints {
             role: "text",
             name: "Push Nachricht",
             read: true,
-            write: true
+            write: true,
+            def: ""
           }
         }
       },
@@ -1017,7 +1058,8 @@ class Datapoints {
             role: "text",
             name: "Push Nachricht",
             read: true,
-            write: true
+            write: true,
+            def: ""
           }
         }
       },
@@ -1067,7 +1109,8 @@ class Datapoints {
             role: "text",
             name: "Push notification",
             read: true,
-            write: true
+            write: true,
+            def: ""
           }
         }
       },
@@ -1171,7 +1214,8 @@ class Datapoints {
             role: "text",
             name: "Push Nachricht",
             read: true,
-            write: true
+            write: true,
+            def: ""
           }
         }
       },
@@ -1312,7 +1356,8 @@ class Datapoints {
             role: "text",
             name: "Push Nachricht",
             read: true,
-            write: true
+            write: true,
+            def: ""
           }
         }
       },
@@ -1372,7 +1417,8 @@ class Datapoints {
             role: "text",
             name: "Push Nachricht",
             read: true,
-            write: true
+            write: true,
+            def: ""
           }
         }
       },
@@ -2475,7 +2521,8 @@ class Datapoints {
             read: true,
             write: false,
             min: 0,
-            max: 9
+            max: 9,
+            def: 0
           }
         },
         reachable: {
@@ -2492,7 +2539,8 @@ class Datapoints {
               de: { false: "nein", 1: "ja" }
             },
             read: true,
-            write: false
+            write: false,
+            def: false
           }
         },
         type: {
@@ -2792,7 +2840,8 @@ class Datapoints {
           read: true,
           write: false,
           min: 0,
-          max: 9
+          max: 9,
+          def: 0
         }
       },
       reachable: {
@@ -2810,7 +2859,8 @@ class Datapoints {
             de: { false: "nein", 1: "ja" }
           },
           read: true,
-          write: false
+          write: false,
+          def: false
         }
       },
       sig_gsm_ok: {
