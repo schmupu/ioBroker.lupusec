@@ -1693,7 +1693,7 @@ export class Lupus {
      * @param state state
      */
     private async onStateChangeDevices(id: string, state: states.ifState): Promise<void> {
-        const execdelay = 250; // in milliseconds
+        const execdelay = 0; // in milliseconds
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const icchannelabs = id.split('.').slice(0, 4).join('.'); //  lupusec.0.devices.ZS:a61d01
         const idchannel = id.split('.').slice(2, 4).join('.'); //  devices.ZS:a61d01

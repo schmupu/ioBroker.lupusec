@@ -157,6 +157,7 @@ sudo chmod u+s `which ping`
 - (Stübi) Added the following values ​​for type 54: air pressure, wind strength, wind angle, wind gust, co2, wind speed
 - (Stübi) Added for HUE the values mode (hue or temperature) and tempererature
 - (Stübi) Added not used states will be not be shwon.
+- (Stübi) Fixed value range for HUE to 0 to 360 degree, saturation from 0% to 100% and temperature from 2200 to 6500 kelvin
 
 ### 2.0.3 (2024-12-29)
 
