@@ -534,6 +534,7 @@ export class Datapoints {
                         read: true,
                         write: false,
                     },
+                    def: '',
                 },
             },
             // Electric Meter / Hauptstromzähler

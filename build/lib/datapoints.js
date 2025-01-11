@@ -507,7 +507,8 @@ class Datapoints {
             name: "Status",
             read: true,
             write: false
-          }
+          },
+          def: ""
         }
       },
       // Electric Meter / Hauptstromzähler

@@ -349,6 +349,9 @@ export class Lupus {
                         ...oldobject,
                         ...newobject,
                     };
+                    if (!Tools.hasProperty(object.common, 'def')) {
+                        continue;
+                    }
                     await this.states.setObjectAsync(id, object);
                 }
             }

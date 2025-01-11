@@ -347,6 +347,9 @@ class Lupus {
             ...oldobject,
             ...newobject
           };
+          if (!import_tools.Tools.hasProperty(object.common, "def")) {
+            continue;
+          }
           await this.states.setObjectAsync(id, object);
         }
       }
