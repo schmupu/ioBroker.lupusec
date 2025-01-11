@@ -148,6 +148,11 @@ sudo chmod u+s `which ping`
 ```
 
 ## Changelog
+
+### **WORK IN PROGRESS**
+
+- (Stübi) Adjust datapoints hue, sat with step 1
+
 ### 2.0.4 (2025-01-05)
 
 - (Stübi) Adjustments of test and release yml

@@ -1872,58 +1872,58 @@ export class Lupus {
             await this.deviceEditPost(iddevice, form);
         } else if (name === 'hue') {
             // Type 74
-            this.adapter.clearTimeout(this.timerhandle[iddevice]);
-            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                const valuesat = Tools.satPercentToLupusec(
-                    Number((await this.states.getStateAsync(`${idchannel}.sat`))?.val || 0),
-                );
-                const valuehue = Tools.hueDegreeToLupusec(state.val || 0);
-                const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
-                const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
-                const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
-                await this.haExecutePost(iddevice, {
-                    exec: exec,
-                });
-            }, execdelay);
+            // this.adapter.clearTimeout(this.timerhandle[iddevice]);
+            // this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+            const valuesat = Tools.satPercentToLupusec(
+                Number((await this.states.getStateAsync(`${idchannel}.sat`))?.val || 0),
+            );
+            const valuehue = Tools.hueDegreeToLupusec(state.val || 0);
+            const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
+            const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
+            const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
+            await this.haExecutePost(iddevice, {
+                exec: exec,
+            });
+            //}, execdelay);
         } else if (name === 'sat') {
             // Type 74
-            this.adapter.clearTimeout(this.timerhandle[iddevice]);
-            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                const valuehue = Tools.hueDegreeToLupusec(
-                    Number((await this.states.getStateAsync(`${idchannel}.hue`))?.val || 0),
-                );
-                const valuesat = Tools.satPercentToLupusec(state.val || 0);
-                const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
-                const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
-                const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
-                await this.haExecutePost(iddevice, {
-                    exec: exec,
-                });
-            }, execdelay);
+            // this.adapter.clearTimeout(this.timerhandle[iddevice]);
+            // this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+            const valuehue = Tools.hueDegreeToLupusec(
+                Number((await this.states.getStateAsync(`${idchannel}.hue`))?.val || 0),
+            );
+            const valuesat = Tools.satPercentToLupusec(state.val || 0);
+            const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
+            const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
+            const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
+            await this.haExecutePost(iddevice, {
+                exec: exec,
+            });
+            // }, execdelay);
         } else if (name === 'ctemp') {
             // Type 74
-            this.adapter.clearTimeout(this.timerhandle[iddevice]);
-            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                const ctemp = state.val || 0;
-                const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
-                const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
-                const exec = `a=${area}&z=${zone}&dimmer=on&hue=-1,-1,${ctemp},-1,-1&pd=${valuepdtxt}`;
-                await this.haExecutePost(iddevice, {
-                    exec: exec,
-                });
-            }, execdelay);
+            // this.adapter.clearTimeout(this.timerhandle[iddevice]);
+            // this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+            const ctemp = state.val || 0;
+            const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
+            const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
+            const exec = `a=${area}&z=${zone}&dimmer=on&hue=-1,-1,${ctemp},-1,-1&pd=${valuepdtxt}`;
+            await this.haExecutePost(iddevice, {
+                exec: exec,
+            });
+            // }, execdelay);
         } else if (name === 'ctempk') {
             // Type 74
-            this.adapter.clearTimeout(this.timerhandle[iddevice]);
-            this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
-                const ctemp = Tools.tempKelvinToLupusec(state.val || 0);
-                const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
-                const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
-                const exec = `a=${area}&z=${zone}&dimmer=on&hue=-1,-1,${ctemp},-1,-1&pd=${valuepdtxt}`;
-                await this.haExecutePost(iddevice, {
-                    exec: exec,
-                });
-            }, execdelay);
+            // this.adapter.clearTimeout(this.timerhandle[iddevice]);
+            // this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+            const ctemp = Tools.tempKelvinToLupusec(state.val || 0);
+            const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
+            const valuepdtxt = !valuepd ? '' : `:${valuepd}`;
+            const exec = `a=${area}&z=${zone}&dimmer=on&hue=-1,-1,${ctemp},-1,-1&pd=${valuepdtxt}`;
+            await this.haExecutePost(iddevice, {
+                exec: exec,
+            });
+            // }, execdelay);
         } else {
             this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
             this.dummyDevicePost(iddevice);

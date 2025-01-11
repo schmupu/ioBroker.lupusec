@@ -720,6 +720,7 @@ class Datapoints {
             write: true,
             min: 0,
             max: 360,
+            step: 1,
             unit: "\xB0"
           }
         },
@@ -733,6 +734,7 @@ class Datapoints {
             write: true,
             min: 0,
             max: 100,
+            step: 1,
             unit: "%"
           }
         },
@@ -768,6 +770,7 @@ class Datapoints {
             write: true,
             min: 2200,
             max: 6500,
+            step: 1,
             unit: "K"
           }
         },
@@ -783,7 +786,8 @@ class Datapoints {
             read: true,
             write: true,
             min: 169,
-            max: 500
+            max: 500,
+            step: 1
           }
         },
         level: {
