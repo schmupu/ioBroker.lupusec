@@ -339,7 +339,7 @@ class Lupus {
         const id = `devices.${deviceids[i].id}.${j}`;
         const oldobject = await this.states.getObjectAsync(id);
         const newobject = objects[j];
-        if (oldobject && newobject) {
+        if (!import_tools.Tools.isEmpty(oldobject) && !import_tools.Tools.isEmpty(newobject)) {
           if ((_a = oldobject == null ? void 0 : oldobject.common) == null ? void 0 : _a.name) {
             newobject.common.name = oldobject.common.name;
           }
@@ -347,9 +347,6 @@ class Lupus {
             ...oldobject,
             ...newobject
           };
-          if (!import_tools.Tools.hasProperty(object.common, "def")) {
-            continue;
-          }
           await this.states.setObjectAsync(id, object);
         }
       }

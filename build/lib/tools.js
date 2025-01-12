@@ -168,6 +168,15 @@ class Tools {
     return false;
   }
   /**
+   * Checks if a object is empty
+   *
+   * @param obj object
+   * @returns if object empty {} or does noch exists than true else false
+   */
+  static isEmpty(obj) {
+    return import_lodash.default.isEmpty(obj);
+  }
+  /**
    * Get datatype of value
    *
    * @param value : value

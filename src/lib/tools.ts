@@ -162,6 +162,16 @@ export class Tools {
     }
 
     /**
+     * Checks if a object is empty
+     *
+     * @param obj object
+     * @returns if object empty {} or does noch exists than true else false
+     */
+    public static isEmpty(obj: object): boolean {
+        return _.isEmpty(obj);
+    }
+
+    /**
      * Get datatype of value
      *
      * @param value : value

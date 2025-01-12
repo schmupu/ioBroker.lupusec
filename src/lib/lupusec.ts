@@ -340,7 +340,7 @@ export class Lupus {
                 const id = `devices.${deviceids[i].id}.${j}`;
                 const oldobject = await this.states.getObjectAsync(id);
                 const newobject = objects[j] as any;
-                if (oldobject && newobject) {
+                if (!Tools.isEmpty(oldobject) && !Tools.isEmpty(newobject)) {
                     // cmmmon names excluded
                     if (oldobject?.common?.name) {
                         newobject.common.name = oldobject.common.name;
@@ -349,9 +349,6 @@ export class Lupus {
                         ...oldobject,
                         ...newobject,
                     };
-                    if (!Tools.hasProperty(object.common, 'def')) {
-                        continue;
-                    }
                     await this.states.setObjectAsync(id, object);
                 }
             }
