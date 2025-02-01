@@ -1,9 +1,22 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "2.0.4",
+    "version": "2.0.5",
     "tier": 3,
     "news": {
+      "2.0.5": {
+        "en": "Adjust datapoints hue, sat with step 1\nFixed, that unused states will be not be shwon.",
+        "de": "Einstellen der Datenpunkte hue, mit Schritt 1\nBehoben, dass ungenutzte Zustände nicht geschwon werden.",
+        "ru": "Настройте точки данных висят, сидя с шагом 1\nИсправлено, что неиспользуемые штаты не будут швонами.",
+        "pt": "Ajuste a tonalidade dos datapoints, sentada com a etapa 1\nCorrigido, esses estados não utilizados não serão estilhaçados.",
+        "nl": "Gegevenspunten tint aanpassen, gezeten met stap 1\nVast, dat ongebruikte staten niet zullen worden shwon.",
+        "fr": "Régler la teinte des points de données, assis avec l'étape 1\nFixé, que les états inutilisés ne seront pas shwon.",
+        "it": "Regolare la tonalità dei datapoint, seduto al passo 1\nRisolto, che gli stati non utilizzati non saranno shwon.",
+        "es": "Ajuste los puntos de datos hue, sentado con el paso 1\nArreglado, que los estados no utilizados no serán deslumbrados.",
+        "pl": "Dostosuj barwę danych punktów, usiadł z krokiem 1\nNaprawiono, że niewykorzystane stany nie będą shwon.",
+        "uk": "Регулювання точок даних, сати з кроком 1\nВиправлено, що невикористані стани не будуть швонами.",
+        "zh-cn": "调整数据点 hue, 与步骤 1 同坐\n固定,未使用状态不会是shwon."
+      },
       "2.0.4": {
         "en": "Adjustments of test and release yml\nReadme expanded to include migration instructions (Issue #97)\nFixed error with HUE lights (Issue #104)\nAdded the following values ​​for type 54: air pressure, wind strength, wind angle, wind gust, co2, wind speed\nAdded for HUE the values mode (hue or temperature) and tempererature\nAdded not used states will be not be shwon.\nFixed value range for HUE to 0 to 360 degree, saturation from 0% to 100% and temperature from 2200 to 6500 kelvin",
         "de": "Anpassungen von Test und Release yml\nReadme erweitert um Migrationsanweisungen (Issue #97)\nFehler behoben mit HUE-Leuchten (Issue #104)\nFolgende Werte für Typ 54 wurden hinzugefügt: Luftdruck, Windstärke, Windwinkel, Wind gust, co2, Windgeschwindigkeit\nHinzugefügt für HUE die Werte Modus (Farbe oder Temperatur) und Temperatur\nHinzu kommen nicht benutzte Zustände werden nicht geschwon.\nFestwertbereich für HUE bis 0 bis 360 Grad, Sättigung von 0 bis 100 % und Temperatur von 2200 bis 6500 Kelvin",
