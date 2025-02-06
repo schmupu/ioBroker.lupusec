@@ -148,6 +148,11 @@ sudo chmod u+s `which ping`
 ```
 
 ## Changelog
+
+### **WORK IN PROGRESS**
+
+- (Stübi) Fixed Issue #113. Minus temperature degrees will be shown now
+
 ### 2.0.5 (2025-02-01)
 
 - (Stübi) Adjust datapoints hue, sat with step 1

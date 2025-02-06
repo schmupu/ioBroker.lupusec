@@ -653,7 +653,7 @@ export class Lupus {
             }
             if (type === 54 || type === 78) {
                 if (name === 'actual_temperature' && states.status !== undefined) {
-                    const regstat = /{WEB_MSG_TS_DEGREE}\s*([\d.]+)/gm;
+                    const regstat = /{WEB_MSG_TS_DEGREE}\s*([-\d.]+)/gm;
                     const m = regstat.exec(states.status);
                     if (m) {
                         value = Number(m[1].trim());
@@ -760,7 +760,7 @@ export class Lupus {
             }
             if (type === 79) {
                 if (name === 'actual_temperature' && states.status !== undefined) {
-                    const regstat = /{WEB_MSG_TS_DEGREE}\s*([\d.]+)/gm;
+                    const regstat = /{WEB_MSG_TS_DEGREE}\s*([-\d.]+)/gm;
                     const m = regstat.exec(states.status);
                     if (m) {
                         value = Number(m[1].trim());
