@@ -1,9 +1,22 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "2.0.5",
+    "version": "2.0.6",
     "tier": 3,
     "news": {
+      "2.0.6": {
+        "en": "Minus temperature degrees will be shown now (Issue #113)\nDeletes unnecessary device objects (Issue #114)",
+        "de": "Minus-Temperaturgrade werden jetzt angezeigt (Issue #113)\nLöscht unnötige Geräteobjekte (Issue #114)",
+        "ru": "Степени температуры Minus будут показаны сейчас (Исход #113)\nУдаляет ненужные объекты устройства (Исход #114)",
+        "pt": "Os níveis de temperatura mínimo serão mostrados agora (Issue #113)\nExclui objetos de dispositivo desnecessários (Issue #114)",
+        "nl": "Minus temperatuur graden worden nu getoond (Issue #113)\nVerwijdert onnodige apparaatobjecten (Issue #114)",
+        "fr": "Moins de degrés de température seront affichés maintenant (Émission 113)\nSupprime les objets de périphérique inutiles (Numéro #114)",
+        "it": "I gradi di temperatura del minus saranno mostrati ora (Issue #113)\nElimina oggetti di dispositivo non necessari (Essue #114)",
+        "es": "Pocos grados de temperatura se mostrarán ahora (Isue #113)\nElimina objetos de dispositivo innecesarios (Isue #114)",
+        "pl": "Minus stopni temperatury zostaną pokazane teraz (wydanie # 113)\nUsuwa niepotrzebne obiekty urządzenia (wydanie # 114)",
+        "uk": "На даний момент будуть показані мінуси температури (Issue #113)\nВидалити непотрібні предмети пристрою (Issue #114)",
+        "zh-cn": "现在显示最小温度度( 问题 # 113)\n删除不必要的设备对象( 问题 # 114)"
+      },
       "2.0.5": {
         "en": "Adjust datapoints hue, sat with step 1\nFixed, that unused states will be not be shwon.",
         "de": "Einstellen der Datenpunkte hue, mit Schritt 1\nBehoben, dass ungenutzte Zustände nicht geschwon werden.",
