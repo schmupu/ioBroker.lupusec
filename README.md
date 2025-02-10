@@ -151,7 +151,8 @@ sudo chmod u+s `which ping`
 
 ### **WORK IN PROGRESS**
 
-- (Stübi) Fixed Issue #113. Minus temperature degrees will be shown now
+- (Stübi) Minus temperature degrees will be shown now (Issue #113)
+- (Stübi) Deletes unnecessary device objects (Issue #114)
 
 ### 2.0.5 (2025-02-01)
 

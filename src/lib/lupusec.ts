@@ -1155,6 +1155,7 @@ export class Lupus {
             devices: devices,
         };
         await this.setAllDeviceLupusecEntries(data);
+        await this.delAllUnusedDeviceLupusecEntries(data);
     }
 
     private async getAllDeviceLupusecLogs(): Promise<any> {
@@ -1465,6 +1466,28 @@ export class Lupus {
                 `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`,
             );
             return;
+        }
+    }
+
+    /**
+     * Deletes unnecessary objects from devices
+     *
+     * @param results lupusec data
+     * @returns void
+     */
+    private async delAllUnusedDeviceLupusecEntries(results: any): Promise<void> {
+        const devices = results.devices;
+        if (!devices || Tools.isEmpty(devices)) {
+            return;
+        }
+        const allstates = await this.states.getObjectsAllAsync();
+        for (const astate in allstates) {
+            if (astate.startsWith('devices.')) {
+                const [, id] = astate.split('.');
+                if (!devices[id]) {
+                    await this.states.delObjectAsync(astate);
+                }
+            }
         }
     }
 

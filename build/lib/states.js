@@ -205,7 +205,7 @@ class States {
    * @returns : return all objects
    */
   async getObjectsAllAsync() {
-    if (this.objects) {
+    if (!import_tools.Tools.isEmpty(this.objects)) {
       return this.objects;
     }
     const objects = await this.adapter.getAdapterObjectsAsync();

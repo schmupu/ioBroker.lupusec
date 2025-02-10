@@ -1110,6 +1110,7 @@ class Lupus {
       devices
     };
     await this.setAllDeviceLupusecEntries(data);
+    await this.delAllUnusedDeviceLupusecEntries(data);
   }
   async getAllDeviceLupusecLogs() {
     var _a;
@@ -1393,6 +1394,27 @@ class Lupus {
         `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`
       );
       return;
+    }
+  }
+  /**
+   * Deletes unnecessary objects from devices
+   *
+   * @param results lupusec data
+   * @returns void
+   */
+  async delAllUnusedDeviceLupusecEntries(results) {
+    const devices = results.devices;
+    if (!devices || import_tools.Tools.isEmpty(devices)) {
+      return;
+    }
+    const allstates = await this.states.getObjectsAllAsync();
+    for (const astate in allstates) {
+      if (astate.startsWith("devices.")) {
+        const [, id] = astate.split(".");
+        if (!devices[id]) {
+          await this.states.delObjectAsync(astate);
+        }
+      }
     }
   }
   async setAllDeviceLupusecEntries(results) {

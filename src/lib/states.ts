@@ -220,7 +220,7 @@ export class States {
      * @returns : return all objects
      */
     public async getObjectsAllAsync(): Promise<ifObjects> {
-        if (this.objects) {
+        if (!Tools.isEmpty(this.objects)) {
             return this.objects;
         }
         const objects = await this.adapter.getAdapterObjectsAsync();
