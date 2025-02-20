@@ -1458,7 +1458,7 @@ export class Lupus {
             );
             return;
         }
-        if (stateunixtime < unixtime && stateget.ack === false) {
+        if (stateunixtime > 0 && stateunixtime < unixtime && stateget.ack === false) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
             this.delUnixTimestamp(sid);

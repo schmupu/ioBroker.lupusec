@@ -1387,7 +1387,7 @@ class Lupus {
       );
       return;
     }
-    if (stateunixtime < unixtime && stateget.ack === false) {
+    if (stateunixtime > 0 && stateunixtime < unixtime && stateget.ack === false) {
       const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
       this.delUnixTimestamp(sid);
       this.adapter.log.debug(
