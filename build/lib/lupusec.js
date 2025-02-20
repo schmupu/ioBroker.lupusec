@@ -1631,8 +1631,8 @@ class Lupus {
    * @param state state
    */
   async onStateChangeDevices(id, state) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l;
-    const execdelay = 0;
+    var _a, _b, _c, _d, _e, _f;
+    const execdelay = 250;
     const icchannelabs = id.split(".").slice(0, 4).join(".");
     const idchannel = id.split(".").slice(2, 4).join(".");
     const iddevice = id.split(".").slice(2).join(".");
@@ -1788,43 +1788,59 @@ class Lupus {
       form[parameter] = state.val;
       await this.deviceEditPost(iddevice, form);
     } else if (name === "hue") {
-      const valuesat = import_tools.Tools.satPercentToLupusec(
-        Number(((_g = await this.states.getStateAsync(`${idchannel}.sat`)) == null ? void 0 : _g.val) || 0)
-      );
-      const valuehue = import_tools.Tools.hueDegreeToLupusec(state.val || 0);
-      const valuepd = Number(((_h = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _h.val) || 0) * 60 || 0;
-      const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
-      const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
-      await this.haExecutePost(iddevice, {
-        exec
-      });
+      this.adapter.clearTimeout(this.timerhandle[iddevice]);
+      this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+        var _a2, _b2;
+        const valuesat = import_tools.Tools.satPercentToLupusec(
+          Number(((_a2 = await this.states.getStateAsync(`${idchannel}.sat`)) == null ? void 0 : _a2.val) || 0)
+        );
+        const valuehue = import_tools.Tools.hueDegreeToLupusec(state.val || 0);
+        const valuepd = Number(((_b2 = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _b2.val) || 0) * 60 || 0;
+        const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
+        const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
+        await this.haExecutePost(iddevice, {
+          exec
+        });
+      }, execdelay);
     } else if (name === "sat") {
-      const valuehue = import_tools.Tools.hueDegreeToLupusec(
-        Number(((_i = await this.states.getStateAsync(`${idchannel}.hue`)) == null ? void 0 : _i.val) || 0)
-      );
-      const valuesat = import_tools.Tools.satPercentToLupusec(state.val || 0);
-      const valuepd = Number(((_j = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _j.val) || 0) * 60 || 0;
-      const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
-      const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
-      await this.haExecutePost(iddevice, {
-        exec
-      });
+      this.adapter.clearTimeout(this.timerhandle[iddevice]);
+      this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+        var _a2, _b2;
+        const valuehue = import_tools.Tools.hueDegreeToLupusec(
+          Number(((_a2 = await this.states.getStateAsync(`${idchannel}.hue`)) == null ? void 0 : _a2.val) || 0)
+        );
+        const valuesat = import_tools.Tools.satPercentToLupusec(state.val || 0);
+        const valuepd = Number(((_b2 = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _b2.val) || 0) * 60 || 0;
+        const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
+        const exec = `a=${area}&z=${zone}&dimmer=on&hue=${valuehue},${valuesat},-1,-1,-1&pd=${valuepdtxt}`;
+        await this.haExecutePost(iddevice, {
+          exec
+        });
+      }, execdelay);
     } else if (name === "ctemp") {
-      const ctemp = state.val || 0;
-      const valuepd = Number(((_k = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _k.val) || 0) * 60 || 0;
-      const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
-      const exec = `a=${area}&z=${zone}&dimmer=on&hue=-1,-1,${ctemp},-1,-1&pd=${valuepdtxt}`;
-      await this.haExecutePost(iddevice, {
-        exec
-      });
+      this.adapter.clearTimeout(this.timerhandle[iddevice]);
+      this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+        var _a2;
+        const ctemp = state.val || 0;
+        const valuepd = Number(((_a2 = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _a2.val) || 0) * 60 || 0;
+        const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
+        const exec = `a=${area}&z=${zone}&dimmer=on&hue=-1,-1,${ctemp},-1,-1&pd=${valuepdtxt}`;
+        await this.haExecutePost(iddevice, {
+          exec
+        });
+      }, execdelay);
     } else if (name === "ctempk") {
-      const ctemp = import_tools.Tools.tempKelvinToLupusec(state.val || 0);
-      const valuepd = Number(((_l = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _l.val) || 0) * 60 || 0;
-      const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
-      const exec = `a=${area}&z=${zone}&dimmer=on&hue=-1,-1,${ctemp},-1,-1&pd=${valuepdtxt}`;
-      await this.haExecutePost(iddevice, {
-        exec
-      });
+      this.adapter.clearTimeout(this.timerhandle[iddevice]);
+      this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
+        var _a2;
+        const ctemp = import_tools.Tools.tempKelvinToLupusec(state.val || 0);
+        const valuepd = Number(((_a2 = await this.states.getStateAsync(`${idchannel}.pd`)) == null ? void 0 : _a2.val) || 0) * 60 || 0;
+        const valuepdtxt = !valuepd ? "" : `:${valuepd}`;
+        const exec = `a=${area}&z=${zone}&dimmer=on&hue=-1,-1,${ctemp},-1,-1&pd=${valuepdtxt}`;
+        await this.haExecutePost(iddevice, {
+          exec
+        });
+      }, execdelay);
     } else {
       this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
       this.dummyDevicePost(iddevice);
