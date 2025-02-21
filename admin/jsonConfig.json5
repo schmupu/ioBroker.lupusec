@@ -59,7 +59,7 @@
                     "step": 0.25,
                     "label": "Polltime in seconds"
                 },
-                "static_expert": {
+                "_static_expert": {
                     "newLine": true,
                     "type": "header",
                     "size": 2,
