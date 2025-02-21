@@ -59,6 +59,18 @@
                     "step": 0.25,
                     "label": "Polltime in seconds"
                 },
+                "static_expert": {
+                    "newLine": true,
+                    "type": "header",
+                    "size": 2,
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "xl": 4,
+                    "xs": 12,
+                    "expertMode": true,
+                    "text": "Expert Mode Settings"
+                },
                 "option_pollfaster": {
                     "newLine": true,
                     "type": "checkbox",
@@ -67,8 +79,34 @@
                     "lg": 4,
                     "xl": 4,
                     "xs": 12,
-                    "label": "Read faster new Status (higher CPU workload, needs more memory)",
-                    "hidden": "true"
+                    "expertMode": true,
+                    "label": "Read faster new Status (higher CPU workload, needs more memory)"
+                },
+                "option_execdelay": {
+                    "type": "number",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "xl": 4,
+                    "xs": 12,
+                    "min": 0,
+                    "max": 5000,
+                    "step": 1,
+                    "expertMode": true,
+                    "label": "Eexcuting delay for level, hue, sat in milliseconds"
+                },
+                "option_updatedelay": {
+                    "type": "number",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "xl": 4,
+                    "xs": 12,
+                    "min": 0,
+                    "max": 120,
+                    "step": 1,
+                    "expertMode": true,
+                    "label": "Delay of updating sates values & ack in sec."
                 }
             }
         },

@@ -1334,7 +1334,7 @@ class Lupus {
     }
   }
   async createObjectSetStates(id, name, value, unixtime, obj, devicename) {
-    const execdelay = this.adapter.config.alarm_polltime * 1e3 * 10;
+    const updatedelay = this.adapter.config.alarm_polltime * 1e3 * this.adapter.config.option_updatedelay;
     const object = obj;
     const sid = `${id}.${name}`;
     if (!import_tools.Tools.hasProperty(obj.common, "def") && value === void 0) {
@@ -1364,7 +1364,7 @@ class Lupus {
       return;
     }
     const stateget = await this.states.getStateAsync(sid);
-    const stateunixtime = this.getUnixTimestamp(sid) > 0 ? this.getUnixTimestamp(sid) + execdelay : 0;
+    const stateunixtime = this.getUnixTimestamp(sid) > 0 ? this.getUnixTimestamp(sid) + updatedelay : 0;
     if (stateget === void 0) {
       const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
       this.delUnixTimestamp(sid);
@@ -1632,7 +1632,6 @@ class Lupus {
    */
   async onStateChangeDevices(id, state) {
     var _a, _b, _c, _d, _e, _f;
-    const execdelay = 500;
     const icchannelabs = id.split(".").slice(0, 4).join(".");
     const idchannel = id.split(".").slice(2, 4).join(".");
     const iddevice = id.split(".").slice(2).join(".");
@@ -1706,7 +1705,7 @@ class Lupus {
           id: channel,
           level: state.val
         });
-      }, execdelay);
+      }, this.adapter.config.option_execdelay);
     } else if (name === "switch") {
       const shutterstates = {
         0: "on",
@@ -1759,7 +1758,7 @@ class Lupus {
           act: "t_setpoint",
           thermo_setpoint: Math.trunc(100 * Math.round(2 * Number(state.val)) / 2)
         });
-      }, execdelay);
+      }, this.adapter.config.option_execdelay);
     } else if (
       // Type 4,7,17,37,81
       name.startsWith("sresp_button_") || name === "sresp_emergency" || name === "name" || name === "send_notify" || name === "bypass" || name === "bypass_tamper" || name === "schar_latch_rpt" || name === "always_off"
@@ -1801,7 +1800,7 @@ class Lupus {
         await this.haExecutePost(iddevice, {
           exec
         });
-      }, execdelay);
+      }, this.adapter.config.option_execdelay);
     } else if (name === "sat") {
       this.adapter.clearTimeout(this.timerhandle[iddevice]);
       this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
@@ -1816,7 +1815,7 @@ class Lupus {
         await this.haExecutePost(iddevice, {
           exec
         });
-      }, execdelay);
+      }, this.adapter.config.option_execdelay);
     } else if (name === "ctemp") {
       this.adapter.clearTimeout(this.timerhandle[iddevice]);
       this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
@@ -1828,7 +1827,7 @@ class Lupus {
         await this.haExecutePost(iddevice, {
           exec
         });
-      }, execdelay);
+      }, this.adapter.config.option_execdelay);
     } else if (name === "ctempk") {
       this.adapter.clearTimeout(this.timerhandle[iddevice]);
       this.timerhandle[iddevice] = this.adapter.setTimeout(async () => {
@@ -1840,7 +1839,7 @@ class Lupus {
         await this.haExecutePost(iddevice, {
           exec
         });
-      }, execdelay);
+      }, this.adapter.config.option_execdelay);
     } else {
       this.adapter.log.error(`Found no function to set state to ${state.val} for Id ${iddevice}`);
       this.dummyDevicePost(iddevice);

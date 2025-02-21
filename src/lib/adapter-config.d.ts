@@ -15,6 +15,8 @@ declare global {
             webcam_bind: string;
             webcam_port: number;
             option_pollfaster: boolean;
+            option_execdelay: number;
+            option_updatedelay: number;
         }
     }
 }

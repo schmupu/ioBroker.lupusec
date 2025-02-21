@@ -83,8 +83,15 @@
             "uk": "Сигналізація Lupusec",
             "zh-cn": "Lupusec 报警系统"
         },
-        "authors": ["Thorsten Stueben <thorsten@stueben.de>"],
-        "keywords": ["lupusec", "burlgar alarm", "alarm system", "lupus"],
+        "authors": [
+            "Thorsten Stueben <thorsten@stueben.de>"
+        ],
+        "keywords": [
+            "lupusec",
+            "burlgar alarm",
+            "alarm system",
+            "lupus"
+        ],
         "localLinks": {
             "_default": {
                 "link": "%alarmlink%",
@@ -127,8 +134,12 @@
             }
         ]
     },
-    "protectedNative": ["alarm_password"],
-    "encryptedNative": ["alarm_password"],
+    "protectedNative": [
+        "alarm_password"
+    ],
+    "encryptedNative": [
+        "alarm_password"
+    ],
     "native": {
         "alarm_hostname": "192.168.11.22",
         "alarm_https": false,
@@ -136,11 +147,14 @@
         "alarm_user": "admin",
         "alarm_password": "",
         "alarm_polltime": 1,
+        "alarm_execdelay": 500,
         "nuki_doorsensors": [],
         "webcam_providing": true,
         "webcam_bind": "0.0.0.0",
         "webcam_port": 7000,
-        "option_pollfaster": false
+        "option_pollfaster": false,
+        "option_execdelay": 500,
+        "option_updatedelay": 10
     },
     "objects": [],
     "instanceObjects": [
