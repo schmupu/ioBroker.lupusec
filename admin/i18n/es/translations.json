@@ -17,5 +17,8 @@
     "Choose your door device": "Elige tu dispositivo de puerta",
     "Choose your Nuki device": "Elige tu dispositivo Nuki",
     "Main_Settings": "Ajustes principales",
-    "test-iob adapter settings": "Configuración del adaptador para test-iob"
+    "test-iob adapter settings": "Configuración del adaptador para test-iob",
+    "Expert Mode Settings": "Configuración de modo experto",
+    "Eexcuting delay for level, hue, sat in milliseconds": "El retraso de EEXCUTING para el nivel, Hue, se sentó en milisegundos",
+    "Delay of updating sates values & ack in sec.": "Retraso de la actualización de valores de sates y ACK en la Sec."
 }

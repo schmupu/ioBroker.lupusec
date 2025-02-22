@@ -17,5 +17,8 @@
     "Choose your door device": "Виберіть пристрій дверей",
     "Choose your Nuki device": "Виберіть свій пристрій Nuki",
     "Main_Settings": "Основні налаштування",
-    "test-iob adapter settings": "Налаштування адаптера для test-iob"
+    "test-iob adapter settings": "Налаштування адаптера для test-iob",
+    "Expert Mode Settings": "Налаштування режиму експертів",
+    "Eexcuting delay for level, hue, sat in milliseconds": "Електронна затримка для рівня, відтінок, сиділа в мілісекундах",
+    "Delay of updating sates values & ack in sec.": "Затримка оновлення значень Sates & ACK в сек."
 }
