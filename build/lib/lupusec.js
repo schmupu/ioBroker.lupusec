@@ -205,6 +205,7 @@ class Lupus {
     const seconds = this.adapter.config.alarm_polltime;
     if (!this.exsitproc("Init")) {
       await this.initObjects();
+      await this.delObjects();
       await this.requestToken(true);
       this.setproc("Init", 1);
     }
@@ -348,6 +349,48 @@ class Lupus {
             ...newobject
           };
           await this.states.setObjectAsync(id, object);
+        }
+      }
+    }
+  }
+  async delObjects() {
+    const deviceidsall = { devices: {} };
+    const deviceids = await this.getDeviceIdsByType();
+    for (const deviceid of deviceids) {
+      deviceidsall[`devices.${deviceid.id}`] = { type: deviceid.type };
+      const objects2 = import_datapoints.Datapoints.getDeviceTypeList(deviceid.type, this.language);
+      for (const id in objects2) {
+        deviceidsall[`devices.${deviceid.id}.${id}`] = { type: deviceid.type };
+      }
+    }
+    const statusids = import_datapoints.Datapoints.getStatusTypeList(this.language);
+    const statusidsall = { status: {} };
+    for (const statusid in statusids) {
+      statusidsall[`status.${statusid}`] = {};
+    }
+    const smsids = import_datapoints.Datapoints.getSMSTypeList(this.language);
+    const smsidsall = { sms: {} };
+    for (const smsid in smsids) {
+      smsidsall[`sms.${smsid}`] = {};
+    }
+    const objects = await this.states.getObjectsAllAsync();
+    for (const id in objects) {
+      if (id.startsWith(`devices.`)) {
+        if (!deviceidsall[id]) {
+          this.adapter.log.info(`Deleting unused object ${id}`);
+          await this.states.delObjectAsync(id);
+        }
+      }
+      if (id.startsWith(`status.`)) {
+        if (!statusidsall[id]) {
+          this.adapter.log.info(`Deleting unused object ${id}`);
+          await this.states.delObjectAsync(id);
+        }
+      }
+      if (id.startsWith(`sms.`)) {
+        if (!smsidsall[id]) {
+          this.adapter.log.info(`Deleting unused object ${id}`);
+          await this.states.delObjectAsync(id);
         }
       }
     }
@@ -542,7 +585,7 @@ class Lupus {
     };
   }
   async device_mapping_all(states) {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d;
     const statesmapped = {};
     const id = states.id || states.sid;
     const idc = `devices.${id}`;
@@ -727,10 +770,6 @@ class Lupus {
         }
       }
       if (type === 76) {
-        if (name === "switch") {
-          const valuelevel = ((_e = await this.states.getStateAsync(`${idc}.level`)) == null ? void 0 : _e.val) || void 0;
-          value = valuelevel !== void 0 && states.level !== void 0 && states.level > value ? 1 : 0;
-        }
         if (name === "on_time" && value !== void 0) {
           value = import_tools.Tools.round(value / 10, 0.1) || 0;
         }
@@ -848,6 +887,11 @@ class Lupus {
     const ressultold = await this.requestPost(urlDeviceEditGet, { id: form.id });
     if ((_b = (_a = ressultold == null ? void 0 : ressultold.data) == null ? void 0 : _a.forms) == null ? void 0 : _b.ssform) {
       const ssform = ressultold.data.forms.ssform;
+      for (const name in form) {
+        if (import_tools.Tools.hasProperty(ssform, name)) {
+          form[name] = import_tools.Tools.convertPropertyType(form[name], typeof ssform[name]);
+        }
+      }
       for (const name in ssform) {
         const value = ssform[name];
         if (!import_tools.Tools.hasProperty(form, name)) {
@@ -1110,7 +1154,6 @@ class Lupus {
       devices
     };
     await this.setAllDeviceLupusecEntries(data);
-    await this.delAllUnusedDeviceLupusecEntries(data);
   }
   async getAllDeviceLupusecLogs() {
     var _a;
@@ -1452,7 +1495,7 @@ class Lupus {
           native: {}
         });
         if (result) {
-          this.adapter.log.info(`Neuer Ger\xE4tname f\xFCr ${id} ist ${cname || ""}`);
+          this.adapter.log.info(`New devicename for ${id} is now ${cname || ""}`);
         }
       } else {
         const result = await this.states.setObjectNotExistsAsync(idc, {
@@ -1467,7 +1510,7 @@ class Lupus {
           native: {}
         });
         if (result) {
-          this.adapter.log.info(`Ger\xE4t ${id} mit Namen ${cname || ""} hinzugef\xFCgt`);
+          this.adapter.log.info(`Add device ${id} with name ${cname || ""}`);
         }
       }
       for (const dp in objects) {
@@ -1564,7 +1607,7 @@ class Lupus {
         native: {}
       });
       if (result) {
-        this.adapter.log.info(`Webcam ${id} mit Namen ${cname} hinzugef\xFCgt`);
+        this.adapter.log.info(`Add webcam ${id} with name ${cname}`);
       }
       for (const dp in objects) {
         if (!import_tools.Tools.hasProperty(webcam, dp)) {
@@ -1631,7 +1674,7 @@ class Lupus {
    * @param state state
    */
   async onStateChangeDevices(id, state) {
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j;
     const icchannelabs = id.split(".").slice(0, 4).join(".");
     const idchannel = id.split(".").slice(2, 4).join(".");
     const iddevice = id.split(".").slice(2).join(".");
@@ -1706,31 +1749,48 @@ class Lupus {
           level: state.val
         });
       }, this.adapter.config.option_execdelay);
-    } else if (name === "switch") {
+    } else if (name === "shutter_up" || name === "shutter_down" || name === "shutter_stop") {
       const shutterstates = {
-        0: "on",
-        1: "off",
-        2: "stop"
+        shutter_up: "on",
+        // up
+        shutter_down: "off",
+        // down
+        shutter_stop: "stop"
+        // stop
       };
-      const exec = `a=${area}&z=${zone}&shutter=${shutterstates[state.val]}`;
+      const exec = `a=${area}&z=${zone}&shutter=${shutterstates[name]}`;
+      await this.states.setStateNotExistsAsync(id, { val: state.val, ack: true });
       await this.haExecutePost(iddevice, {
         exec
       });
     } else if (name === "on_time") {
       const on_time = Number(state.val);
       const off_time = Number(((_e = await this.states.getStateAsync(`${idchannel}.off_time`)) == null ? void 0 : _e.val) || 0);
+      const turn_time = Number(((_f = await this.states.getStateAsync(`${idchannel}.turn_time`)) == null ? void 0 : _f.val) || 0);
       await this.deviceEditShutterPost(iddevice, {
         id: channel,
         on_time: Math.round(on_time * 10),
-        off_time: Math.round(off_time * 10)
+        off_time: Math.round(off_time * 10),
+        turn_time
       });
     } else if (name === "off_time") {
-      const on_time = Number(((_f = await this.states.getStateAsync(`${idchannel}.on_time`)) == null ? void 0 : _f.val) || 0);
+      const on_time = Number(((_g = await this.states.getStateAsync(`${idchannel}.on_time`)) == null ? void 0 : _g.val) || 0);
+      const turn_time = Number(((_h = await this.states.getStateAsync(`${idchannel}.turn_time`)) == null ? void 0 : _h.val) || 0);
       const off_time = Number(state.val);
       await this.deviceEditShutterPost(iddevice, {
         id: channel,
         on_time: Math.round(on_time * 10),
-        off_time: Math.round(off_time * 10)
+        off_time: Math.round(off_time * 10),
+        turn_time
+      });
+    } else if (name === "turn_time") {
+      const on_time = Number(((_i = await this.states.getStateAsync(`${idchannel}.on_time`)) == null ? void 0 : _i.val) || 0);
+      const off_time = Number(((_j = await this.states.getStateAsync(`${idchannel}.off_time`)) == null ? void 0 : _j.val) || 0);
+      await this.deviceEditShutterPost(iddevice, {
+        id: channel,
+        on_time: Math.round(on_time * 10),
+        off_time: Math.round(off_time * 10),
+        turn_time: state.val
       });
     } else if (name === "thermo_offset") {
       await this.deviceEditThermoPost(iddevice, {
@@ -1761,7 +1821,7 @@ class Lupus {
       }, this.adapter.config.option_execdelay);
     } else if (
       // Type 4,7,17,37,81
-      name.startsWith("sresp_button_") || name === "sresp_emergency" || name === "name" || name === "send_notify" || name === "bypass" || name === "bypass_tamper" || name === "schar_latch_rpt" || name === "always_off"
+      name.startsWith("sresp_button_") || name === "sresp_emergency" || name === "name" || name === "send_notify" || name === "bypass" || name === "bypass_tamper" || name === "schar_latch_rpt" || name === "always_off" || name === "shutter_turn"
     ) {
       let parameter = name;
       const form = {
@@ -1783,6 +1843,9 @@ class Lupus {
       }
       if (name === "bypass") {
         parameter = "scond_bypass";
+      }
+      if (name === "shutter_turn") {
+        parameter = "shutter_turn";
       }
       form[parameter] = state.val;
       await this.deviceEditPost(iddevice, form);

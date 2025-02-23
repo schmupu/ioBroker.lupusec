@@ -218,6 +218,22 @@ class States {
     return objects;
   }
   /**
+   * reads all objects
+   *
+   * @param idChannel channel like devices.NK:23423
+   * @returns : return all objects
+   */
+  async getObjectsByChannelAsync(idChannel) {
+    const objects = await this.getObjectsAllAsync();
+    const objectschannels = {};
+    for (const id in objects) {
+      if (id.startsWith(idChannel)) {
+        objectschannels[id] = objects[id];
+      }
+    }
+    return objectschannels;
+  }
+  /**
    * Sets for an id the object data
    *
    * @param id state id

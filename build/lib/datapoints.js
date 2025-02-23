@@ -1157,23 +1157,46 @@ class Datapoints {
             unit: "%"
           }
         },
-        switch: {
+        shutter_up: {
           type: "state",
           common: {
-            type: "number",
-            role: "switch",
+            type: "boolean",
+            role: "button",
             name: {
-              en: "Shutter down/up",
-              de: "Rollladen hoch/runter"
+              en: "Shutter up",
+              de: "Rollladen hochhfahren"
             },
             read: true,
             write: true,
-            states: {
-              en: { 0: "up", 1: "down", 2: "stop" },
-              de: { 0: "hoch", 1: "runter", 2: "stop" }
+            def: true
+          }
+        },
+        shutter_down: {
+          type: "state",
+          common: {
+            type: "boolean",
+            role: "button",
+            name: {
+              en: "Shutter down",
+              de: "Rollladen herunterfahren"
             },
-            min: 0,
-            max: 2
+            read: true,
+            write: true,
+            def: true
+          }
+        },
+        shutter_stop: {
+          type: "state",
+          common: {
+            type: "boolean",
+            role: "button",
+            name: {
+              en: "Shutter stop",
+              de: "Rollladen stoppen"
+            },
+            read: true,
+            write: true,
+            def: true
           }
         },
         on_time: {
@@ -1210,6 +1233,36 @@ class Datapoints {
             step: 0.1,
             def: 0,
             unit: "sec"
+          }
+        },
+        shutter_turn: {
+          type: "state",
+          common: {
+            type: "boolean",
+            role: "value",
+            name: {
+              en: "Turning the slats",
+              de: "Drehen der Lamellen"
+            },
+            read: true,
+            write: true,
+            def: false
+          }
+        },
+        turn_time: {
+          type: "state",
+          common: {
+            type: "number",
+            role: "value",
+            name: {
+              en: "Time to turn the slats",
+              de: "Zeit zum drehen der Lamellen"
+            },
+            read: true,
+            write: true,
+            step: 1,
+            def: 0,
+            unit: "ms"
           }
         }
       },
