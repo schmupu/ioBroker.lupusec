@@ -1,234 +1,247 @@
 {
-    "common": {
-        "name": "lupusec",
-        "version": "2.0.6",
-        "tier": 3,
-        "news": {
-            "2.0.6": {
-                "en": "Minus temperature degrees will be shown now (Issue #113)\nDeletes unnecessary device objects (Issue #114)",
-                "de": "Minus-Temperaturgrade werden jetzt angezeigt (Issue #113)\nLöscht unnötige Geräteobjekte (Issue #114)",
-                "ru": "Степени температуры Minus будут показаны сейчас (Исход #113)\nУдаляет ненужные объекты устройства (Исход #114)",
-                "pt": "Os níveis de temperatura mínimo serão mostrados agora (Issue #113)\nExclui objetos de dispositivo desnecessários (Issue #114)",
-                "nl": "Minus temperatuur graden worden nu getoond (Issue #113)\nVerwijdert onnodige apparaatobjecten (Issue #114)",
-                "fr": "Moins de degrés de température seront affichés maintenant (Émission 113)\nSupprime les objets de périphérique inutiles (Numéro #114)",
-                "it": "I gradi di temperatura del minus saranno mostrati ora (Issue #113)\nElimina oggetti di dispositivo non necessari (Essue #114)",
-                "es": "Pocos grados de temperatura se mostrarán ahora (Isue #113)\nElimina objetos de dispositivo innecesarios (Isue #114)",
-                "pl": "Minus stopni temperatury zostaną pokazane teraz (wydanie # 113)\nUsuwa niepotrzebne obiekty urządzenia (wydanie # 114)",
-                "uk": "На даний момент будуть показані мінуси температури (Issue #113)\nВидалити непотрібні предмети пристрою (Issue #114)",
-                "zh-cn": "现在显示最小温度度( 问题 # 113)\n删除不必要的设备对象( 问题 # 114)"
-            },
-            "2.0.5": {
-                "en": "Adjust datapoints hue, sat with step 1\nFixed, that unused states will be not be shwon.",
-                "de": "Einstellen der Datenpunkte hue, mit Schritt 1\nBehoben, dass ungenutzte Zustände nicht geschwon werden.",
-                "ru": "Настройте точки данных висят, сидя с шагом 1\nИсправлено, что неиспользуемые штаты не будут швонами.",
-                "pt": "Ajuste a tonalidade dos datapoints, sentada com a etapa 1\nCorrigido, esses estados não utilizados não serão estilhaçados.",
-                "nl": "Gegevenspunten tint aanpassen, gezeten met stap 1\nVast, dat ongebruikte staten niet zullen worden shwon.",
-                "fr": "Régler la teinte des points de données, assis avec l'étape 1\nFixé, que les états inutilisés ne seront pas shwon.",
-                "it": "Regolare la tonalità dei datapoint, seduto al passo 1\nRisolto, che gli stati non utilizzati non saranno shwon.",
-                "es": "Ajuste los puntos de datos hue, sentado con el paso 1\nArreglado, que los estados no utilizados no serán deslumbrados.",
-                "pl": "Dostosuj barwę danych punktów, usiadł z krokiem 1\nNaprawiono, że niewykorzystane stany nie będą shwon.",
-                "uk": "Регулювання точок даних, сати з кроком 1\nВиправлено, що невикористані стани не будуть швонами.",
-                "zh-cn": "调整数据点 hue, 与步骤 1 同坐\n固定,未使用状态不会是shwon."
-            },
-            "2.0.4": {
-                "en": "Adjustments of test and release yml\nReadme expanded to include migration instructions (Issue #97)\nFixed error with HUE lights (Issue #104)\nAdded the following values ​​for type 54: air pressure, wind strength, wind angle, wind gust, co2, wind speed\nAdded for HUE the values mode (hue or temperature) and tempererature\nAdded not used states will be not be shwon.\nFixed value range for HUE to 0 to 360 degree, saturation from 0% to 100% and temperature from 2200 to 6500 kelvin",
-                "de": "Anpassungen von Test und Release yml\nReadme erweitert um Migrationsanweisungen (Issue #97)\nFehler behoben mit HUE-Leuchten (Issue #104)\nFolgende Werte für Typ 54 wurden hinzugefügt: Luftdruck, Windstärke, Windwinkel, Wind gust, co2, Windgeschwindigkeit\nHinzugefügt für HUE die Werte Modus (Farbe oder Temperatur) und Temperatur\nHinzu kommen nicht benutzte Zustände werden nicht geschwon.\nFestwertbereich für HUE bis 0 bis 360 Grad, Sättigung von 0 bis 100 % und Temperatur von 2200 bis 6500 Kelvin",
-                "ru": "Корректировки теста и выпуска yml\nReadme расширился, включив миграционные инструкции (Isue #97)\nИсправленная ошибка с помощью огней HUE (Исход #104)\nДобавлены следующие значения для типа 54: давление воздуха, сила ветра, угол ветра, ветренная пыль, ко2, скорость ветра\nДобавлено для HUE режим значений (высота или температура) и температура\nДобавленные не используемые состояния не будут швонами.\nИсправленный диапазон значений для HUE до 0-360 градусов, насыщенность от 0% до 100% и температура от 2200 до 6500 кельвин",
-                "pt": "Ajustes de teste e liberação yml\nReadme expandido para incluir instruções de migração (Issue #97)\nErro fixo com luzes HUE (Issue #104)\nAdicionado os seguintes valores para o tipo 54: pressão do ar, força do vento, ângulo do vento, rajada do vento, co2, velocidade do vento\nAdicionado para HUE o modo valores (hue ou temperatura) e tempererature\nAdicionados estados não usados não será shwon.\nFaixa de valor fixo para HUE a 0 a 360 graus, saturação de 0% a 100% e temperatura de 2200 a 6500 kelvin",
-                "nl": "Aanpassingen van test en afgifte yml\nReadme uitgebreid met migratie instructies (Issue #97)\nFout vastgesteld met HUE verlichting (Issue #104)\nToegevoegd de volgende waarden voor type 54: luchtdruk, windsterkte, windhoek, windgust, co2, windsnelheid\nToegevoegd voor HUE de waarden modus (kleur of temperatuur) en temperatuur\nToegevoegd niet gebruikte staten zullen niet worden shwon.\nVaste waarde bereik voor HUE tot 0 tot 360 graden, verzadiging van 0% tot 100% en temperatuur van 2200 tot 6500 kelvin",
-                "fr": "Ajustements de l'essai et libération yml\nReadme élargi pour inclure des instructions de migration (Émission n°97)\nErreur corrigée avec les feux HUE (numéro 104)\nAjout des valeurs suivantes pour le type 54: pression atmosphérique, force du vent, angle du vent, rafales de vent, co2, vitesse du vent\nAjouté pour HUE le mode valeurs (hue ou température) et la température\nLes États non utilisés ne seront pas shwon.\nPlage de valeurs fixes pour HUE à 0 à 360 degrés, saturation de 0% à 100% et température de 2200 à 6500 kelvin",
-                "it": "Aggiustazioni di test e rilascio yml\nReadme ampliato per includere le istruzioni di migrazione (Issue #97)\nErrore fisso con luci HUE (Essue #104)\nAggiunto i seguenti valori per il tipo 54: pressione dell'aria, resistenza del vento, angolo del vento, vento, co2, velocità del vento\nAggiunto per HUE la modalità valori (umido o temperatura) e tempereratura\nAggiunto stati non utilizzati non sarà shwon.\nGamma di valore fisso per HUE a 0 a 360 gradi, saturazione da 0% a 100% e temperatura da 2200 a 6500 kelvin",
-                "es": "Ajustes de prueba y liberación yml\nReadme expandido para incluir instrucciones de migración (Isue #97)\nError fijo con luces HUE (Isue #104)\nSe agregaron los siguientes valores para el tipo 54: presión del aire, fuerza del viento, ángulo del viento, ráfaga del viento, co2, velocidad del viento\nAñadido para HUE el modo de valores (hue o temperatura) y la temperatura\nLos estados no utilizados no serán reducidos.\nRango de valor fijo para HUE a 0 a 360 grados, saturación de 0% a 100% y temperatura de 2200 a 6500 kelvin",
-                "pl": "Regulacje badania i uwalniania yml\nReadme rozszerzony o instrukcje migracji (wydanie # 97)\nNaprawiono błąd z światłami HUE (wydanie # 104)\nDodano następujące wartości dla typu 54: ciśnienie powietrza, siła wiatru, kąt wiatru, podmuch wiatru, co2, prędkość wiatru\nDodano dla HUE tryb wartości (odcień lub temperatura) i tempererature\nDodano nie używane stany nie będą shwon.\nStała wartość zakresu HUE do 0 do 360 stopni, nasycenie od 0% do 100% i temperatura od 2200 do 6500 kelvin",
-                "uk": "Регулювання тесту і релізу yml\nReadme розширено для включення інструкцій з міграції (Issue #97)\nВиправлена помилка з HUE вогні (Isue #104)\nДодано наступні значення для типу 54: тиск повітря, сила вітру, кут вітру, кон2, швидкість вітру\nДодано для HUE режим значень (відтінок або температура) і температура\nНе використовуються стани не будуть швонами.\nФіксований діапазон значення для HUE до 0 до 360 градусів, насичення від 0% до 100% і температури від 2200 до 6500 kelvin",
-                "zh-cn": "测试和释放的调整\nReadme 已扩大,包括了迁移指令(问题97)\nHUE灯的固定错误( 问题 # 104)\n添加了54型的以下数值:气压,风力,风角,风涌,co2,风速\n为 HUE 添加值模式( 色度或温度) 和温度\n添加的未使用状态将不会是 Shwon .\nHUE到0到360度的固定值范围,饱和度从0%到100%,温度从2200到6500 kelvin"
-            },
-            "2.0.3": {
-                "en": "Adjustments due to migration from ESLint 8x≤ to 9.x.x",
-                "de": "Anpassungen durch Migration von ESLint 8x ≤ auf 9.x.x",
-                "ru": "Корректировки из-за миграции из ESLint 8x≤ в 9.x.x",
-                "pt": "Ajustes devido à migração de ESLint 8x≤ para 9.x.x",
-                "nl": "Aanpassingen als gevolg van migratie van ESLint 8x≤ naar 9.x.x",
-                "fr": "Ajustements dus à la migration d'ESLint 8x.x à 9.x.x",
-                "it": "Regolazioni dovute alla migrazione da ESLint 8x≤ a 9.x.x",
-                "es": "Ajustes debido a la migración de ESLint 8x≤ a 9.x.x",
-                "pl": "Korekty wynikające z migracji z ESLint 8x ≤ do 9.x.x",
-                "uk": "Налаштування через міграцію від ESLint 8x≤ до 9.x.x",
-                "zh-cn": "由于从ESLint 8x≤ 迁移到9.x.xx而做出的调整"
-            }
-        },
-        "titleLang": {
-            "en": "Lupusec alarm system",
-            "de": "Lupusec-Alarmsystem",
-            "ru": "Система сигнализации Лупусек",
-            "pt": "Sistema de alarme Lupusec",
-            "nl": "Lupusec-alarmsysteem",
-            "fr": "Système d'alarme Lupusec",
-            "it": "Sistema di allarme Lupusec",
-            "es": "sistema de alarma lupusec",
-            "pl": "System alarmowy Lupusec",
-            "uk": "Сигналізація Lupusec",
-            "zh-cn": "卢普塞克报警系统"
-        },
-        "desc": {
-            "en": "Lupusec alarm system",
-            "de": "Lupusec-Alarmsystem",
-            "ru": "Система сигнализации Lupusec",
-            "pt": "Sistema de alarme Lupusec",
-            "nl": "Lupusec alarmsysteem",
-            "fr": "Système d'alarme Lupusec",
-            "it": "Sistema di allarme Lupusec",
-            "es": "Sistema de alarma Lupusec",
-            "pl": "System alarmowy Lupusec",
-            "uk": "Сигналізація Lupusec",
-            "zh-cn": "Lupusec 报警系统"
-        },
-        "authors": [
-            "Thorsten Stueben <thorsten@stueben.de>"
-        ],
-        "keywords": [
-            "lupusec",
-            "burlgar alarm",
-            "alarm system",
-            "lupus"
-        ],
-        "localLinks": {
-            "_default": {
-                "link": "%alarmlink%",
-                "pro": true
-            }
-        },
-        "licenseInformation": {
-            "license": "MIT",
-            "type": "free"
-        },
-        "platform": "Javascript/Node.js",
-        "icon": "lupusec.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
-        "readme": "https://github.com/schmupu/ioBroker.lupusec/blob/master/README.md",
-        "loglevel": "info",
-        "messagebox": true,
-        "mode": "daemon",
-        "type": "alarm",
-        "compact": true,
-        "connectionType": "local",
-        "dataSource": "poll",
-        "plugins": {
-            "sentry": {
-                "dsn": "https://8a50c3e06fdb402d9e7b0ad5ae9f6400@sentry.iobroker.net/82",
-                "pathWhitelist": []
-            }
-        },
-        "adminUI": {
-            "config": "json"
-        },
-        "dependencies": [
-            {
-                "js-controller": ">=5.0.19"
-            }
-        ],
-        "globalDependencies": [
-            {
-                "admin": ">=7.4.10"
-            }
-        ]
+  "common": {
+    "name": "lupusec",
+    "version": "2.0.7",
+    "tier": 3,
+    "news": {
+      "2.0.7": {
+        "en": "Fixing @iobroker/adapter-dev 1.0.1 specified. 1.3.0 is required as minimum, 1.3.0 is recommended (Issue #115)\nFixiing problem, that state value jumps back to old value (Issue #116)\nDelete status switch and add 3 butteons (shutter_up, shutter_down, shutter_stop) for shutter (Issue #116)\nFixing dependency (Issue #117)",
+        "de": "Festlegen von @iobroker/adapter-dev 1.0.1 angegeben. 1.3.0 ist als Minimum erforderlich, 1.3.0 wird empfohlen (Issue #115)\nProblem behoben, springt dieser Zustandswert auf den alten Wert zurück (Issue #116)\nStatusschalter löschen und 3 Butteons (shutter_up, shutter_down, shutter_stop) für Shutter (Issue #116) hinzufügen\nBehebung der Abhängigkeit (Issue #117)",
+        "ru": "Указание @iobroker/adapter-dev 1.0.1. 1.3.0 требуется как минимум, 1.3.0 рекомендуется (выпуск #115)\nФиксирующая проблема: значение состояния возвращается к старому значению (выпуск No 116)\nУдалить переключатель состояния и добавить 3 бутеона (shutter_up, shutter_down, shutter_stop) для затвора (выпуск #116)\nЗависимость (проблема #117)",
+        "pt": "Corrigindo @iobroker/adapter-dev 1.0.1 especificado. 1.3.0 é exigido como mínimo, 1.3.0 é recomendado (Issue #115)\nProblema de fixação, esse valor de estado volta ao valor antigo (Issue #116)\nExcluir o interruptor de status e adicionar 3 butteons (shutter_up, shutter_down, shutter_stop) para o obturador (Issue #116)\nFixação de dependência (Issue #117)",
+        "nl": "Bevestiging van @iobroker/adapter-dev 1.0.1 gespecificeerd. 1.3.0 is minimaal vereist, 1,30 wordt aanbevolen (Issue #115)\nVastleggen probleem, die staat waarde springt terug naar oude waarde (Issue #116)\nStatusschakelaar verwijderen en 3 butteons toevoegen (shutter_up, sluiter_down, sluiter_stop) voor sluiter (Issue #116)\nVaststellen van afhankelijkheid (issue #117)",
+        "fr": "Correction @iobroker/adaptateur-dev 1.0.1 spécifiée. 1.3.0 est nécessaire au minimum, 1.3.0 est recommandé (Émission 115)\nCorrection du problème, cette valeur d'état revient à l'ancienne valeur (Issue #16)\nSupprimer l'interrupteur d'état et ajouter 3 butteons (shutter_up, obturateur_down, obturateur_stop) pour obturateur (Numéro #16)\nCorrection de la dépendance (numéro 117)",
+        "it": "Fissaggio @iobroker/adapter-dev 1.0.1 specificato. 1.3.0 è richiesto come minimo, 1.3.0 è raccomandato (Essue #115)\nProblema di fissaggio, quel valore di stato salta indietro al vecchio valore (Issue #116)\nElimina l'interruttore di stato e aggiungi 3 tasti (shutter_up, shutter_down, shutter_stop) per l'otturatore (Issue #116)\nRisolvere la dipendenza (Essue #117)",
+        "es": "Corrección @iobroker/adapter-dev 1.0.1 especificado. 1.3.0 se requiere como mínimo, 1.3.0 se recomienda (Isue #115)\nProblema de fijación, ese valor del estado retrocede al valor antiguo (Isue #116)\nEliminar el interruptor de estado y añadir 3 butteones (shutter_up, shutter_down, shutter_stop) para el obturador (Isue #116)\nFijación de dependencia (Isue #117)",
+        "pl": "Fixing @ iobroker / adapter- dev 1.0.1 określony. 1.3.0 jest wymagane jako minimum, 1.3.0 jest zalecane (wydanie # 115)\nProblem Fixying, że wartość stanu skacze do starej wartości (Issue # 116)\nUsuń status przełącznika i dodaj 3 guziki (migawki _ up, migawki _ down, migawki _ stop) do migawki (Wydanie # 116)\nUstalenie zależności (wydanie # 117)",
+        "uk": "Виправлення @iobroker/adapter-dev 1.0.1 вказаний. 1.3.0 потрібна як мінімум, 1.3.0 рекомендується (Issue #115)\nВиправлення проблеми, що державне значення стрибає назад до старого значення (Issue #116)\nВидалити перемикач стану і додати 3 алетеони (shutter_up, відключення, відключення, відключення) для затвору (Isue #116)\nФіксована залежність (Issue #117)",
+        "zh-cn": "正在修复@iobroduc/adapter-dev 1. 0.1。 最低要求为1.3.0,建议为1.3.0(第115期)\n修复问题, 状态值会跳回旧值( 问题 # 116)\n删除状态切换并添加 3 个 butteons (shutter_up, shutter_shutter_shutter_shop) 用于超机( Isue #116)\n修复依赖( 问题 # 117)"
+      },
+      "2.0.6": {
+        "en": "Minus temperature degrees will be shown now (Issue #113)\nDeletes unnecessary device objects (Issue #114)",
+        "de": "Minus-Temperaturgrade werden jetzt angezeigt (Issue #113)\nLöscht unnötige Geräteobjekte (Issue #114)",
+        "ru": "Степени температуры Minus будут показаны сейчас (Исход #113)\nУдаляет ненужные объекты устройства (Исход #114)",
+        "pt": "Os níveis de temperatura mínimo serão mostrados agora (Issue #113)\nExclui objetos de dispositivo desnecessários (Issue #114)",
+        "nl": "Minus temperatuur graden worden nu getoond (Issue #113)\nVerwijdert onnodige apparaatobjecten (Issue #114)",
+        "fr": "Moins de degrés de température seront affichés maintenant (Émission 113)\nSupprime les objets de périphérique inutiles (Numéro #114)",
+        "it": "I gradi di temperatura del minus saranno mostrati ora (Issue #113)\nElimina oggetti di dispositivo non necessari (Essue #114)",
+        "es": "Pocos grados de temperatura se mostrarán ahora (Isue #113)\nElimina objetos de dispositivo innecesarios (Isue #114)",
+        "pl": "Minus stopni temperatury zostaną pokazane teraz (wydanie # 113)\nUsuwa niepotrzebne obiekty urządzenia (wydanie # 114)",
+        "uk": "На даний момент будуть показані мінуси температури (Issue #113)\nВидалити непотрібні предмети пристрою (Issue #114)",
+        "zh-cn": "现在显示最小温度度( 问题 # 113)\n删除不必要的设备对象( 问题 # 114)"
+      },
+      "2.0.5": {
+        "en": "Adjust datapoints hue, sat with step 1\nFixed, that unused states will be not be shwon.",
+        "de": "Einstellen der Datenpunkte hue, mit Schritt 1\nBehoben, dass ungenutzte Zustände nicht geschwon werden.",
+        "ru": "Настройте точки данных висят, сидя с шагом 1\nИсправлено, что неиспользуемые штаты не будут швонами.",
+        "pt": "Ajuste a tonalidade dos datapoints, sentada com a etapa 1\nCorrigido, esses estados não utilizados não serão estilhaçados.",
+        "nl": "Gegevenspunten tint aanpassen, gezeten met stap 1\nVast, dat ongebruikte staten niet zullen worden shwon.",
+        "fr": "Régler la teinte des points de données, assis avec l'étape 1\nFixé, que les états inutilisés ne seront pas shwon.",
+        "it": "Regolare la tonalità dei datapoint, seduto al passo 1\nRisolto, che gli stati non utilizzati non saranno shwon.",
+        "es": "Ajuste los puntos de datos hue, sentado con el paso 1\nArreglado, que los estados no utilizados no serán deslumbrados.",
+        "pl": "Dostosuj barwę danych punktów, usiadł z krokiem 1\nNaprawiono, że niewykorzystane stany nie będą shwon.",
+        "uk": "Регулювання точок даних, сати з кроком 1\nВиправлено, що невикористані стани не будуть швонами.",
+        "zh-cn": "调整数据点 hue, 与步骤 1 同坐\n固定,未使用状态不会是shwon."
+      },
+      "2.0.4": {
+        "en": "Adjustments of test and release yml\nReadme expanded to include migration instructions (Issue #97)\nFixed error with HUE lights (Issue #104)\nAdded the following values ​​for type 54: air pressure, wind strength, wind angle, wind gust, co2, wind speed\nAdded for HUE the values mode (hue or temperature) and tempererature\nAdded not used states will be not be shwon.\nFixed value range for HUE to 0 to 360 degree, saturation from 0% to 100% and temperature from 2200 to 6500 kelvin",
+        "de": "Anpassungen von Test und Release yml\nReadme erweitert um Migrationsanweisungen (Issue #97)\nFehler behoben mit HUE-Leuchten (Issue #104)\nFolgende Werte für Typ 54 wurden hinzugefügt: Luftdruck, Windstärke, Windwinkel, Wind gust, co2, Windgeschwindigkeit\nHinzugefügt für HUE die Werte Modus (Farbe oder Temperatur) und Temperatur\nHinzu kommen nicht benutzte Zustände werden nicht geschwon.\nFestwertbereich für HUE bis 0 bis 360 Grad, Sättigung von 0 bis 100 % und Temperatur von 2200 bis 6500 Kelvin",
+        "ru": "Корректировки теста и выпуска yml\nReadme расширился, включив миграционные инструкции (Isue #97)\nИсправленная ошибка с помощью огней HUE (Исход #104)\nДобавлены следующие значения для типа 54: давление воздуха, сила ветра, угол ветра, ветренная пыль, ко2, скорость ветра\nДобавлено для HUE режим значений (высота или температура) и температура\nДобавленные не используемые состояния не будут швонами.\nИсправленный диапазон значений для HUE до 0-360 градусов, насыщенность от 0% до 100% и температура от 2200 до 6500 кельвин",
+        "pt": "Ajustes de teste e liberação yml\nReadme expandido para incluir instruções de migração (Issue #97)\nErro fixo com luzes HUE (Issue #104)\nAdicionado os seguintes valores para o tipo 54: pressão do ar, força do vento, ângulo do vento, rajada do vento, co2, velocidade do vento\nAdicionado para HUE o modo valores (hue ou temperatura) e tempererature\nAdicionados estados não usados não será shwon.\nFaixa de valor fixo para HUE a 0 a 360 graus, saturação de 0% a 100% e temperatura de 2200 a 6500 kelvin",
+        "nl": "Aanpassingen van test en afgifte yml\nReadme uitgebreid met migratie instructies (Issue #97)\nFout vastgesteld met HUE verlichting (Issue #104)\nToegevoegd de volgende waarden voor type 54: luchtdruk, windsterkte, windhoek, windgust, co2, windsnelheid\nToegevoegd voor HUE de waarden modus (kleur of temperatuur) en temperatuur\nToegevoegd niet gebruikte staten zullen niet worden shwon.\nVaste waarde bereik voor HUE tot 0 tot 360 graden, verzadiging van 0% tot 100% en temperatuur van 2200 tot 6500 kelvin",
+        "fr": "Ajustements de l'essai et libération yml\nReadme élargi pour inclure des instructions de migration (Émission n°97)\nErreur corrigée avec les feux HUE (numéro 104)\nAjout des valeurs suivantes pour le type 54: pression atmosphérique, force du vent, angle du vent, rafales de vent, co2, vitesse du vent\nAjouté pour HUE le mode valeurs (hue ou température) et la température\nLes États non utilisés ne seront pas shwon.\nPlage de valeurs fixes pour HUE à 0 à 360 degrés, saturation de 0% à 100% et température de 2200 à 6500 kelvin",
+        "it": "Aggiustazioni di test e rilascio yml\nReadme ampliato per includere le istruzioni di migrazione (Issue #97)\nErrore fisso con luci HUE (Essue #104)\nAggiunto i seguenti valori per il tipo 54: pressione dell'aria, resistenza del vento, angolo del vento, vento, co2, velocità del vento\nAggiunto per HUE la modalità valori (umido o temperatura) e tempereratura\nAggiunto stati non utilizzati non sarà shwon.\nGamma di valore fisso per HUE a 0 a 360 gradi, saturazione da 0% a 100% e temperatura da 2200 a 6500 kelvin",
+        "es": "Ajustes de prueba y liberación yml\nReadme expandido para incluir instrucciones de migración (Isue #97)\nError fijo con luces HUE (Isue #104)\nSe agregaron los siguientes valores para el tipo 54: presión del aire, fuerza del viento, ángulo del viento, ráfaga del viento, co2, velocidad del viento\nAñadido para HUE el modo de valores (hue o temperatura) y la temperatura\nLos estados no utilizados no serán reducidos.\nRango de valor fijo para HUE a 0 a 360 grados, saturación de 0% a 100% y temperatura de 2200 a 6500 kelvin",
+        "pl": "Regulacje badania i uwalniania yml\nReadme rozszerzony o instrukcje migracji (wydanie # 97)\nNaprawiono błąd z światłami HUE (wydanie # 104)\nDodano następujące wartości dla typu 54: ciśnienie powietrza, siła wiatru, kąt wiatru, podmuch wiatru, co2, prędkość wiatru\nDodano dla HUE tryb wartości (odcień lub temperatura) i tempererature\nDodano nie używane stany nie będą shwon.\nStała wartość zakresu HUE do 0 do 360 stopni, nasycenie od 0% do 100% i temperatura od 2200 do 6500 kelvin",
+        "uk": "Регулювання тесту і релізу yml\nReadme розширено для включення інструкцій з міграції (Issue #97)\nВиправлена помилка з HUE вогні (Isue #104)\nДодано наступні значення для типу 54: тиск повітря, сила вітру, кут вітру, кон2, швидкість вітру\nДодано для HUE режим значень (відтінок або температура) і температура\nНе використовуються стани не будуть швонами.\nФіксований діапазон значення для HUE до 0 до 360 градусів, насичення від 0% до 100% і температури від 2200 до 6500 kelvin",
+        "zh-cn": "测试和释放的调整\nReadme 已扩大,包括了迁移指令(问题97)\nHUE灯的固定错误( 问题 # 104)\n添加了54型的以下数值:气压,风力,风角,风涌,co2,风速\n为 HUE 添加值模式( 色度或温度) 和温度\n添加的未使用状态将不会是 Shwon .\nHUE到0到360度的固定值范围,饱和度从0%到100%,温度从2200到6500 kelvin"
+      },
+      "2.0.3": {
+        "en": "Adjustments due to migration from ESLint 8x≤ to 9.x.x",
+        "de": "Anpassungen durch Migration von ESLint 8x ≤ auf 9.x.x",
+        "ru": "Корректировки из-за миграции из ESLint 8x≤ в 9.x.x",
+        "pt": "Ajustes devido à migração de ESLint 8x≤ para 9.x.x",
+        "nl": "Aanpassingen als gevolg van migratie van ESLint 8x≤ naar 9.x.x",
+        "fr": "Ajustements dus à la migration d'ESLint 8x.x à 9.x.x",
+        "it": "Regolazioni dovute alla migrazione da ESLint 8x≤ a 9.x.x",
+        "es": "Ajustes debido a la migración de ESLint 8x≤ a 9.x.x",
+        "pl": "Korekty wynikające z migracji z ESLint 8x ≤ do 9.x.x",
+        "uk": "Налаштування через міграцію від ESLint 8x≤ до 9.x.x",
+        "zh-cn": "由于从ESLint 8x≤ 迁移到9.x.xx而做出的调整"
+      }
     },
-    "protectedNative": [
-        "alarm_password"
-    ],
-    "encryptedNative": [
-        "alarm_password"
-    ],
-    "native": {
-        "alarm_hostname": "192.168.11.22",
-        "alarm_https": false,
-        "alarm_type": "lupusec_xt2",
-        "alarm_user": "admin",
-        "alarm_password": "",
-        "alarm_polltime": 1,
-        "alarm_execdelay": 500,
-        "nuki_doorsensors": [],
-        "webcam_providing": true,
-        "webcam_bind": "0.0.0.0",
-        "webcam_port": 7000,
-        "option_pollfaster": false,
-        "option_execdelay": 500,
-        "option_updatedelay": 10
+    "titleLang": {
+      "en": "Lupusec alarm system",
+      "de": "Lupusec-Alarmsystem",
+      "ru": "Система сигнализации Лупусек",
+      "pt": "Sistema de alarme Lupusec",
+      "nl": "Lupusec-alarmsysteem",
+      "fr": "Système d'alarme Lupusec",
+      "it": "Sistema di allarme Lupusec",
+      "es": "sistema de alarma lupusec",
+      "pl": "System alarmowy Lupusec",
+      "uk": "Сигналізація Lupusec",
+      "zh-cn": "卢普塞克报警系统"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "devices",
-            "type": "channel",
-            "common": {
-                "icon": "/icons/zentrale.png",
-                "name": {
-                    "en": "Devices alarmsystem",
-                    "de": "Geräte Alarmanlage"
-                }
-            },
-            "native": {}
-        },
-        {
-            "_id": "status",
-            "type": "channel",
-            "common": {
-                "icon": "/icons/zentrale.png",
-                "statusStates": {
-                    "onlineId": "reachable"
-                },
-                "name": {
-                    "en": "Status alarmsystem",
-                    "de": "Status Alarmanlage"
-                }
-            },
-            "native": {}
-        },
-        {
-            "_id": "sms",
-            "type": "channel",
-            "common": {
-                "icon": "/icons/sms.png",
-                "name": {
-                    "en": "SMS",
-                    "de": "SMS"
-                }
-            },
-            "native": {}
-        },
-        {
-            "_id": "webcams",
-            "type": "channel",
-            "common": {
-                "icon": "/icons/webcam.png",
-                "name": {
-                    "en": "Webcam alarmsystems",
-                    "de": "Webcam Alarmanlage"
-                }
-            },
-            "native": {}
-        }
+    "desc": {
+      "en": "Lupusec alarm system",
+      "de": "Lupusec-Alarmsystem",
+      "ru": "Система сигнализации Lupusec",
+      "pt": "Sistema de alarme Lupusec",
+      "nl": "Lupusec alarmsysteem",
+      "fr": "Système d'alarme Lupusec",
+      "it": "Sistema di allarme Lupusec",
+      "es": "Sistema de alarma Lupusec",
+      "pl": "System alarmowy Lupusec",
+      "uk": "Сигналізація Lupusec",
+      "zh-cn": "Lupusec 报警系统"
+    },
+    "authors": [
+      "Thorsten Stueben <thorsten@stueben.de>"
+    ],
+    "keywords": [
+      "lupusec",
+      "burlgar alarm",
+      "alarm system",
+      "lupus"
+    ],
+    "localLinks": {
+      "_default": {
+        "link": "%alarmlink%",
+        "pro": true
+      }
+    },
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
+    "platform": "Javascript/Node.js",
+    "icon": "lupusec.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/schmupu/ioBroker.lupusec/master/admin/lupusec.png",
+    "readme": "https://github.com/schmupu/ioBroker.lupusec/blob/master/README.md",
+    "loglevel": "info",
+    "messagebox": true,
+    "mode": "daemon",
+    "type": "alarm",
+    "compact": true,
+    "connectionType": "local",
+    "dataSource": "poll",
+    "plugins": {
+      "sentry": {
+        "dsn": "https://8a50c3e06fdb402d9e7b0ad5ae9f6400@sentry.iobroker.net/82",
+        "pathWhitelist": []
+      }
+    },
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=5.0.19"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=7.4.10"
+      }
     ]
+  },
+  "protectedNative": [
+    "alarm_password"
+  ],
+  "encryptedNative": [
+    "alarm_password"
+  ],
+  "native": {
+    "alarm_hostname": "192.168.11.22",
+    "alarm_https": false,
+    "alarm_type": "lupusec_xt2",
+    "alarm_user": "admin",
+    "alarm_password": "",
+    "alarm_polltime": 1,
+    "alarm_execdelay": 500,
+    "nuki_doorsensors": [],
+    "webcam_providing": true,
+    "webcam_bind": "0.0.0.0",
+    "webcam_port": 7000,
+    "option_pollfaster": false,
+    "option_execdelay": 500,
+    "option_updatedelay": 10
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Device or service connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "devices",
+      "type": "channel",
+      "common": {
+        "icon": "/icons/zentrale.png",
+        "name": {
+          "en": "Devices alarmsystem",
+          "de": "Geräte Alarmanlage"
+        }
+      },
+      "native": {}
+    },
+    {
+      "_id": "status",
+      "type": "channel",
+      "common": {
+        "icon": "/icons/zentrale.png",
+        "statusStates": {
+          "onlineId": "reachable"
+        },
+        "name": {
+          "en": "Status alarmsystem",
+          "de": "Status Alarmanlage"
+        }
+      },
+      "native": {}
+    },
+    {
+      "_id": "sms",
+      "type": "channel",
+      "common": {
+        "icon": "/icons/sms.png",
+        "name": {
+          "en": "SMS",
+          "de": "SMS"
+        }
+      },
+      "native": {}
+    },
+    {
+      "_id": "webcams",
+      "type": "channel",
+      "common": {
+        "icon": "/icons/webcam.png",
+        "name": {
+          "en": "Webcam alarmsystems",
+          "de": "Webcam Alarmanlage"
+        }
+      },
+      "native": {}
+    }
+  ]
 }

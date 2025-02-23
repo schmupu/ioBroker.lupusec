@@ -148,8 +148,7 @@ sudo chmod u+s `which ping`
 ```
 
 ## Changelog
-
-### **WORK IN PROGRESS**
+### 2.0.7 (2025-02-23)
 
 - (Stübi) Fixing @iobroker/adapter-dev 1.0.1 specified. 1.3.0 is required as minimum, 1.3.0 is recommended (Issue #115)
 - (Stübi) Fixiing problem, that state value jumps back to old value (Issue #116)
