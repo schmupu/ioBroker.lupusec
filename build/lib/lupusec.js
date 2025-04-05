@@ -202,7 +202,7 @@ class Lupus {
   async startallproc() {
     var _a;
     this.adapter.log.debug(`Starting Lupsuec polling process`);
-    const seconds = this.adapter.config.alarm_polltime;
+    const seconds = this.adapter.config.alarm_polltime < 0.25 ? 0.25 : this.adapter.config.alarm_polltime;
     if (!this.exsitproc("Init")) {
       await this.initObjects();
       await this.delObjects();
@@ -210,12 +210,12 @@ class Lupus {
       this.setproc("Init", 1);
     }
     if (!this.exsitproc("Status")) {
-      await this.startproc("Status", seconds > 1 ? seconds : 1, async () => {
+      await this.startproc("Status", seconds, async () => {
         await this.getAllStatusLupusecEntries();
       });
     }
     if (!this.exsitproc("Devices")) {
-      await this.startproc("Devices", seconds > 1 ? seconds : 1, async () => {
+      await this.startproc("Devices", seconds, async () => {
         await this.getAllDeviceLupusec();
       });
     }
@@ -884,7 +884,9 @@ class Lupus {
     if (!form) {
       return;
     }
-    const ressultold = await this.requestPost(urlDeviceEditGet, { id: form.id });
+    const ressultold = await this.requestPost(urlDeviceEditGet, {
+      id: form.id
+    });
     if ((_b = (_a = ressultold == null ? void 0 : ressultold.data) == null ? void 0 : _a.forms) == null ? void 0 : _b.ssform) {
       const ssform = ressultold.data.forms.ssform;
       for (const name in form) {
@@ -1298,9 +1300,16 @@ class Lupus {
   }
   async getAllDeviceLupusecEntries() {
     var _a, _b, _c, _d, _e, _f, _g, _h, _i;
-    const resultDeviceListGet = await this.requestGet(urlDeviceListGet);
-    const resultDevicePSSListGet = await this.requestGet(urlDevicePSSListGet);
-    const resultDeviceListUPICGet = await this.requestGet(urlDeviceListUPICGet);
+    const parallelprocessing = true;
+    const [resultDeviceListGet, resultDevicePSSListGet, resultDeviceListUPICGet] = parallelprocessing ? await Promise.all([
+      await this.requestGet(urlDeviceListGet),
+      await this.requestGet(urlDevicePSSListGet),
+      await this.requestGet(urlDeviceListUPICGet)
+    ]) : [
+      await this.requestGet(urlDeviceListGet),
+      await this.requestGet(urlDevicePSSListGet),
+      await this.requestGet(urlDeviceListUPICGet)
+    ];
     const results = {
       unixtime: resultDeviceListUPICGet.unixtime,
       data: {
@@ -1409,13 +1418,19 @@ class Lupus {
     const stateget = await this.states.getStateAsync(sid);
     const stateunixtime = this.getUnixTimestamp(sid) > 0 ? this.getUnixTimestamp(sid) + updatedelay : 0;
     if (stateget === void 0) {
-      const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
+      const result = await this.states.setStateNotExistsAsync(sid, {
+        val: statevalue,
+        ack: true
+      });
       this.delUnixTimestamp(sid);
       this.adapter.log.debug(`State ${sid} changed to value ${statevalue} and ack to true)`);
       return;
     }
     if (stateget.ack === false && stateget.val === statevalue) {
-      const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
+      const result = await this.states.setStateNotExistsAsync(sid, {
+        val: statevalue,
+        ack: true
+      });
       this.delUnixTimestamp(sid);
       this.adapter.log.debug(
         `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`
@@ -1423,7 +1438,10 @@ class Lupus {
       return;
     }
     if (stateunixtime === 0 && stateget.ack === true && stateget.val !== statevalue) {
-      const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
+      const result = await this.states.setStateNotExistsAsync(sid, {
+        val: statevalue,
+        ack: true
+      });
       this.delUnixTimestamp(sid);
       this.adapter.log.debug(
         `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`
@@ -1431,7 +1449,10 @@ class Lupus {
       return;
     }
     if (stateunixtime > 0 && stateunixtime < unixtime && stateget.ack === false) {
-      const result = await this.states.setStateNotExistsAsync(sid, { val: statevalue, ack: true });
+      const result = await this.states.setStateNotExistsAsync(sid, {
+        val: statevalue,
+        ack: true
+      });
       this.delUnixTimestamp(sid);
       this.adapter.log.debug(
         `State ${sid} changed value from ${stateget.val} to ${statevalue} and ack from ${stateget.ack} to true)`
@@ -1530,7 +1551,7 @@ class Lupus {
         }
       }
     }
-    if (promisearray) {
+    if (promisearray.length > 0) {
       await Promise.all(promisearray.map(async (func) => await func()));
     }
   }
@@ -1648,7 +1669,10 @@ class Lupus {
   async onStateChange(id, state) {
     try {
       if (state && state.ack === false) {
-        await this.states.setStateNotExistsAsync(id, { val: state.val, ack: state.ack });
+        await this.states.setStateNotExistsAsync(id, {
+          val: state.val,
+          ack: state.ack
+        });
         if (id.startsWith(`${this.adapter.namespace}.devices.`)) {
           await this.onStateChangeDevices(id, state);
         }
@@ -1759,7 +1783,10 @@ class Lupus {
         // stop
       };
       const exec = `a=${area}&z=${zone}&shutter=${shutterstates[name]}`;
-      await this.states.setStateNotExistsAsync(id, { val: state.val, ack: true });
+      await this.states.setStateNotExistsAsync(id, {
+        val: state.val,
+        ack: true
+      });
       await this.haExecutePost(iddevice, {
         exec
       });
