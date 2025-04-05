@@ -192,6 +192,7 @@ export class Lupus {
      */
     public async startallproc(): Promise<void> {
         this.adapter.log.debug(`Starting Lupsuec polling process`);
+        this.adapter.log.debug(`GitHub version!`);
         // const seconds = this.adapter.config.alarm_polltime < 0.25 ? 0.25 : this.adapter.config.alarm_polltime;
         const seconds = this.adapter.config.alarm_polltime;
         if (!this.exsitproc('Init')) {
