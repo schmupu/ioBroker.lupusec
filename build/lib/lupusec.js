@@ -202,7 +202,6 @@ class Lupus {
   async startallproc() {
     var _a;
     this.adapter.log.debug(`Starting Lupsuec polling process`);
-    this.adapter.log.debug(`GitHub version!`);
     const seconds = this.adapter.config.alarm_polltime;
     if (!this.exsitproc("Init")) {
       await this.initObjects();
