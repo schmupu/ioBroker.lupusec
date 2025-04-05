@@ -168,9 +168,6 @@ class Lupusec extends utils.Adapter {
     const obj = await this.getForeignObjectAsync(id);
     if (obj && obj.native) {
       if (obj.native.option_pollfaster === true) {
-        this.log.debug(`Changing default parameter ${id} from value ${obj.native.option_pollfaster} to false`);
-        obj.native.option_pollfaster = false;
-        update = true;
       }
       const server = this.getHostnameAndPort();
       const url = server.https ? `https://${server.hostname}:${server.port}` : `http://${server.hostname}:${server.port}`;

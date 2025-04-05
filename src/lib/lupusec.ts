@@ -192,7 +192,8 @@ export class Lupus {
      */
     public async startallproc(): Promise<void> {
         this.adapter.log.debug(`Starting Lupsuec polling process`);
-        const seconds = this.adapter.config.alarm_polltime < 0.25 ? 0.25 : this.adapter.config.alarm_polltime;
+        // const seconds = this.adapter.config.alarm_polltime < 0.25 ? 0.25 : this.adapter.config.alarm_polltime;
+        const seconds = this.adapter.config.alarm_polltime;
         if (!this.exsitproc('Init')) {
             await this.initObjects();
             await this.delObjects();
@@ -1199,11 +1200,22 @@ export class Lupus {
                 unixtime = result.unixtime;
             }
         }
+        /*
         const data = {
             unixtime: unixtime,
             devices: devices,
         };
-        await this.setAllDeviceLupusecEntries(data);
+        */
+        const promisearraydevices = [];
+        for (const id in devices) {
+            promisearraydevices.push(
+                async () => await this.setAllDeviceLupusecEntriesDevice(id, devices[id], unixtime),
+            );
+        }
+        if (promisearraydevices.length > 0) {
+            await Promise.all(promisearraydevices.map(async func => await func()));
+        }
+        // await this.setAllDeviceLupusecEntries(data);
         // await this.delAllUnusedDeviceLupusecEntries(data);
     }
 
@@ -1361,9 +1373,9 @@ export class Lupus {
         const parallelprocessing = true;
         const [resultDeviceListGet, resultDevicePSSListGet, resultDeviceListUPICGet] = parallelprocessing
             ? await Promise.all([
-                  await this.requestGet(urlDeviceListGet),
-                  await this.requestGet(urlDevicePSSListGet),
-                  await this.requestGet(urlDeviceListUPICGet),
+                  this.requestGet(urlDeviceListGet),
+                  this.requestGet(urlDevicePSSListGet),
+                  this.requestGet(urlDeviceListUPICGet),
               ])
             : [
                   await this.requestGet(urlDeviceListGet),
@@ -1561,6 +1573,67 @@ export class Lupus {
         }
     }
 
+    private async setAllDeviceLupusecEntriesDevice(id: string, device: any, unixtime: number): Promise<void> {
+        const idc = `devices.${id}`;
+        const cname = device.name || device.sname;
+        const type = device.type || device.stype || (await this.states.getStateAsync(`${idc}.type`))?.val;
+        if (type === undefined) {
+            return;
+        }
+        let objects = Datapoints.getDeviceTypeList(type, this.language);
+        if (!objects) {
+            this.adapter.log.warn(
+                `Gerätetyp ${type} für das Gerät ${id} mit Namen ${cname || ''} wird nicht unterstützt!`,
+            );
+            objects = Datapoints.getDeviceTypeList(0, this.language);
+        }
+        const icon = Datapoints.getDeviceIconByDeviceType(type);
+        const oldobject = await this.states.getObjectAsync(idc);
+        if (cname !== undefined && oldobject && oldobject.common && oldobject.common.name !== cname) {
+            const result = await this.states.setObjectAsync(idc, {
+                type: 'channel',
+                common: {
+                    name: cname,
+                    icon: icon,
+                    statusStates: {
+                        onlineId: 'reachable',
+                    },
+                },
+                native: {},
+            });
+            if (result) {
+                this.adapter.log.info(`New devicename for ${id} is now ${cname || ''}`);
+            }
+        } else {
+            const result = await this.states.setObjectNotExistsAsync(idc, {
+                type: 'channel',
+                common: {
+                    name: cname,
+                    icon: icon,
+                    statusStates: {
+                        onlineId: 'reachable',
+                    },
+                },
+                native: {},
+            });
+            if (result) {
+                this.adapter.log.info(`Add device ${id} with name ${cname || ''}`);
+            }
+        }
+        // Add owen (missing) datapoints
+        for (const dp in objects) {
+            if (!Tools.hasProperty(device, dp)) {
+                device[dp] = undefined;
+            }
+        }
+        // Daten erweitern
+        const devicemappend = await this.device_mapping_all(device);
+        for (const dp in objects) {
+            const val: any = objects[dp];
+            await this.createObjectSetStates(idc, dp, devicemappend[dp], unixtime, val, cname);
+        }
+    }
+
     private async setAllDeviceLupusecEntries(results: any): Promise<void> {
         const unixtime = results.unixtime;
         const devices = results.devices;
@@ -1624,16 +1697,14 @@ export class Lupus {
             for (const dp in objects) {
                 const val: any = objects[dp];
                 if (this.adapter.config.option_pollfaster) {
-                    promisearray.push(async () => {
-                        await this.createObjectSetStates(idc, dp, devicemappend[dp], unixtime, val, cname);
-                    });
+                    promisearray.push(this.createObjectSetStates(idc, dp, devicemappend[dp], unixtime, val, cname));
                 } else {
                     await this.createObjectSetStates(idc, dp, devicemappend[dp], unixtime, val, cname);
                 }
             }
-        }
-        if (promisearray.length > 0) {
-            await Promise.all(promisearray.map(async func => await func()));
+            if (promisearray.length > 0) {
+                await Promise.all(promisearray);
+            }
         }
     }
 
@@ -1656,14 +1727,14 @@ export class Lupus {
         for (const dp in objects) {
             if (this.adapter.config.option_pollfaster) {
                 promisearray.push(
-                    async () => await this.createObjectSetStates(idc, dp, zentralemapped[dp], unixtime, objects[dp]),
-                    cname,
+                    async () =>
+                        await this.createObjectSetStates(idc, dp, zentralemapped[dp], unixtime, objects[dp], cname),
                 );
             } else {
                 await this.createObjectSetStates(idc, dp, zentralemapped[dp], unixtime, objects[dp], cname);
             }
         }
-        if (promisearray) {
+        if (promisearray.length > 0) {
             await Promise.all(promisearray.map(async func => await func()));
         }
     }
