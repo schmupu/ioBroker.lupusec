@@ -677,7 +677,7 @@ class Lupus {
           value = states[m[1]];
         }
       }
-      if (type === 54 || type === 78) {
+      if (type === 54 || type === 78 || type === 20) {
         if (name === "actual_temperature" && states.status !== void 0) {
           const regstat = /{WEB_MSG_TS_DEGREE}\s*([-\d.]+)/gm;
           const m = regstat.exec(states.status);
@@ -1114,6 +1114,7 @@ class Lupus {
     await this.setAllWebcamLupusecEntries(data);
   }
   async getAllDeviceLupusec() {
+    this.adapter.log.debug(`Starting Method getAllDeviceLupusec()`);
     const parallelprocessing = true;
     const requestarray = [];
     const devices = {};
@@ -1487,6 +1488,7 @@ class Lupus {
   }
   async setAllDeviceLupusecEntriesDevice(id, device, unixtime) {
     var _a;
+    this.adapter.log.debug(`Starting Method setAllDeviceLupusecEntriesDevice() for id: ${id}`);
     const idc = `devices.${id}`;
     const cname = device.name || device.sname;
     const type = device.type || device.stype || ((_a = await this.states.getStateAsync(`${idc}.type`)) == null ? void 0 : _a.val);

@@ -152,6 +152,7 @@ sudo chmod u+s `which ping`
 ### **WORK IN PROGRESS**
 
 - (Stübi) Performance optimization by pplling Lupusec alarm system (Issue #123)
+- (Stübi) Add actual_temperature to type 20 Sensor (Issue #124)
 
 ### 2.0.7 (2025-02-23)
 

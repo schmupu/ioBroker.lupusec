@@ -698,7 +698,7 @@ export class Lupus {
                     value = states[m[1]];
                 }
             }
-            if (type === 54 || type === 78) {
+            if (type === 54 || type === 78 || type === 20) {
                 if (name === 'actual_temperature' && states.status !== undefined) {
                     const regstat = /{WEB_MSG_TS_DEGREE}\s*([-\d.]+)/gm;
                     const m = regstat.exec(states.status);
@@ -1163,6 +1163,7 @@ export class Lupus {
     }
 
     private async getAllDeviceLupusec(): Promise<void> {
+        this.adapter.log.debug(`Starting Method getAllDeviceLupusec()`);
         const parallelprocessing = true;
         const requestarray = [];
         const devices: any = {};
@@ -1574,6 +1575,7 @@ export class Lupus {
     }
 
     private async setAllDeviceLupusecEntriesDevice(id: string, device: any, unixtime: number): Promise<void> {
+        this.adapter.log.debug(`Starting Method setAllDeviceLupusecEntriesDevice() for id: ${id}`);
         const idc = `devices.${id}`;
         const cname = device.name || device.sname;
         const type = device.type || device.stype || (await this.states.getStateAsync(`${idc}.type`))?.val;
