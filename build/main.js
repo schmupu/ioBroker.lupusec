@@ -54,7 +54,6 @@ class Lupusec extends utils.Adapter {
     await this.subscribeObjectsAsync("sms.*");
     await this.subscribeObjectsAsync("webcams.*");
     await this.startOnlineCheck();
-    this.log.info(`GitHub version!`);
   }
   /**
    * Is called when adapter shuts down - callback has to be called under any circumstances!

@@ -42,7 +42,7 @@ class Lupusec extends utils.Adapter {
         await this.subscribeObjectsAsync('sms.*');
         await this.subscribeObjectsAsync('webcams.*');
         await this.startOnlineCheck();
-        this.log.info(`GitHub version!`);
+        // this.log.info(`GitHub version ${this.version}!`);
     }
 
     /**
