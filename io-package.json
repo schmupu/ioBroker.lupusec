@@ -1,9 +1,22 @@
 {
   "common": {
     "name": "lupusec",
-    "version": "2.0.7",
+    "version": "2.0.8",
     "tier": 3,
     "news": {
+      "2.0.8": {
+        "en": "Performance optimization by pplling Lupusec alarm system (Issue #123)\nAdd actual_temperature to type 20 Sensor (Issue #124)",
+        "de": "Leistungsoptimierung durch pplling Lupusec alarm system (Issue #123)\nIst_Temperatur zum Typ 20 Sensor hinzufügen (Issue #124)",
+        "ru": "Оптимизация производительности путем установки сигнализации Lupusec (выпуск No 123)\nДобавить фактическую температуру в датчик типа 20 (выпуск No 124)",
+        "pt": "Otimização de desempenho pelo sistema de alarme de pplling Lupusec (Issue #123)\nAdicione real_temperatura ao tipo 20 Sensor (Issue #124)",
+        "nl": "Prestatieoptimalisatie door het pplling Lupusec alarmsysteem (Issue #123)\nActuele_temperatuur toevoegen aan type 20-sensor (Issue #124)",
+        "fr": "Optimisation des performances en ppllant le système d'alarme Lupusec (Issue #123)\nAjouter real_temperature au capteur de type 20 (Émission #124)",
+        "it": "Ottimizzazione delle prestazioni da pplling sistema di allarme Lupusec (Issue #123)\nAggiungi la temperatura_effettiva per digitare 20 Sensor (Essue #124)",
+        "es": "Optimización del rendimiento mediante el sistema de alarma Lupusec (Isue #123)\nAñadir actual_temperatura al tipo 20 Sensor (Isue #124)",
+        "pl": "Optymalizacja wydajności poprzez system alarmowy Lupusec (wydanie # 123)\nDodaj rzeczywistą _ temperaturę do czujnika typu 20 (wydanie # 124)",
+        "uk": "Оптимізація продуктивності за допомогою системи сигналізації (Issue #123)\nДодати фактичний_температурний до типу 20 Датчик (Issue #124)",
+        "zh-cn": "由 pplling Lupusec 提醒系统进行性能优化(问题 #123)\n添加实际温度到20 传感器( 问题 # 124)"
+      },
       "2.0.7": {
         "en": "Fixing @iobroker/adapter-dev 1.0.1 specified. 1.3.0 is required as minimum, 1.3.0 is recommended (Issue #115)\nFixiing problem, that state value jumps back to old value (Issue #116)\nDelete status switch and add 3 butteons (shutter_up, shutter_down, shutter_stop) for shutter (Issue #116)\nFixing dependency (Issue #117)",
         "de": "Festlegen von @iobroker/adapter-dev 1.0.1 angegeben. 1.3.0 ist als Minimum erforderlich, 1.3.0 wird empfohlen (Issue #115)\nProblem behoben, springt dieser Zustandswert auf den alten Wert zurück (Issue #116)\nStatusschalter löschen und 3 Butteons (shutter_up, shutter_down, shutter_stop) für Shutter (Issue #116) hinzufügen\nBehebung der Abhängigkeit (Issue #117)",
