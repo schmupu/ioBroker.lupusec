@@ -710,7 +710,8 @@ export class Lupus {
                     const regstat = /{WEB_MSG_RH_HUMIDITY}\s*([\d.]+)/gm;
                     const m = regstat.exec(states.status);
                     if (m) {
-                        value = Number(m[1].trim());
+                        // Valus between 0 and 100
+                        value = Math.min(100, Math.max(0, Number(m[1].trim())));
                     }
                 }
                 if (name === 'actual_lux' && states.status !== undefined) {
