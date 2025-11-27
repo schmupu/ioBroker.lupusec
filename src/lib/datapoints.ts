@@ -181,7 +181,7 @@ export class Datapoints {
             },
             TYPE_48: {
                 name: 'Power Switch Meter',
-                devlist: 'type_switch',
+                devlist: 'type_switch_power',
                 icon: '/icons/48.png',
             },
             TYPE_50: {
@@ -193,6 +193,11 @@ export class Datapoints {
                 name: 'Universal IR Fernbedienung',
                 devlist: 'type_ir_remotecontrol',
                 icon: '/icons/52.png',
+            },
+            TYPE_53: {
+                name: 'Power Switch',
+                devlist: 'type_switch',
+                icon: '/icons/53.png',
             },
             TYPE_54: {
                 name: 'Raumsensor',
@@ -400,8 +405,61 @@ export class Datapoints {
                     },
                 },
             },
-            // Steckdose
+            // Steckdose mit Powermeter
             type_switch: {
+                status_ex: {
+                    type: 'state',
+                    common: {
+                        type: 'boolean',
+                        role: 'switch.power',
+                        name: {
+                            de: 'Schalter',
+                            en: 'Switch',
+                        },
+                        read: true,
+                        write: true,
+                        states: {
+                            en: { false: 'off', true: 'on' },
+                            de: { false: 'Aus', true: 'An' },
+                        },
+                    },
+                },
+                pd: {
+                    type: 'state',
+                    common: {
+                        type: 'number',
+                        role: 'level',
+                        name: {
+                            en: 'Minutes to get off again',
+                            de: 'Aus in x Minuten',
+                        },
+                        read: true,
+                        write: true,
+                        min: 0,
+                        max: 180,
+                        def: 0,
+                    },
+                },
+                always_off: {
+                    type: 'state',
+                    common: {
+                        type: 'number',
+                        role: 'value',
+                        name: {
+                            en: 'Switch/Push button',
+                            de: 'Schalter/Taster',
+                        },
+                        read: true,
+                        write: true,
+                        states: {
+                            en: { 0: 'Switch', 1: 'Push button' },
+                            de: { 0: 'Schalter', 1: 'Taster' },
+                        },
+                    },
+                },
+            },
+            // Steckdose mit Powermeter
+            type_switch_power: {
                 status_ex: {
                     type: 'state',
                     common: {

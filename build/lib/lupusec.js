@@ -32,9 +32,9 @@ __export(lupusec_exports, {
 });
 module.exports = __toCommonJS(lupusec_exports);
 var import_axios = __toESM(require("axios"));
-var import_http = __toESM(require("http"));
-var import_https = __toESM(require("https"));
-var import_querystring = __toESM(require("querystring"));
+var http = __toESM(require("http"));
+var https = __toESM(require("https"));
+var querystring = __toESM(require("querystring"));
 var import_datapoints = require("./datapoints");
 var import_states = require("./states");
 var import_tools = require("./tools");
@@ -83,12 +83,12 @@ class Lupus {
   token;
   axiostimeout;
   axiosinstance;
-  httpsagent = new import_https.default.Agent({
+  httpsagent = new https.Agent({
     rejectUnauthorized: false,
     keepAlive: true,
     maxSockets: 1
   });
-  httpagent = new import_http.default.Agent({
+  httpagent = new http.Agent({
     keepAlive: true,
     maxSockets: 1
   });
@@ -573,7 +573,7 @@ class Lupus {
       ...config
     };
     const unixtime = this.getUnixTimestampNow();
-    const text = import_querystring.default.stringify(data);
+    const text = querystring.stringify(data);
     this.adapter.log.debug(`Request Post ${path} with payload ${JSON.stringify(data)}`);
     const response = await this.axiosinstance.post(await this.getAbsoluteURI(path), text, requestconfig);
     if (response.data) {
@@ -651,7 +651,7 @@ class Lupus {
           value = states.sresp_medical;
         }
       }
-      if (type === 24 || type === 48 || type === 50 || type === 66) {
+      if (type === 24 || type === 48 || type === 50 || type === 53 || type === 66) {
         if (name === "pd") {
           value = ((_b = await this.states.getStateAsync(`${idc}.pd`)) == null ? void 0 : _b.val) || 0;
         }

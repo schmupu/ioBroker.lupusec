@@ -1,7 +1,7 @@
 import axios from 'axios';
-import http from 'http';
-import https from 'https';
-import querystring from 'querystring';
+import * as http from 'http';
+import * as https from 'https';
+import * as querystring from 'querystring';
 import { Datapoints } from './datapoints';
 import type * as states from './states';
 import { States } from './states';
@@ -672,7 +672,7 @@ export class Lupus {
                 }
             }
             // For Power Switches,
-            if (type === 24 || type === 48 || type === 50 || type === 66) {
+            if (type === 24 || type === 48 || type === 50 || type === 53 || type === 66) {
                 if (name === 'pd') {
                     value = (await this.states.getStateAsync(`${idc}.pd`))?.val || 0;
                 }
@@ -1873,7 +1873,7 @@ export class Lupus {
         const area = (await this.states.getStateAsync(`${idchannel}.area`))?.val;
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const type = (await this.states.getStateAsync(`${idchannel}.type`))?.val;
-        // Type 24,48,66
+        // Type 24,48,53,66
         if (name === 'status_ex') {
             const value = state.val === true ? 'on' : 'off';
             const valuepd = Number((await this.states.getStateAsync(`${idchannel}.pd`))?.val || 0) * 60 || 0;
@@ -1883,7 +1883,7 @@ export class Lupus {
                 exec: exec,
             });
         } else if (name === 'pd') {
-            // Type 24,48,66
+            // Type 24,48,53,66
             this.dummyDevicePost(iddevice);
         } else if (name === 'factor') {
             // Type 50
