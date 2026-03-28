@@ -1,7 +1,7 @@
 import axios from 'axios';
-import * as http from 'http';
+import * as http from 'node:http';
 import { createHttpTerminator } from 'http-terminator';
-import * as https from 'https';
+import * as https from 'node:https';
 import { Tools } from './tools';
 
 /**

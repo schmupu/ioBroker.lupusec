@@ -1,4 +1,4 @@
-import { promises as dnsPromises } from 'dns';
+import { promises as dnsPromises } from 'node:dns';
 import _ from 'lodash';
 import * as tcpPing from 'tcp-ping';
 

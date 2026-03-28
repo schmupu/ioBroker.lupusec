@@ -1,7 +1,7 @@
 import axios from 'axios';
-import * as http from 'http';
-import * as https from 'https';
-import * as querystring from 'querystring';
+import * as http from 'node:http';
+import * as https from 'node:https';
+import * as querystring from 'node:querystring';
 import { Datapoints } from './datapoints';
 import type * as states from './states';
 import { States } from './states';
