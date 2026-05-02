@@ -150,6 +150,7 @@ sudo chmod u+s `which ping`
 ## Changelog
 
 ### **WORK IN PROGRESS**
+- (copilot) Adapter requires node.js >= 22 now
 
 - (Stübi) Checks actual_humidity value if it less 0% or greater 100%
 - (Stübi) fixing issues detected by repository checker (Issue #126)
