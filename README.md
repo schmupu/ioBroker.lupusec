@@ -197,6 +197,8 @@ sudo chmod u+s `which ping`
 - (Stübi) js-controller in version 6 and 7 will be supported (Issue #83, #84, #95)
 - (Stübi) nodejs 20 and nodejs 22 will be suported (Issue #87)
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## Planed
 
 Following things are planed in the future:
